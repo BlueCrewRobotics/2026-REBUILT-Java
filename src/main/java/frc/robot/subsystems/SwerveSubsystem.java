@@ -37,7 +37,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private boolean rotationHalved = false;
 
-    private final VisionPoseEstimator vision;
+   
     private double targetYaw;
 
 
@@ -60,7 +60,7 @@ public class SwerveSubsystem extends SubsystemBase {
         resetModulesToAbsolute();
         
 
-        vision = new VisionPoseEstimator();
+       
         
         var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1); // TODO: Tune the standard deviations
         var visionStdDevs = VecBuilder.fill(1, 1, 1);
@@ -376,7 +376,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param robotCentricSup {@link BooleanSupplier} for driving in robot or field centric mode
      */
     public Command teleopDriveSwerveAndRotateToAngleCommand(DoubleSupplier translationSup, DoubleSupplier strafeSup,
-                                                            double targetDegrees, BooleanSupplier robotCentricSup) {
+    double targetDegrees, BooleanSupplier robotCentricSup) {
       return this.run(
                 () -> teleopDriveSwerve(
                         translationSup,
@@ -387,42 +387,4 @@ public class SwerveSubsystem extends SubsystemBase {
         );
     }
 
-    public double getTargetYaw() {
-        return vision.getTargetRotationValue(getGyroYaw());
-    }
-
-    @Override
-    public void periodic(){
-         swervePoseEstimator.update(getGyroYaw(), getModulePositions());
-
-        // Correct pose estimate with vision measurements
-        var visionEst = vision.getEstimatedVisionGlobalPose();
-        visionEst.ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = vision.getVisionEstimationStdDevs(estPose);
-
-                    swervePoseEstimator.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
-
-        SmartDashboard.putNumber("Swerve Estimator X", swervePoseEstimator.getEstimatedPosition().getX());
-        SmartDashboard.putNumber("Swerve Estimator Y", swervePoseEstimator.getEstimatedPosition().getY());
-        SmartDashboard.putNumber("Swerve Yaw", getGyroYaw().getDegrees());
-        SmartDashboard.putNumber("Target Yaw", vision.getTargetRotationValue(getGyroYaw()));
-        SmartDashboard.putNumber("Rotation Velocity", rotationPercentageFromTargetAngle(getTargetYaw()));
-        if(visionEst.isPresent()) {
-            SmartDashboard.putNumber("Vision Estimator X", visionEst.get().estimatedPose.getX());
-            SmartDashboard.putNumber("Vision Estimator Y", visionEst.get().estimatedPose.getY());
-        }
-
-        for(SwerveModule mod : swerveMods) {
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);   
-        }
-        SmartDashboard.putNumber("Inverted?", invertDrive);
-    }
 }
