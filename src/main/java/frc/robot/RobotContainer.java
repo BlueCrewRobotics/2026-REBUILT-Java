@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.bluecrew.pathplanner.CustomAutoBuilder;
-import frc.robot.commands.RumbleControllerWhenDriving;
+
 import frc.robot.subsystems.*;
 
 import java.util.ArrayList;
@@ -56,9 +56,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-    private final WristSubsystem wristSubsystem = new WristSubsystem();
+    
 
     // Sendable Choosers
     private final SendableChooser<Command> autoChooser;
@@ -85,17 +83,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("Hello"));
-        NamedCommands.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
-        NamedCommands.registerCommand("L1 Score", elevatorSubsystem.elevatorToIntakeAuto().andThen(wristSubsystem.wristToL1Auto()));
-        NamedCommands.registerCommand("L2 Score", wristSubsystem.wristToLMIDAuto().andThen(elevatorSubsystem.elevatorToL2Auto()));
-        NamedCommands.registerCommand("Shoot Coral", wristSubsystem.wristToLMID().andThen(intakeSubsystem.intakeAlgae()).withTimeout(1).andThen(intakeSubsystem.stopIntake()));
-        NamedCommands.registerCommand("Get Coral", elevatorSubsystem.returnHome().andThen(wristSubsystem.wristToIntake()));
-        NamedCommands.registerCommand("Intake Coral", intakeSubsystem.intakeCoral().onlyWhile(() -> intakeSubsystem.coralInIntake()));
-        NamedCommands.registerCommand("Dislodge Shooter", elevatorSubsystem.spinMotor(.2).withTimeout(1).andThen(elevatorSubsystem.stopMotor()));
-        NamedCommands.registerCommand("L4 Score", elevatorSubsystem.elevatorToL4Auto().andThen(wristSubsystem.wristToL4Auto()));
-        NamedCommands.registerCommand("Home", elevatorSubsystem.returnHome().andThen(wristSubsystem.wristToIntake()));
-        NamedCommands.registerCommand("Reset Elevator Position", elevatorSubsystem.runOnce(() -> elevatorSubsystem.resetMotorEncoderToAbsolute()));
-
+        
         // Chooser for number of actions in auto
         numOfAutoActions = new SendableChooser<>();
         numOfAutoActions.setDefaultOption("0", 0);
@@ -125,23 +113,18 @@ public class RobotContainer {
         //         )));
         cancelRotateToAngle.onTrue(new InstantCommand(swerveSubsystem::cancelCurrentCommand));
 
-        driver.leftStick().toggleOnTrue(new RumbleControllerWhenDriving(driver));
+        
 
         // driver.rightBumper().whileTrue(swerveSubsystem.run(()->swerveSubsystem.teleopSlowTurnDriveSwerve(
         //         driver::getLeftY,
         //         driver::getLeftX,
+        
         //         driver::getRightX,
         //         () -> driver.leftBumper().getAsBoolean()
         //     ))
         // );
 
-        driver.x().whileTrue(swerveSubsystem.teleopDriveSwerveAndRotateToAngleCommand(
-                driver::getLeftY,
-                driver::getLeftX,
-                swerveSubsystem.getTargetYaw(),
-                () -> driver.leftBumper().getAsBoolean()
-        ));
-
+        
         // driver.rightStick().toggleOnTrue(swerveSubsystem.run(() -> swerveSubsystem.teleopDriveSwerve(
         //         () -> driver.getRawAxis(translationAxis),
         //         () -> driver.getRawAxis(strafeAxis),
@@ -151,51 +134,21 @@ public class RobotContainer {
 
         driver.rightTrigger().whileTrue(swerveSubsystem.halveRotationSpeed());
 
-        elevatorSubsystem.setDefaultCommand(elevatorSubsystem.run(()->elevatorSubsystem.driveByJoystick(auxDriver::getRightY)));
-        wristSubsystem.setDefaultCommand(wristSubsystem.run(()->wristSubsystem.spinByJoystick(auxDriver::getLeftY)));
-        
-        //intake/ extake controls
-        auxDriver.rightBumper().whileTrue(intakeSubsystem.intakeCoral());
-        auxDriver.rightBumper().onFalse(intakeSubsystem.stopIntake());
-        auxDriver.leftBumper().whileTrue(intakeSubsystem.intakeAlgae());
-        auxDriver.leftTrigger().onTrue(intakeSubsystem.stopIntake());
-        
-        //elevator controls
-        auxDriver.povUp().onTrue(elevatorSubsystem.intakeCoral());
-        auxDriver.povDown().onTrue(elevatorSubsystem.returnHome());
-        auxDriver.povLeft().onTrue(wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L2Reef()));
-        auxDriver.povRight().onTrue(wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
-        auxDriver.rightStick().toggleOnTrue(elevatorSubsystem.linearActuatorOut());
-        auxDriver.leftStick().toggleOnTrue(elevatorSubsystem.linearActuatorIn());
-
-        //wrist controls
-        driver.rightBumper().onTrue(swerveSubsystem.invertDriver());
-        auxDriver.x().onTrue(wristSubsystem.wristToIntake());
-        auxDriver.a().onTrue(wristSubsystem.wristToL4());
-        auxDriver.b().onTrue(wristSubsystem.wristToLMID());
-        auxDriver.y().onTrue(wristSubsystem.wristToL4().andThen(elevatorSubsystem.L4Reef()));
-    }
+       
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return autoChooser.getSelected(); 
-        // Load the path we want to pathfind to and follow
-PathPlannerPath path = PathPlannerPath.fromPathFile("B Coarl Station R");
-
+    
 // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
 PathConstraints constraints = new PathConstraints(
         3.0, 4.0,
         Units.degreesToRadians(540), Units.degreesToRadians(720));
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
-Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-        path,
-        constraints);
+
         //return new PathPlannerAuto("New Auto");
 
         // Command[] autoCommands = new Command[numOfAutoActions.getSelected()*2];

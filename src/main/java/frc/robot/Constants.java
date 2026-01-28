@@ -204,38 +204,13 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
 
-    //elevator constants 
-    public static final int ELEVATOR_MOTOR_LEFT_ID = 10;
-    public static final int ELEVATOR_MOTOR_RIGHT_ID = 11;
-    public static final double ELEVATOR_LOWER_LIMIT = 0.335449; //.403809; //TODO: Placeholder
-    public static final double ELEVATOR_UPPER_LIMIT = 43; //TODO: Placeholder
-    public static final double ELEVATOR_MAX_ROTATIONS_PER_SEC = 80;
-    public static final double ELEVATOR_CAN_TO_MOTOR_RATIO = 5.24954/0.916748;
-    public static final int ELEVATOR_CAN_CODER_ID = 4;
-    public static final double L4REEFPOSITION = 7.332764; //40.575195;
-    public static final double L3REEFPOSITION = 4.114502;114502
-    public static final double L2REEFPOSITION = 2.605713;
-    public static final double L1REEFPOSITION = 2;
-    public static final double DEEPCAGE = 999;
-    public static final double PROCESSOR = 9;
-    public static final double CORALSTATION = 0.898193; //-10.97
+    //intake constans 
+    private static final int intake_motor_id = 9999999;
+    private static final int intake_motor_max_rotations = 10;
 
-    //intake constants 
-    public static final int INTAKE_MOTOR_ID = 8; 
+    //shooter constants 
+    private static final int shooter_motor_id = 999999;
+    private static final int shooter_motor_max_rotation = 10;
 
-    //wrist constants
-    public static final int WRIST_MOTOR_ID = 9;
-    public static final double WRIST_UPPER_LIMIT = 19.274414; //-7.884277
-    public static final double WRIST_LOWER_LIMIT = -4.093750;//18.414551
-    public static final double WRIST_MAX_ROTATIONS_PER_SEC = 100;
-    public static final double WIRST_MAX_VOLTAGE = 40;
-    public static final double WRIST_INTAKE_POSITION = 2.067871;//2.512207;
-    public static final double WRIST_L1_POSITION = 4.617188;
-    public static final double WRIST_LMID_POSITION = 10.134766;
-    public static final double WRIST_L4_POSITION = 14.634766;
-    public static final double WIRST_BARGE_POSITION = -4.212402;
 }
-
-
-
-
+  
