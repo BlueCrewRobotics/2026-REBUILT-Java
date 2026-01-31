@@ -26,7 +26,6 @@ public RelativeEncoder encoder; //built in encoder
 public void configMotor(){
     motor = new SparkMax(intake_motor_id, MotorType.kBrushless);//you can configure the motor type bewteen kBrushless and kBrushed
     config = new SparkMaxConfig();
-
     config
         .idleMode(IdleMode.kBrake) //The motor mode, kBrake will stop motor immediately otherwise will spin untill stop naturally
         .inverted(false) //configure if the motor inverted
