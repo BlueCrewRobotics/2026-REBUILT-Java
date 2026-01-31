@@ -205,8 +205,8 @@ public final class Constants {
     }
 
     //intake constans 
-    private static final int intake_motor_id = 9999999;
-    private static final int intake_motor_max_rotations = 10;
+    public static final int intake_motor_id = 9999999;
+    public static final int intake_motor_max_rotations = 10;
 
     //shooter constants 
     private static final int shooter_motor_id = 999999;
