@@ -210,8 +210,10 @@ public final class Constants {
     public static final double intake_motor_speed = 0.5;
 
     //shooter constants 
-    public static final int shooter_motor_id = 999999;
-    public static final int shooter_motor_max_rotation = 10;
-
+    private static final int shooter_motor_id = 999999;
+    private static final int shooter_motor_max_rotation = 10;
+public static final int popcorn= 34;
+public static final int motor= 54;
 }
+
   

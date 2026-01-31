@@ -18,20 +18,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 //this intialised motor and incoder and spark
 public class IntakeSubsystem extends SubsystemBase {
-private SparkMax intakeMotor = new SparkMax(Constants.intake_motor_id,SparkLowLevel.MotorType.kBrushless);
-private SparkClosedLoopController m_pidController = intakeMotor.getClosedLoopController(); 
-private SparkRelativeEncoder leftEncoder = (SparkRelativeEncoder) intakeMotor.getEncoder();
-    
-    
-    
 
-public IntakeSubsystem(){
-    
+public SparkMax motor; //Motor itself
+public SparkMaxConfig config; //motor config
+public RelativeEncoder encoder; //built in encoder
+public void configMotor(){
+    motor = new SparkMax(intake_motor_id, MotorType.kBrushless);//you can configure the motor type bewteen kBrushless and kBrushed
+    config = new SparkMaxConfig();
+
+    config
+        .idleMode(IdleMode.kBrake) //The motor mode, kBrake will stop motor immediately otherwise will spin untill stop naturally
+        .inverted(false) //configure if the motor inverted
+        .follow(0); //you can set the motor followed to another motor, usually used in 4 motor KOP chassis
+
+    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); //apply settings to the motor
 }
- public Command intakeOn(double speed){
-    return new InstantCommand(() -> intakeMotor.set(speed));
- }
- public Command intakeOff(){
-    return new InstantCommand(() -> intakeMotor.set(0));
- }
 }
