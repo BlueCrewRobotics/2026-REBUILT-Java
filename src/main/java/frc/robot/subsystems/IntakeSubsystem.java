@@ -26,7 +26,12 @@ private SparkRelativeEncoder leftEncoder = (SparkRelativeEncoder) intakeMotor.ge
     
 
 public IntakeSubsystem(){
-
+    
 }
-
+ public Command intakeOn(double speed){
+    return new InstantCommand(() -> intakeMotor.set(speed));
+ }
+ public Command intakeOff(){
+    return new InstantCommand(() -> intakeMotor.set(0));
+ }
 }

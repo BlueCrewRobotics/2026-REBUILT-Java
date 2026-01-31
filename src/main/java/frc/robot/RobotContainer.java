@@ -56,7 +56,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    
+    private  final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
     // Sendable Choosers
     private final SendableChooser<Command> autoChooser;
@@ -133,7 +133,8 @@ public class RobotContainer {
         // )));
 
         driver.rightTrigger().whileTrue(swerveSubsystem.halveRotationSpeed());
-
+        driver.rightBumper().whileTrue(intakeSubsystem.intakeOn(Constants.intake_motor_speed));
+        driver.rightBumper().whileFalse(intakeSubsystem.intakeOff());
        
 
     /**
