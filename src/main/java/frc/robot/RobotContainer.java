@@ -93,9 +93,11 @@ public class RobotContainer {
             numOfAutoActions.addOption("" + i, i);
         }
         SmartDashboard.putData("Number Of Auto Actions", numOfAutoActions);
+        
         // Auto Chooser
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
+        
     }
 
     /**

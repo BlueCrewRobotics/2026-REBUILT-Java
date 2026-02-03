@@ -119,7 +119,7 @@ public final class Constants {
         /** Constants for the Front Right Module - Module 1 */
         public static final class Mod1 {
             public static final int driveMotorID = 1;
-            public static final int angleMotorID = 5;
+            public static final int angleMotorID = 7;
             public static final int canCoderID = 1;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.173340);
             public static final SwerveModuleConstants constants = 
@@ -139,7 +139,7 @@ public final class Constants {
         /** Constants for the Back Right Module - Module 3 */
         public static final class Mod3 {
             public static final int driveMotorID = 3;
-            public static final int angleMotorID = 7;
+            public static final int angleMotorID = 5;
             public static final int canCoderID = 3;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.218262);
             public static final SwerveModuleConstants constants = 
@@ -168,7 +168,7 @@ public final class Constants {
 
     /**
      * Contains all the Constants used by Path Planner
-     */
+     *//* 
     public static final class PathPlannerConstants {
         public static final PPHolonomicDriveController driveController = new PPHolonomicDriveController(
                 new PIDConstants(5.0, 0.0, 0.0), // Translation PID
@@ -187,7 +187,7 @@ public final class Constants {
             }
         }
     }
-
+*/
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -205,7 +205,8 @@ public final class Constants {
     }
 
     //intake constans 
-    public static final int intake_motor_id = 9999999;
+    public static final int Sparky_1 = 10;
+    public static final int intake_motor_id = 10;
     public static final int intake_motor_max_rotations = 10;
     public static final double intake_motor_speed = 0.5;
 
