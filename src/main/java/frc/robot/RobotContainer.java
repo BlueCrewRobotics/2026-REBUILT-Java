@@ -56,7 +56,9 @@ public class RobotContainer {
 
     /* Subsystems */
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    private  final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+
 
     // Sendable Choosers
     private final SendableChooser<Command> autoChooser;
