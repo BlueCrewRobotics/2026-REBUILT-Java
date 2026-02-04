@@ -127,7 +127,7 @@ public class RobotContainer {
         //         () -> driver.leftBumper().getAsBoolean()
         //     ))
         // );
-
+   
         
         // driver.rightStick().toggleOnTrue(swerveSubsystem.run(() -> swerveSubsystem.teleopDriveSwerve(
         //         () -> driver.getRawAxis(translationAxis),
@@ -137,8 +137,10 @@ public class RobotContainer {
         // )));
 
         driver.rightTrigger().whileTrue(swerveSubsystem.halveRotationSpeed());
-        driver.rightBumper().whileTrue(intakeSubsystem.intakeOn(Constants.intake_motor_speed));
-        driver.rightBumper().whileFalse(intakeSubsystem.intakeOff());
+
+        //driver buttons 
+        driver.b().whileTrue(intakeSubsystem.intakeOn(Constants.intake_motor_speed));
+        driver.rightBumper().onFalse(intakeSubsystem.intakeOff());
        
 
     /**
