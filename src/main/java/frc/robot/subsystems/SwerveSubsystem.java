@@ -76,7 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
         rotationPIDController = new PIDController(5, 0, 0);
         rotationPIDController.enableContinuousInput(0, 360);
         rotationPIDController.setTolerance(1);
-/* 
+
         // Configure PathPlanner Auto Builder
         AutoBuilder.configure(
                 this::getPose,
@@ -98,7 +98,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 },
                 this
         );
-*/
+
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
 
         // Logging callback for the active path, this is sent as a list of poses
