@@ -30,11 +30,9 @@ shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 }
 public Command spinMotor(double speed ){
 return new InstantCommand(() -> motor1.set(speed));
-
 }
 public Command stopSpin(){
 return new InstantCommand(()-> motor1.set(0));
-
 }
 
 }
