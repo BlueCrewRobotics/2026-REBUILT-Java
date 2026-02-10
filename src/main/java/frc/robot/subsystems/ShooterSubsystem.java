@@ -25,4 +25,5 @@ public void ShooterSubsystem(){
 shooterConfig.CurrentLimits.SupplyCurrentLimit=40;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 }
+
 }
