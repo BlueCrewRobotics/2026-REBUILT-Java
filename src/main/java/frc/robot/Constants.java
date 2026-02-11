@@ -88,7 +88,7 @@ public final class Constants {
 
     //intake constans 
     public static final int Sparky_1 = 9;
-    public static final int intake_motor_id = 10;
+    public static final int intake_motor_id = 50;
     public static final int intake_motor_max_rotations = 10;
     public static final double intake_motor_speed = 0.5;
 
