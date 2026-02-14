@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-//make the shooter work
+//shooter1 code
 public class ShooterSubsystem extends SubsystemBase {
 private final TalonFX motor1 = new TalonFX(Constants.motor1);
 private final TalonFX motor2 = new TalonFX(Constants.motor2);
@@ -32,6 +32,18 @@ public Command spinMotor(double speed ){
 return new InstantCommand(() -> motor1.set(speed));
 }
 public Command stopSpin(){
+return new InstantCommand(()-> motor1.stopMotor());
+}
+//shooter2 code
+public void SpinTheMotor(){
+shooterConfig.CurrentLimits.SupplyCurrentLimit=40;
+shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
+ motor2.setControl(new Follower(Constants.motor1, null));
+}
+public Command spinMotor2(double speed ){
+return new InstantCommand(() -> motor1.set(speed));
+}
+public Command stopSpin2(){
 return new InstantCommand(()-> motor1.stopMotor());
 }
 
