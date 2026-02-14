@@ -50,8 +50,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-Driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-Driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(Driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(Driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-Driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -63,9 +63,14 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // controler buttons 
-        Driver.x().onTrue(intakeSubsystem.intakeOn(.5));
+        Driver.x().onTrue(intakeSubsystem.intakeOn(.3));
         Driver.y().onFalse(intakeSubsystem.intakeOff());
-        Driver.rightTrigger().onTrue(shooterSubsystem.spinMotor(.5));
+        Driver.b().onTrue(intakeSubsystem.intakeOn(-0.3));
+        //50 percent wimpy 10ft
+        //60 is awsome at 10ft
+        //70 to much at 10ft
+        Driver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.7));
+        Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         //Driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         /*Driver.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-Driver.getLeftY(), -Driver.getLeftX()))

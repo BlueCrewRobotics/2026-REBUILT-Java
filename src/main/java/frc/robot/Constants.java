@@ -96,7 +96,7 @@ public final class Constants {
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;
 public static final int motor2= 34;
-public static final int motor1= 54;
+public static final int motor1= 10;
 }
 
   
