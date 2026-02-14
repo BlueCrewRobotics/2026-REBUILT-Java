@@ -22,9 +22,10 @@ private SparkMax intakeMotor = new SparkMax(Constants.intake_motor_id,SparkLowLe
 private CANcoder BadEncoder;
 private SparkClosedLoopController m_pidController = intakeMotor.getClosedLoopController(); 
 private SparkRelativeEncoder leftEncoder = (SparkRelativeEncoder) intakeMotor.getEncoder();
-    
+
 public IntakeSubsystem(){
 BadEncoder = new CANcoder(Constants.Sparky_1);
+
 }
 public Command intakeOn(double speed){
     return new InstantCommand(() -> intakeMotor.set(speed));
