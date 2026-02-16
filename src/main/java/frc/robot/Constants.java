@@ -18,6 +18,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.generated.TunerConstants;
 
 import org.json.simple.parser.ParseException;
 
@@ -91,12 +92,18 @@ public final class Constants {
     public static final int intake_motor_id = 50;
     public static final int intake_motor_max_rotations = 10;
     public static final double intake_motor_speed = 0.5;
+   
 
     //shooter constants 
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;
 public static final int motor2= 12;
 public static final int motor1= 10;
+
+
+        
+
+        
 }
 
   
