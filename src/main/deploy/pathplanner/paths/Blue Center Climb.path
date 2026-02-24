@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5671316964285715,
-        "y": 0.7213169642857145
+        "x": 3.625722891566265,
+        "y": 3.9694337349397593
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.328640084192418,
-        "y": 0.3286564128181026
+        "x": 3.901359362818896,
+        "y": 3.7374793462910154
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.826004464285714,
-        "y": 2.830189732142857
+        "x": 2.128626506024096,
+        "y": 4.69066265060241
       },
       "prevControl": {
-        "x": 1.263704788773147,
-        "y": 1.2084317129629616
+        "x": 2.3795980427327397,
+        "y": 4.676853208240279
+      },
+      "nextControl": {
+        "x": 1.768898859523838,
+        "y": 4.710456282444325
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1123493975903613,
+        "y": 4.69066265060241
+      },
+      "prevControl": {
+        "x": 2.167550861629073,
+        "y": 4.721843090933508
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +47,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "elavator up",
+      "waypointRelativePos": 0.7964028776978364,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,7 +65,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.58440116690445
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
