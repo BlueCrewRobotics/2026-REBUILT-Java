@@ -41,10 +41,10 @@ shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
  motor2.setControl(new Follower(Constants.motor1, null));
 }
 public Command spinMotor2(double speed ){
-return new InstantCommand(() -> motor1.set(speed));
+return new InstantCommand(() -> motor2.set(-speed));
 }
 public Command stopSpin2(){
-return new InstantCommand(()-> motor1.stopMotor());
+return new InstantCommand(()-> motor2.stopMotor());
 }
 
 }
