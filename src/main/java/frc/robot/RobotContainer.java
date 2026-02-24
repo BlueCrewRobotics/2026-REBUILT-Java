@@ -63,17 +63,17 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // controler buttons 
-        Driver.x().onTrue(intakeSubsystem.intakeOn(.3));
-        Driver.y().onFalse(intakeSubsystem.intakeOff());
-        Driver.b().onTrue(intakeSubsystem.intakeOn(-0.3));
+        auxDriver.x().onTrue(intakeSubsystem.intakeOn(.3));
+        auxDriver.y().onFalse(intakeSubsystem.intakeOff());
+        auxDriver.b().onTrue(intakeSubsystem.intakeOn(-0.3));
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
         Driver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.7));
         Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
-        Driver.leftTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
-        Driver.leftTrigger().onFalse(shooterSubsystem.stopSpin2());
+        Driver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
+        Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
         //Driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         /*Driver.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-Driver.getLeftY(), -Driver.getLeftX()))
