@@ -65,11 +65,9 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // controler buttons 
-        auxDriver.x().onTrue(intakeSubsystem.intakeOn(.3));
+        auxDriver.x().onTrue(intakeSubsystem.intakeOn(-.7));
         auxDriver.y().onFalse(intakeSubsystem.intakeOff());
-        auxDriver.b().onTrue(intakeSubsystem.intakeOn(-0.3));
-        auxDriver.a().onTrue(armSubsystem.armToNeutralLevel());
-        auxDriver.povLeft().onTrue(armSubsystem.armToIntakePosition());
+        auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
