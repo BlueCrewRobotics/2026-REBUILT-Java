@@ -30,6 +30,17 @@ import java.io.IOException;
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
+    public static final class ArmConstants {
+        public static final double ARM_AT_NEUTRAL_POSITION = 0;
+        public static final double ARM_AT_INTAKE_POSITION = -10;
+        public final static class ARM_UPWARDS_HIGH_GRAVITY_PID {
+            public static final double kP = 0.1;
+            public static final double kI = 0;
+            public static final double kD = 0;
+        }
+    }
+
+
     public static final class PhotonVision {
         public static final String Camera_Name_Back = "Camera_Intake_Side";
         public static final String camera_Name_Front = "Camera_Battery_Side";
