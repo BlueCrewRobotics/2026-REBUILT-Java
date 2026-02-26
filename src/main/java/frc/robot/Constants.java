@@ -23,6 +23,7 @@ import frc.robot.generated.TunerConstants;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.util.logging.FileHandler;
 
 /**
  * Contains all the robot constants
@@ -94,17 +95,56 @@ public final class Constants {
     public static final double intake_motor_speed = 0.5;
    // lift arm
    public static final int ARM_MOTOR = 51;
-
+    public static final double ARM_AT_HUB_POSITION = 3; 
+    public static final double ARM_AT_INTAKE_POSITION = 1;
+    public static final double ARM_MIN_LIMIT = -10;
+    public static final double ARM_MAX_LIMIT = 5;
     //shooter constants 
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;
 public static final int motor2= 12;
 public static final int motor1= 10;
 
+public static final class ArmConstants{
 
-        
+     public static final class ArmUpwardsHighGravityPID {
+            public static final double p = 0.36;
+            double i = 0.000035;
+            double d = 0.05;
+            double iZ = 3.0;
 
-        
+            double maxOutput = 0.48;
+            double minOutput = -0.48;
+        }
+        interface ArmUpwardsLowGravityPID {
+            double p = 0.1;
+            double i = 0.0;
+            double d = 0.0;
+            double iZ = 0.0;
+
+            double maxOutput = 0.2;
+            double minOutput = -0.2;
+        }
+        interface ArmDownwardsHighGravityPID {
+            double p = 0.12;
+            double i = 0.0001;
+            double d = 0.02;
+            double iZ = 1.5;
+
+            double maxOutput = 0.1;
+            double minOutput = -0.15;
+        }
+        interface ArmDownwardsLowGravityPID {
+            double p = 0.04;
+            double i = 0.0;
+            double d = 0.0;
+            double iZ = 0.0;
+
+            double maxOutput = 0.1;
+            double minOutput = -0.135;
+        }
+    }
 }
+
 
   
