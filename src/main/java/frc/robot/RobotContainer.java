@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -40,6 +41,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public RobotContainer() {
         configureBindings();
     }
@@ -66,6 +68,8 @@ public class RobotContainer {
         auxDriver.x().onTrue(intakeSubsystem.intakeOn(.3));
         auxDriver.y().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(-0.3));
+        auxDriver.a().onTrue(armSubsystem.armToNeutralLevel());
+        auxDriver.povLeft().onTrue(armSubsystem.armToIntakePosition());
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
