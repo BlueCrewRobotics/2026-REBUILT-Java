@@ -65,7 +65,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // controler buttons 
-        auxDriver.x().onTrue(intakeSubsystem.intakeOn(-0.5));
+        auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.6));
         auxDriver.y().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         auxDriver.a().onTrue(armSubsystem.armToNeutralLevel());
