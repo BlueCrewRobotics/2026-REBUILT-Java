@@ -17,6 +17,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,17 +45,22 @@ public class ArmSubsystem extends SubsystemBase {
     
    public ArmSubsystem(){
     
-SparkFlexConfig config = new SparkFlexConfig();
+SparkMaxConfig config = new SparkMaxConfig();
+
+
 
 // Set PID gains
-config.closedLoop
-    .p(Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP)
-    .i(Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI)
-    .d(Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD)
-    .outputRange(1, -1);
+    config.closedLoop.pid(
+    Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
+ClosedLoopSlot.kSlot0);
+config.smartCurrentLimit(20);
 
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
+
+    ArmMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 //PID controloer 
     armPidController = ArmMotor.getClosedLoopController();
 // encodoer 
@@ -66,12 +72,23 @@ config.closedLoop
 
     }
 
+    public void Intakedown(){
+        armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        ArmMotor.set(-.5);
+    }
+    public Command ArmIntake(){
+        return new InstantCommand(()-> Intakedown());
+        
+    }
+    public Command armStop(){
+        return new InstantCommand(()-> ArmMotor.stopMotor());
+    }
     public Command armToNeutralLevel(){
+        System.out.print(setPosition);
         return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
     public Command armToIntakePosition(){
-        return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0)); 
     }
     
-   
-} 
+}  
