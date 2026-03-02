@@ -69,14 +69,23 @@ config.closedLoop
     // figuer out how to make this go to the corect posithion me cant 
 
         //armPidController.setSetpoint(setPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-
     }
-
+    public void Intakedown(){
+        armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        ArmMotor.set(-.5);
+    }
+    public Command ArmIntake(){
+        return new InstantCommand(()-> Intakedown());
+        
+    }
+    public Command armStop(){
+        return new InstantCommand(()-> ArmMotor.stopMotor());
+    }
     public Command armToNeutralLevel(){
         return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
     public Command armToIntakePosition(){
-        return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0)); 
     }
-   
+    
 } 
