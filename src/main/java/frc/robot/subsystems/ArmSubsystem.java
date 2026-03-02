@@ -20,6 +20,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -48,15 +49,12 @@ public class ArmSubsystem extends SubsystemBase {
     
    public ArmSubsystem(){
     
-SparkFlexConfig config = new SparkFlexConfig();
-
-// Set PID gains
-config.closedLoop
-    .p(Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP)
-    .i(Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI)
-    .d(Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD)
-    .outputRange(1, -1);
-
+SparkMaxConfig config = new SparkMaxConfig();
+config.closedLoop.pid(
+    Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
+ClosedLoopSlot.kSlot0);
 
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
@@ -65,14 +63,18 @@ config.closedLoop
 // encodoer 
     armEncoder = (SparkRelativeEncoder) ArmMotor.getEncoder();
 //geting position of the encoder 
-    setPosition = armEncoder.getPosition();
-    // figuer out how to make this go to the corect posithion me cant 
+    armEncoder.setPosition(0.0);
 
+    setPosition = armEncoder.getPosition();
+    // figuer out how to make this go to the corect posithion me 
+
+        
         //armPidController.setSetpoint(setPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
 
     }
 
     public Command armToNeutralLevel(){
+        System.out.print(setPosition);
         return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
     public Command armToIntakePosition(){

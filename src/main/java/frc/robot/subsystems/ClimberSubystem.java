@@ -22,6 +22,8 @@ private final TalonFX motor1 = new TalonFX(Constants.CLIMBER_MOTOR_ID);
     private Servo elevatorStopper;
     private double elevatorStopperPosition;
     
-
+public ClimberSubystem(){
+    
+}
 
 }
