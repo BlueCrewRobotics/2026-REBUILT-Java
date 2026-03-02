@@ -22,11 +22,14 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
 private final TalonFX motor1 = new TalonFX(Constants.motor1);
 private final TalonFX motor2 = new TalonFX(Constants.motor2);
+
     private TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
-public void ShooterSubsystem(){
+public ShooterSubsystem(){
+    motor1.clearStickyFaults();
+    motor2.clearStickyFaults();
 shooterConfig.CurrentLimits.SupplyCurrentLimit=40;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
- motor2.setControl(new Follower(Constants.motor1, null));
+// motor2.setControl(new Follower(Constants.motor1, null));
 }
 public Command spinMotor(double speed ){
 return new InstantCommand(() -> motor1.set(speed));
