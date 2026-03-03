@@ -35,7 +35,7 @@ public final class Constants {
         public static final double ARM_AT_NEUTRAL_POSITION = 0;
         public static final double ARM_AT_INTAKE_POSITION = -2.8;
         public final static class ARM_UPWARDS_HIGH_GRAVITY_PID {
-            public static final double kP = 0.1;
+            public static final double kP = 5;
             public static final double kI = 0;
             public static final double kD = 0;
         }
@@ -108,8 +108,8 @@ public final class Constants {
    public static final int ARM_MOTOR = 51;
     public static final double ARM_AT_HUB_POSITION = 3; 
     public static final double ARM_AT_INTAKE_POSITION = 1;
-    public static final double ARM_MIN_LIMIT = -10;
-    public static final double ARM_MAX_LIMIT = 5;
+    public static final double ARM_MIN_LIMIT = -2;
+    public static final double ARM_MAX_LIMIT = 0;
     //shooter constants 
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;

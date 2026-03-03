@@ -30,7 +30,7 @@ public class ClimberSubsystem {
         motor1.clearStickyFaults();
       
   
-      climberConfig.CurrentLimits.SupplyCurrentLimit = 40;
+      climberConfig.CurrentLimits.SupplyCurrentLimit = 30;
       climberConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
   
       // climberConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.ELEVATOR_UPPER_LIMIT; 
@@ -64,11 +64,9 @@ return new InstantCommand(()->motor1.set(speed));
     }
 public Command StopSpin (){
 return new RunCommand(()->motor1.stopMotor());
-
-
 }
 public Command climbDown (){
-    return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_LOWER_LEVEL)));
+ return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_LOWER_LEVEL)));
 }
 public Command ClimbUp (){
  return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_HIGHER_LEVEL)));
