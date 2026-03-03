@@ -27,7 +27,7 @@ private final TalonFX motor2 = new TalonFX(Constants.motor2);
 public ShooterSubsystem(){
     motor1.clearStickyFaults();
     motor2.clearStickyFaults();
-shooterConfig.CurrentLimits.SupplyCurrentLimit=40;
+shooterConfig.CurrentLimits.SupplyCurrentLimit=30;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 // motor2.setControl(new Follower(Constants.motor1, null));
 }
