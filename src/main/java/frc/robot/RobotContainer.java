@@ -70,20 +70,22 @@ public class RobotContainer {
         auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.8));
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
-        auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
-        auxDriver.povLeft().onTrue(armSubsystem.armToIntakePosition());
+        auxDriver.rightBumper().onTrue(armSubsystem.armToNeutralLevel());
+        auxDriver.leftBumper().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
-        Driver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
-        Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
+        auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
+        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
-        Driver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
-        Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
+        auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
+        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
        // all climber stuff
+       Driver.povUp().onTrue(ClimberSubsystem.linearActuatorIn());
+       Driver.povDown().onTrue(ClimberSubsystem.linearActuatorOut());
        Driver.y().onTrue(ClimberSubsystem.ClimbUp());
        Driver.a().onTrue(ClimberSubsystem.climbDown());
         Driver.rightBumper().whileTrue(drivetrain.applyRequest(() ->
