@@ -58,6 +58,8 @@ ClosedLoopSlot.kSlot0);
 
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
+
+    ArmMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 //PID controloer 
     armPidController = ArmMotor.getClosedLoopController();
 // encodoer 
