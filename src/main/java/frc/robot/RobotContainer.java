@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -42,6 +43,7 @@ public class RobotContainer {
     public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public RobotContainer() {
         configureBindings();
     }
@@ -70,6 +72,7 @@ public class RobotContainer {
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
         auxDriver.povLeft().onTrue(armSubsystem.armToIntakePosition());
+        auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
@@ -80,7 +83,9 @@ public class RobotContainer {
         //buttton for motor2
         Driver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
         Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
-        auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+       // all climber stuff
+       Driver.y().onTrue(ClimberSubsystem.ClimbUp());
+       Driver.a().onTrue(ClimberSubsystem.climbDown());
         Driver.rightBumper().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(Driver.getLeftY(), Driver.getLeftX()))
         ));
