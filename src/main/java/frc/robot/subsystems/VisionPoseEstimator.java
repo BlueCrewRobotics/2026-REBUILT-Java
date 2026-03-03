@@ -109,10 +109,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
                */
            
                private void useBestCamera() {
-                   var cam1Targets = camera1.getLatestResult().getTargets();
-                   var cam2Targets = camera2.getLatestResult().getTargets();
-                //    var cam1Targets = camera1.getAllUnreadResults().get(camera1.getAllUnreadResults().size()-1).getTargets();
-                //    var cam2Targets = camera2.getAllUnreadResults().get(camera2.getAllUnreadResults().size()-1).getTargets();
+                   //var cam1Targets = camera1.getLatestResult().getTargets();
+                  // var cam2Targets = camera2.getLatestResult().getTargets();
+                   var cam1Targets = camera1.getAllUnreadResults().get(camera1.getAllUnreadResults().size()-1).getTargets();
+                   var cam2Targets = camera2.getAllUnreadResults().get(camera2.getAllUnreadResults().size()-1).getTargets();
                    int cam1numTags = 0;
                    int cam2numTags = 0;
                    double cam1AvgDist = 0;
@@ -150,9 +150,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
                }
            
                 public PhotonPipelineResult getLatestResult() {
-                    return currentCamera.getLatestResult();
-                //    var results = currentCamera.getAllUnreadResults();
-                //    return results.get(results.size()-1);
+                    //return currentCamera.getLatestResult();
+                   var results = currentCamera.getAllUnreadResults();
+                    return results.get(results.size()-1);
                }
            
                /**
@@ -165,7 +165,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
                public Optional<EstimatedRobotPose> getEstimatedVisionGlobalPose() {
                    useBestCamera();
                    var visionEst = currentPhotonEstimator.update(getLatestResult());
-                   double latestTimestamp = currentCamera.getLatestResult().getTimestampSeconds();
+                   double latestTimestamp = ((PhotonPipelineResult) currentCamera.getAllUnreadResults()).getTimestampSeconds();
                 //    double latestTimestamp = currentCamera.getAllUnreadResults().get(currentCamera.getAllUnreadResults().size()-1).getTimestampSeconds();
                    boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
                    if (newResult) lastEstTimestamp = latestTimestamp;

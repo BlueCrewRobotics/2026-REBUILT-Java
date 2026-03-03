@@ -23,6 +23,7 @@ import frc.robot.generated.TunerConstants;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.util.logging.FileHandler;
 
 /**
  * Contains all the robot constants
@@ -32,7 +33,7 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final double ARM_AT_NEUTRAL_POSITION = 0;
-        public static final double ARM_AT_INTAKE_POSITION = -10;
+        public static final double ARM_AT_INTAKE_POSITION = -2.8;
         public final static class ARM_UPWARDS_HIGH_GRAVITY_PID {
             public static final double kP = 0.1;
             public static final double kI = 0;
@@ -105,17 +106,19 @@ public final class Constants {
     public static final double intake_motor_speed = 0.5;
    // lift arm
    public static final int ARM_MOTOR = 51;
-
+    public static final double ARM_AT_HUB_POSITION = 3; 
+    public static final double ARM_AT_INTAKE_POSITION = 1;
+    public static final double ARM_MIN_LIMIT = -10;
+    public static final double ARM_MAX_LIMIT = 5;
     //shooter constants 
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;
-public static final int motor2= 12;
-public static final int motor1= 10;
-
-
-        
-
-        
+    public static final int motor2= 12;
+    public static final int motor1= 10;
+    // Climber stuf
+    public static final int CLIMBER_MOTOR_ID= 999;
+    public static final double CLIMBER_LOWER_LEVEL = 0;
+    public static final double CLIMBER_HIGHER_LEVEL = 1;
 }
 
   

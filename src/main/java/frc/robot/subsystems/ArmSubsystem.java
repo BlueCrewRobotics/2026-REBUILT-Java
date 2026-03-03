@@ -4,13 +4,16 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.*;
 
 
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotState;
 import com.revrobotics.jni.CANSparkJNI;
+
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
+
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
@@ -27,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 // import frc.robot.Constants.ArmConstants;
 // import frc.robot.Constants.ArmConstants.ArmUpwardsHighGravityPID;
+
 public class ArmSubsystem extends SubsystemBase {
 
     private final SparkMax ArmMotor;
@@ -46,16 +50,11 @@ public class ArmSubsystem extends SubsystemBase {
    public ArmSubsystem(){
     
 SparkMaxConfig config = new SparkMaxConfig();
-
-
-
-// Set PID gains
-    config.closedLoop.pid(
+config.closedLoop.pid(
     Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
-config.smartCurrentLimit(20);
 
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
@@ -66,12 +65,14 @@ config.smartCurrentLimit(20);
 // encodoer 
     armEncoder = (SparkRelativeEncoder) ArmMotor.getEncoder();
 //geting position of the encoder 
+    armEncoder.setPosition(0.0);
+
     setPosition = armEncoder.getPosition();
-    // figuer out how to make this go to the corect posithion me cant 
+    // figuer out how to make this go to the corect posithion me 
+
+        
         //armPidController.setSetpoint(setPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-
     }
-
     public void Intakedown(){
         armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
         ArmMotor.set(-.5);
@@ -91,4 +92,4 @@ config.smartCurrentLimit(20);
         return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0)); 
     }
     
-}  
+} 
