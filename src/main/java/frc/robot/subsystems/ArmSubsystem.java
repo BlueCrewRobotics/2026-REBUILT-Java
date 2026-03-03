@@ -83,8 +83,11 @@ ClosedLoopSlot.kSlot0);
         return new InstantCommand(()-> ArmMotor.stopMotor());
     }
     public Command armToNeutralLevel(){
-        System.out.print(setPosition);
-        return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
+        if (setPosition == Constants.ARM_MIN_LIMIT){
+            return new InstantCommand(()-> ArmMotor.stopMotor());
+        }
+        return new InstantCommand(()-> ArmMotor.set(-.3));
+        //return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
     }
     public Command armToIntakePosition(){
         return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0)); 

@@ -52,8 +52,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-Driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-Driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(Driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(Driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-Driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -65,13 +65,13 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // controler buttons 
-        auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.6));
-        auxDriver.y().onFalse(intakeSubsystem.intakeOff());
+        auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.8));
+        auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
         auxDriver.povLeft().onTrue(armSubsystem.armToIntakePosition());
-       auxDriver.a().onTrue(armSubsystem.ArmIntake());
-       auxDriver.a().onFalse(armSubsystem.armStop());
+      // auxDriver.a().onTrue(armSubsystem.ArmIntake());
+       //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
@@ -80,10 +80,10 @@ public class RobotContainer {
         //buttton for motor2
         Driver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
         Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
-        //Driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        /*Driver.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-Driver.getLeftY(), -Driver.getLeftX()))
-        ));*/
+        auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        Driver.rightBumper().whileTrue(drivetrain.applyRequest(() ->
+            point.withModuleDirection(new Rotation2d(Driver.getLeftY(), Driver.getLeftX()))
+        ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
