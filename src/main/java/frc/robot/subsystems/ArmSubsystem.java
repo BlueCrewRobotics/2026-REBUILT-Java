@@ -1,19 +1,8 @@
 package frc.robot.subsystems;
-import java.util.function.BooleanSupplier;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.*;
-
-
-
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotState;
-import com.revrobotics.jni.CANSparkJNI;
-
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
-
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
@@ -22,11 +11,10 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 // import frc.robot.Constants.ArmConstants;
@@ -74,13 +62,18 @@ ClosedLoopSlot.kSlot0);
         
         //armPidController.setSetpoint(setPosition, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
-    public void Intakedown(){
-        armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-        ArmMotor.set(-.5);
-    }
+    // public void Intakedown(){
+    //     armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    //     ArmMotor.set(-.5);
+    // }
+
     public Command ArmIntake(){
-        return new InstantCommand(()-> Intakedown());
-        
+        // return new InstantCommand(()-> Intakedown());
+        return new StartEndCommand(
+        () -> ArmMotor.set(0.3),  // start
+        () -> ArmMotor.set(0),    // stop
+        this
+    ).withTimeout(2.0);
     }
     public Command armStop(){
         return new InstantCommand(()-> ArmMotor.stopMotor());
