@@ -26,6 +26,7 @@ public class ClimberSubsystem {
     private CommandXboxController driver;
     private Servo ClimbStopper;
     private double ClimberStopperPosition;
+    private double setPos;
     public ClimberSubsystem(){
         motor1.clearStickyFaults();
       
@@ -72,4 +73,22 @@ public Command ClimbUp (){
  return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_HIGHER_LEVEL)));
 
 }
+public Command linearActuatorOut(){
+    return new InstantCommand(() -> ClimbStopper.set(1)
+      );
+  }
+
+  public Command linearActuatorIn() {
+    return new InstantCommand(
+      () -> ClimbStopper.set(200d / 370d)
+      );
+  }
+  public void LinearActuatorIn() {
+    ClimbStopper.set(200d / 370d)
+;
+  }
+  public void climberDown(){
+    motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_LOWER_LEVEL));
+    LinearActuatorIn();
+  }
 }
