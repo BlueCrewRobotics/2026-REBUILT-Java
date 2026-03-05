@@ -15,7 +15,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 //shooter1 code
@@ -31,11 +33,14 @@ shooterConfig.CurrentLimits.SupplyCurrentLimit=30;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 // motor2.setControl(new Follower(Constants.motor1, null));
 }
+public Command Shoot(double Speed,double speed){
+    return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-speed);});
+}
 public Command spinMotor(double speed ){
 return new InstantCommand(() -> motor1.set(speed));
 }
 public Command stopSpin(){
-return new InstantCommand(()-> motor1.stopMotor());
+return Commands.runOnce(()->{ motor1.stopMotor();motor2.stopMotor();});
 }
 //shooter2 code
 public void SpinTheMotor(){

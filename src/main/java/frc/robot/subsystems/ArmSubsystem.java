@@ -70,31 +70,18 @@ ClosedLoopSlot.kSlot0);
     public Command ArmIntake(){
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
-        () -> ArmMotor.set(0.3),  // start
+        () -> ArmMotor.set(-0.1),  // start
         () -> ArmMotor.set(0),    // stop
         this
     ).withTimeout(2.0);
     }
-    public Command armStop(){
-        return new InstantCommand(()-> ArmMotor.stopMotor());
-    }
+   
     public Command armToNeutralLevel(){
     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
-      
-         if (setPosition == Constants.ARM_MAX_LIMIT){
-            return new InstantCommand(()-> ArmMotor.stopMotor());
-       }
-       return new InstantCommand(()-> ArmMotor.set(.1)); 
-
+        return new StartEndCommand(
+        () -> ArmMotor.set(0.4),  // start
+        () -> ArmMotor.set(0),    // stop
+        this
+    ).withTimeout(1.0);
     }
-    public Command armToIntakePosition(){
-     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0)); 
-      
-         if (setPosition == Constants.ARM_MIN_LIMIT){
-            return new InstantCommand(()-> ArmMotor.stopMotor());
-        }
-        return new InstantCommand(()-> ArmMotor.set(-.3));
-        
-    }
-    
 } 

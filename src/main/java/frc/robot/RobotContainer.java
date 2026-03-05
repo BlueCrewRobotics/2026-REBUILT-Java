@@ -29,6 +29,8 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionModule;
+import frc.lib.bluecrew.pathplanner.CustomAutoBuilder;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -51,21 +53,24 @@ public class RobotContainer {
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
-/* 
+    public final VisionModule visionModule = new VisionModule();
+///* 
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<Integer> numOfAutoActions;
     private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
     private List<SendableChooser<Command>> selectedNoteActions = new ArrayList<>();
     private boolean hasSetupAutoChoosers = false;
-*/
+//*/
     public RobotContainer() {
-        /* 
+        
+        ///* 
         NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("Hello"));
         //NamedCommands.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
-       NamedCommands.registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(.2).andThen(ClimberSubsystem.climbDown()));
-
+       NamedCommands.registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(15).andThen(ClimberSubsystem.climbDown()));
+        NamedCommands.registerCommand("center shoot",shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
+        NamedCommands.registerCommand("shoot auto red", shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
         // Chooser for number of actions in auto
         numOfAutoActions = new SendableChooser<>();
         numOfAutoActions.setDefaultOption("0", 0);
@@ -76,7 +81,7 @@ public class RobotContainer {
         // Auto Chooser
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
-        */
+        //*/
         configureBindings();
     }
      
@@ -110,16 +115,18 @@ public class RobotContainer {
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
-        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
+        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
+        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
+        //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
+        //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
-        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
+        //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
+        //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
        // all climber stuff
-       Driver.povUp().onTrue(ClimberSubsystem.linearActuatorIn());
-       Driver.povDown().onTrue(ClimberSubsystem.linearActuatorOut());
-       Driver.y().onTrue(ClimberSubsystem.ClimbUp());
-       Driver.a().onTrue(ClimberSubsystem.climbDown());
+       //Driver.povUp().onTrue(ClimberSubsystem.linearActuatorIn());
+       //Driver.povDown().onTrue(ClimberSubsystem.linearActuatorOut());
+       //Driver.y().onTrue(ClimberSubsystem.ClimbUp());
+       //Driver.a().onTrue(ClimberSubsystem.climbDown());
         Driver.rightBumper().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(Driver.getLeftY(), Driver.getLeftX()))
         ));
@@ -145,12 +152,14 @@ public class RobotContainer {
             // facing away from our alliance station wall (0 deg).
             drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
             // Then slowly drive forward (away from us) for 5 seconds.
+            /* 
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(0.5)
                     .withVelocityY(0)
                     .withRotationalRate(0)
-            )
-            .withTimeout(5.0),
+            )*/
+            //ShooterSubsystem.runOnce(()-> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
+            //.withTimeout(5.0),
             // Finally idle for the rest of auton
             drivetrain.applyRequest(() -> idle)
         );

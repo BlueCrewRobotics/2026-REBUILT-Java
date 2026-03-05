@@ -26,9 +26,9 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import static frc.robot.Constants.PhotonVision.April_Tag_Back_pos;
 
 import static frc.robot.Constants.PhotonVision.April_Tag_Front_pos;
-import static frc.robot.Constants.PhotonVision.Camera_Name_Back;
+import static frc.robot.Constants.PhotonVision.Thing2;
 
-import static frc.robot.Constants.PhotonVision.camera_Name_Front;
+import static frc.robot.Constants.PhotonVision.Thing1;
 import static frc.robot.Constants.PhotonVision.tagLayout;
 
 import java.util.Optional;
@@ -42,11 +42,11 @@ public final class VisionModule {
 
     private static VisionModule instance;
 
-    private VisionModule() {
+    public VisionModule() {
         PhotonCamera.setVersionCheckEnabled(false);
 
-        aprilTagsFront = new PhotonCamera(camera_Name_Front);
-        aprilTagsBack = new PhotonCamera(Camera_Name_Back);
+        aprilTagsFront = new PhotonCamera(Thing1);
+        aprilTagsBack = new PhotonCamera(Thing2);
 
 
         photonEstimatorBack =
