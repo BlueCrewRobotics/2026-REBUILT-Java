@@ -116,9 +116,9 @@ public final class Constants {
     public static final int motor2= 12;
     public static final int motor1= 10;
     // Climber stuf
-    public static final int CLIMBER_MOTOR_ID= 999;
-    public static final double CLIMBER_LOWER_LEVEL = 0;
-    public static final double CLIMBER_HIGHER_LEVEL = 1;
+    public static final int CLIMBER_MOTOR_ID= 60;
+    public static final double CLIMBER_LOWER_LEVEL = 37.811;
+    public static final double CLIMBER_HIGHER_LEVEL = 2;
 }
 
   

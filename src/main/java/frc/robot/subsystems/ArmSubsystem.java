@@ -84,7 +84,7 @@ ClosedLoopSlot.kSlot0);
          if (setPosition == Constants.ARM_MAX_LIMIT){
             return new InstantCommand(()-> ArmMotor.stopMotor());
        }
-       return new InstantCommand(()-> ArmMotor.set(.4)); 
+       return new InstantCommand(()-> ArmMotor.set(.1)); 
 
     }
     public Command armToIntakePosition(){

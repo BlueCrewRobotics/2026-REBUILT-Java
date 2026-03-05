@@ -6,10 +6,17 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -44,10 +51,35 @@ public class RobotContainer {
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
+/* 
+    private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Integer> numOfAutoActions;
+    private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
+    private List<SendableChooser<Command>> selectedNoteActions = new ArrayList<>();
+    private boolean hasSetupAutoChoosers = false;
+*/
     public RobotContainer() {
+        /* 
+        NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
+        NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
+        NamedCommands.registerCommand("print hello", Commands.print("Hello"));
+        //NamedCommands.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
+       NamedCommands.registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(.2).andThen(ClimberSubsystem.climbDown()));
+
+        // Chooser for number of actions in auto
+        numOfAutoActions = new SendableChooser<>();
+        numOfAutoActions.setDefaultOption("0", 0);
+        for (int i = 1; i <= 5; i++) {
+            numOfAutoActions.addOption("" + i, i);
+        }
+        SmartDashboard.putData("Number Of Auto Actions", numOfAutoActions);
+        // Auto Chooser
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Mode", autoChooser);
+        */
         configureBindings();
     }
-
+     
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.

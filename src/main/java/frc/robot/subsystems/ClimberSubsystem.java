@@ -56,7 +56,7 @@ public class ClimberSubsystem {
 
     motor1.getConfigurator().apply(climberConfig);
 
-    ClimbStopper = new Servo(0);
+    ClimbStopper = new Servo(9);
   
     }
     public Command Spin (double speed ){
