@@ -106,7 +106,7 @@ public final class Constants {
     public static final double intake_motor_speed = 0.5;
    // lift arm
    public static final int ARM_MOTOR = 51;
-    public static final double ARM_AT_HUB_POSITION = 3; 
+    public static final double ARM_AT_HUB_POSITION = .1; 
     public static final double ARM_AT_INTAKE_POSITION = 1;
     public static final double ARM_MIN_LIMIT = -2;
     public static final double ARM_MAX_LIMIT = 0;

@@ -54,16 +54,16 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
-///* 
+/* 
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<Integer> numOfAutoActions;
     private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
     private List<SendableChooser<Command>> selectedNoteActions = new ArrayList<>();
     private boolean hasSetupAutoChoosers = false;
-//*/
+*/
     public RobotContainer() {
         
-        ///* 
+        /* 
         NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("Hello"));
@@ -81,7 +81,7 @@ public class RobotContainer {
         // Auto Chooser
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
-        //*/
+        */
         configureBindings();
     }
      
