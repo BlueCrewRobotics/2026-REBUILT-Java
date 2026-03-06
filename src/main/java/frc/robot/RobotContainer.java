@@ -145,6 +145,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+        //return autoChooser.getSelected();
+        
         // Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
@@ -152,17 +154,17 @@ public class RobotContainer {
             // facing away from our alliance station wall (0 deg).
             drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
             // Then slowly drive forward (away from us) for 5 seconds.
-            /* 
+            
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(0.5)
                     .withVelocityY(0)
                     .withRotationalRate(0)
-            )*/
+            )
             //ShooterSubsystem.runOnce(()-> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
             //.withTimeout(5.0),
             // Finally idle for the rest of auton
-            drivetrain.applyRequest(() -> idle)
-        );
+            //drivetrain.applyRequest(() -> idle) 
+        ); 
+        
     }
 }
-//I love you landon <3

@@ -9,8 +9,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -45,6 +46,7 @@ Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
 config.smartCurrentLimit(20);
+config.idleMode(IdleMode.kCoast);
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
 
@@ -82,6 +84,6 @@ config.smartCurrentLimit(20);
             return new InstantCommand(()-> ArmMotor.stopMotor());
         }
     return new InstantCommand(
-        () -> ArmMotor.set(.4));
+        () -> ArmMotor.set(.3));
     }
 } 
