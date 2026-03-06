@@ -107,9 +107,13 @@ public class RobotContainer {
         auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.8));
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
-        auxDriver.rightBumper().onTrue(armSubsystem.armToNeutralLevel());
-        auxDriver.leftBumper().onTrue(armSubsystem.ArmIntake());
+        auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
+        auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        auxDriver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
+        auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
+        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft

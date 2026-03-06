@@ -13,6 +13,8 @@ import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,13 +26,14 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
 private final TalonFX motor1 = new TalonFX(Constants.motor1);
 private final TalonFX motor2 = new TalonFX(Constants.motor2);
-
+private final SparkMax  kickWheel;
     private TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
 public ShooterSubsystem(){
     motor1.clearStickyFaults();
     motor2.clearStickyFaults();
 shooterConfig.CurrentLimits.SupplyCurrentLimit=30;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
+ kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
 // motor2.setControl(new Follower(Constants.motor1, null));
 }
 public Command Shoot(double Speed,double speed){
@@ -54,5 +57,10 @@ return new InstantCommand(() -> motor2.set(-speed));
 public Command stopSpin2(){
 return new InstantCommand(()-> motor2.stopMotor());
 }
-
+public Command kick(double speed){
+    return new InstantCommand(()-> kickWheel.set(speed));
+}
+public Command KickOff(){
+    return new InstantCommand(()-> kickWheel.stopMotor());
+}
 }

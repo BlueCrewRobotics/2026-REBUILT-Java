@@ -117,6 +117,7 @@ public final class Constants {
     public static final int motor1= 10;
     public static final double SPEED_OF_SHOTER_LEFT_FACE = .75;
      public static final double SPEED_OF_SHOTER_RIGHT_FACE = .7;
+     public static final int KICK_WHEEL = 1;
     // Climber stuf
     public static final int CLIMBER_MOTOR_ID= 60;
     public static final double CLIMBER_LOWER_LEVEL = 37.811;
