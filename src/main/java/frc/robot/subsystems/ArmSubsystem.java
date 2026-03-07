@@ -66,7 +66,10 @@ ClosedLoopSlot.kSlot0);
     //     armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     //     ArmMotor.set(-.5);
     // }
-
+        public void setArmMotorSpeed(double speed){
+        ArmMotor.set(speed);
+    }
+    
     public Command ArmIntake(){
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
