@@ -92,4 +92,5 @@ config.idleMode(IdleMode.kCoast);
     return new InstantCommand(
         () -> ArmMotor.set(.3));
     }
+    
 } 

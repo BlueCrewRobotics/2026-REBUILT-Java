@@ -104,24 +104,31 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // controler buttons 
+        // intake buttons 
         auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.8));
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
+        //arm buttons 
+        auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
         auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
         auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        //system clear
         auxDriver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
+        auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
         auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
+        auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
+        // kicker wheel
         auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
         auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
-        auxDriver.povRight().onTrue(armSubsystem.armSetPoints(2));
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
+        // shooter button 
         auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));

@@ -35,7 +35,7 @@ public final class Constants {
         public static final double ARM_AT_NEUTRAL_POSITION = 0;
         public static final double ARM_AT_INTAKE_POSITION = -2.8;
         public final static class ARM_UPWARDS_HIGH_GRAVITY_PID {
-            public static final double kP = 5;
+            public static final double kP = 7;
             public static final double kI = 0;
             public static final double kD = 0;
         }
