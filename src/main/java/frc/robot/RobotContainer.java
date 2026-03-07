@@ -73,6 +73,10 @@ public class RobotContainer {
         auxDriver.rightBumper().onTrue(armSubsystem.armToNeutralLevel());
         auxDriver.leftBumper().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        armSubsystem.setDefaultCommand(
+            new RunCommand (
+                () -> armSubsystem.setArmMotorSpeed(-auxDriver.getLeftY()))
+                );
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
