@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.560328102710413,
-        "y": 3.5886162624821685
+        "x": 3.6250213980028523,
+        "y": 3.0063766048502147
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2645699721226134,
-        "y": 3.065095920177938
+        "x": 2.5607300216716578,
+        "y": 2.864726996087745
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 2.8122967189728967
       },
       "prevControl": {
-        "x": 2.5853797999154677,
-        "y": 2.85001397890362
+        "x": 2.6810690501890586,
+        "y": 2.857573472724161
       },
       "nextControl": {
-        "x": 2.0838623030864616,
-        "y": 2.7756077745785075
+        "x": 2.0349085555302846,
+        "y": 2.773964109986823
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 2.8122967189728967
       },
       "prevControl": {
-        "x": 2.2393138647505015,
-        "y": 2.858571271734845
+        "x": 2.2621665792094063,
+        "y": 2.82789758420827
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,8 +49,14 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "elavator up",
+      "name": "climbUp",
       "waypointRelativePos": 0.7964028776978364,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "",
+      "waypointRelativePos": 2.0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -65,13 +71,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -178.6112834104487
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.3924307093408707
   },
   "useDefaultConstraints": true
 }

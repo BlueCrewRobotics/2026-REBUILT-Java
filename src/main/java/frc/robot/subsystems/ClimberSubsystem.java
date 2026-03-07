@@ -27,17 +27,18 @@ public class ClimberSubsystem {
     private Servo ClimbStopper;
     private double ClimberStopperPosition;
     private double setPos;
+    
     public ClimberSubsystem(){
         motor1.clearStickyFaults();
       
-  
+      
       climberConfig.CurrentLimits.SupplyCurrentLimit = 30;
       climberConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
   
       // climberConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.ELEVATOR_UPPER_LIMIT; 
-      climberConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Constants.CLIMBER_LOWER_LEVEL;    
-      climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-      climberConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+      //climberConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Constants.CLIMBER_LOWER_LEVEL;    
+      //climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+      //climberConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
       // climberConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
       // climberConfig.DifferentialSensors.DifferentialRemoteSensorID = 4;
   
@@ -56,39 +57,26 @@ public class ClimberSubsystem {
 
     motor1.getConfigurator().apply(climberConfig);
 
-    ClimbStopper = new Servo(0);
+    ClimbStopper = new Servo(9);
   
     }
-    public Command Spin (double speed ){
-return new InstantCommand(()->motor1.set(speed));
-
-    }
-public Command StopSpin (){
-return new RunCommand(()->motor1.stopMotor());
-}
+    // all moving stuff
 public Command climbDown (){
  return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_LOWER_LEVEL)));
 }
 public Command ClimbUp (){
  return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_HIGHER_LEVEL)));
-
 }
 public Command linearActuatorOut(){
     return new InstantCommand(() -> ClimbStopper.set(1)
       );
   }
-
   public Command linearActuatorIn() {
     return new InstantCommand(
-      () -> ClimbStopper.set(200d / 370d)
+      () -> ClimbStopper.set(2)
       );
   }
   public void LinearActuatorIn() {
-    ClimbStopper.set(200d / 370d)
-;
-  }
-  public void climberDown(){
-    motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_LOWER_LEVEL));
-    LinearActuatorIn();
+    ClimbStopper.set(1);
   }
 }

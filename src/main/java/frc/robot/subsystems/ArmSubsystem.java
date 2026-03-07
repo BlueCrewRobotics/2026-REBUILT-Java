@@ -44,7 +44,7 @@ config.closedLoop.pid(
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
-
+config.smartCurrentLimit(20);
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
 
@@ -73,31 +73,18 @@ ClosedLoopSlot.kSlot0);
     public Command ArmIntake(){
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
-        () -> ArmMotor.set(0.3),  // start
+        () -> ArmMotor.set(-0.2),  // start
         () -> ArmMotor.set(0),    // stop
         this
     ).withTimeout(2.0);
     }
-    public Command armStop(){
-        return new InstantCommand(()-> ArmMotor.stopMotor());
-    }
+   
     public Command armToNeutralLevel(){
     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
-      
-         if (setPosition == Constants.ARM_MAX_LIMIT){
-            return new InstantCommand(()-> ArmMotor.stopMotor());
-       }
-       return new InstantCommand(()-> ArmMotor.set(.4)); 
-
-    }
-    public Command armToIntakePosition(){
-     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_INTAKE_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0)); 
-      
-         if (setPosition == Constants.ARM_MIN_LIMIT){
+        if (setPosition == 0){
             return new InstantCommand(()-> ArmMotor.stopMotor());
         }
-        return new InstantCommand(()-> ArmMotor.set(-.3));
-        
+    return new InstantCommand(
+        () -> ArmMotor.set(.4));
     }
-    
 } 

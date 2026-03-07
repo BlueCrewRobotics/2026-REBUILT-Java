@@ -43,8 +43,8 @@ public final class Constants {
 
 
     public static final class PhotonVision {
-        public static final String Camera_Name_Back = "Camera_Intake_Side";
-        public static final String camera_Name_Front = "Camera_Battery_Side";
+        public static final String Thing2 = "Thing2";
+        public static final String Thing1 = "Thing1";
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         public static final Transform3d April_Tag_Front_pos =
             new Transform3d(new Translation3d(Units.inchesToMeters(-11.5d), Units.inchesToMeters(-10.7d), Units.inchesToMeters(9.0d)), new Rotation3d(Math.toRadians(-33d), 0, 0/*Math.PI+3.125*/));
@@ -106,7 +106,7 @@ public final class Constants {
     public static final double intake_motor_speed = 0.5;
    // lift arm
    public static final int ARM_MOTOR = 51;
-    public static final double ARM_AT_HUB_POSITION = 3; 
+    public static final double ARM_AT_HUB_POSITION = .1; 
     public static final double ARM_AT_INTAKE_POSITION = 1;
     public static final double ARM_MIN_LIMIT = -2;
     public static final double ARM_MAX_LIMIT = 0;
@@ -115,10 +115,12 @@ public final class Constants {
     private static final int shooter_motor_max_rotation = 10;
     public static final int motor2= 12;
     public static final int motor1= 10;
+    public static final double SPEED_OF_SHOTER_LEFT_FACE = .75;
+     public static final double SPEED_OF_SHOTER_RIGHT_FACE = .7;
     // Climber stuf
-    public static final int CLIMBER_MOTOR_ID= 999;
-    public static final double CLIMBER_LOWER_LEVEL = 0;
-    public static final double CLIMBER_HIGHER_LEVEL = 1;
+    public static final int CLIMBER_MOTOR_ID= 60;
+    public static final double CLIMBER_LOWER_LEVEL = 37.811;
+    public static final double CLIMBER_HIGHER_LEVEL = 4;
 }
 
   
