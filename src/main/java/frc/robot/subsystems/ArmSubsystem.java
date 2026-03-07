@@ -66,12 +66,7 @@ ClosedLoopSlot.kSlot0);
     //     armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     //     ArmMotor.set(-.5);
     // }
-       public void setArmMotorSpeed(double speed){
-        if (speed > 0.5){
-            speed = 0.5;
-        } else if (speed < -0.5){
-            speed = -0.5;
-        }
+        public void setArmMotorSpeed(double speed){
         ArmMotor.set(speed);
     }
     
