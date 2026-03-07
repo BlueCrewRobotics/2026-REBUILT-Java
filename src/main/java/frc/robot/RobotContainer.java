@@ -114,6 +114,9 @@ public class RobotContainer {
         auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
+        auxDriver.povRight().onTrue(armSubsystem.armSetPoints(2));
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft

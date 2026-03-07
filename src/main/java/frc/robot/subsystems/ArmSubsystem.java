@@ -47,6 +47,8 @@ Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
 config.smartCurrentLimit(20);
 config.idleMode(IdleMode.kCoast);
+
+
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
 
@@ -68,6 +70,10 @@ config.idleMode(IdleMode.kCoast);
     //     armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     //     ArmMotor.set(-.5);
     // }
+    public Command armSetPoints(double setState){
+        return new InstantCommand(()-> 
+        armPidController.setSetpoint(setState,ControlType.kVoltage,ClosedLoopSlot.kSlot0));
+    }
 
     public Command ArmIntake(){
         // return new InstantCommand(()-> Intakedown());

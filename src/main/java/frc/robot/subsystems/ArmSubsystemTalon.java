@@ -15,9 +15,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-
-public class ClimberSubsystem {
-   private final TalonFX motor1 = new TalonFX(Constants.CLIMBER_MOTOR_ID);
+public class ArmSubsystemTalon {
+private final TalonFX motor1 = new TalonFX(Constants.CLIMBER_MOTOR_ID);
     private boolean enableSetPosition = true;
     private double elevatorSetPosition;
     private PositionVoltage ClimberPositionVoltage = new PositionVoltage(0);
@@ -27,20 +26,11 @@ public class ClimberSubsystem {
     private Servo ClimbStopper;
     private double ClimberStopperPosition;
     private double setPos;
-    
-    public ClimberSubsystem(){
-        motor1.clearStickyFaults();
+    public ArmSubsystemTalon(){
+      motor1.clearStickyFaults();
       
       climberConfig.CurrentLimits.SupplyCurrentLimit = 30;
       climberConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-  
-      // climberConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.ELEVATOR_UPPER_LIMIT; 
-      //climberConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Constants.CLIMBER_LOWER_LEVEL;    
-      //climberConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-      //climberConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-      // climberConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-      // climberConfig.DifferentialSensors.DifferentialRemoteSensorID = 4;
-  
       climberConfig.Slot0.kP = 0.435;
       climberConfig.Slot0.kI = 0.02;
       climberConfig.Slot0.kD = 0.0;
@@ -56,26 +46,6 @@ public class ClimberSubsystem {
 
     motor1.getConfigurator().apply(climberConfig);
 
-    ClimbStopper = new Servo(9);
-  
+    
     }
-    // all moving stuff
-public Command climbDown (){
- return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_LOWER_LEVEL)));
-}
-public Command ClimbUp (){
- return new InstantCommand (() -> motor1.setControl(ClimberPositionVoltage.withPosition(Constants.CLIMBER_HIGHER_LEVEL)));
-}
-public Command linearActuatorOut(){
-    return new InstantCommand(() -> ClimbStopper.set(1)
-      );
-  }
-  public Command linearActuatorIn() {
-    return new InstantCommand(
-      () -> ClimbStopper.set(2)
-      );
-  }
-  public void LinearActuatorIn() {
-    ClimbStopper.set(1);
-  }
 }

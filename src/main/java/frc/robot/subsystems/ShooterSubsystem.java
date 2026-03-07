@@ -26,6 +26,7 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
 private final TalonFX motor1 = new TalonFX(Constants.motor1);
 private final TalonFX motor2 = new TalonFX(Constants.motor2);
+private final TalonFX kickWheelT = new TalonFX(Constants.KICK_WHEEL);
 private final SparkMax  kickWheel;
     private TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
 public ShooterSubsystem(){
@@ -33,6 +34,7 @@ public ShooterSubsystem(){
     motor2.clearStickyFaults();
 shooterConfig.CurrentLimits.SupplyCurrentLimit=30;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
+
  kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
 // motor2.setControl(new Follower(Constants.motor1, null));
 }
@@ -62,5 +64,11 @@ public Command kick(double speed){
 }
 public Command KickOff(){
     return new InstantCommand(()-> kickWheel.stopMotor());
+}
+public Command kickT(double speed){
+    return new InstantCommand(()-> kickWheelT.set(speed));
+}
+public Command KickOffT(){
+    return new InstantCommand(()-> kickWheelT.stopMotor());
 }
 }
