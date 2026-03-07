@@ -75,6 +75,10 @@ config.idleMode(IdleMode.kCoast);
         armPidController.setSetpoint(setState,ControlType.kVoltage,ClosedLoopSlot.kSlot0));
     }
 
+        public void setArmMotorSpeed(double speed){
+        ArmMotor.set(speed);
+    }
+    
     public Command ArmIntake(){
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
@@ -92,5 +96,5 @@ config.idleMode(IdleMode.kCoast);
     return new InstantCommand(
         () -> ArmMotor.set(.3));
     }
-    
+
 } 
