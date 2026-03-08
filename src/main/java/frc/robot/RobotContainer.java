@@ -111,8 +111,7 @@ public class RobotContainer {
         auxDriver.leftBumper().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         armSubsystem.setDefaultCommand(
-            new RunCommand (
-                () -> armSubsystem.setArmMotorSpeed(-auxDriver.getLeftY()))
+                armSubsystem.setArmMotorSpeed(auxDriver.getLeftY() * -0.5)
                 );
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
