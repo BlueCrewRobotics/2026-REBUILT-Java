@@ -66,8 +66,8 @@ config.smartCurrentLimit(20);
     //     armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     //     ArmMotor.set(-.5);
     // }
-        public void setArmMotorSpeed(double speed){
-        ArmMotor.set(speed);
+        public Command setArmMotorSpeed(double speed){
+        return new InstantCommand(() -> ArmMotor.set(speed));
     }
     
     public Command ArmIntake(){
