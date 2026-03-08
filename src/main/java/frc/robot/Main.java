@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.subsystems.ArmSubsystem;
 
 public final class Main {
   private Main() {}

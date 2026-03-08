@@ -32,6 +32,7 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
 
     public static final class ArmConstants {
+        public static final double ARM_MAX_ROTATIONS = 100;
         public static final double ARM_AT_NEUTRAL_POSITION = 0;
         public static final double ARM_AT_INTAKE_POSITION = -2.8;
         public final static class ARM_UPWARDS_HIGH_GRAVITY_PID {
@@ -115,9 +116,9 @@ public final class Constants {
     private static final int shooter_motor_max_rotation = 10;
     public static final int motor2= 12;
     public static final int motor1= 10;
-    public static final double SPEED_OF_SHOTER_LEFT_FACE = .75;
-     public static final double SPEED_OF_SHOTER_RIGHT_FACE = .7;
-     public static final int KICK_WHEEL = 1;
+    public static final double SPEED_OF_SHOTER_LEFT_FACE = .62;
+     public static final double SPEED_OF_SHOTER_RIGHT_FACE = .62;
+     public static final int KICK_WHEEL = 17;
     // Climber stuf
     public static final int CLIMBER_MOTOR_ID= 60;
     public static final double CLIMBER_LOWER_LEVEL = 37.811;

@@ -119,11 +119,15 @@ public class RobotContainer {
         auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
         auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
+        auxDriver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
         // kicker wheel
         auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
-        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
+        auxDriver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
+        armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
         /* 
         armSubsystem.setDefaultCommand(
             new RunCommand (
