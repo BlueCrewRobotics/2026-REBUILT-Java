@@ -12,7 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -96,5 +96,11 @@ config.idleMode(IdleMode.kCoast);
     return new InstantCommand(
         () -> ArmMotor.set(.3));
     }
-
+    int ARM_MAX_ROTATIONS = 100;
+    public void spinByJostick( double amount){
+        double spinAmount = MathUtil.applyDeadband(amount,.1);
+        if (spinAmount > .1 && spinAmount <- .01){
+            armPidController.setSetpoint(spinAmount, ControlType.kPosition,ClosedLoopSlot.kSlot0,);
+        }
+    }
 } 

@@ -32,7 +32,7 @@ private final SparkMax  kickWheel;
 public ShooterSubsystem(){
     motor1.clearStickyFaults();
     motor2.clearStickyFaults();
-shooterConfig.CurrentLimits.SupplyCurrentLimit=30;
+shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 
  kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
