@@ -40,6 +40,9 @@ public final class Constants {
             public static final double kI = 0;
             public static final double kD = 0;
         }
+        //Lucy edits
+        public static final double ARM_LOWER_LIMIT = 22;
+        public static final double ARM_UPPER_LIMIT = 0;
     }
 
 

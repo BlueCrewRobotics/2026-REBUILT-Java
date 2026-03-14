@@ -41,7 +41,7 @@ shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 public Command Shoot(double Speed,double speed){
     return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-speed);});
 }
-public Command spinMotor(double speed ){
+public Command spinMotor(double speed){
 return new InstantCommand(() -> motor1.set(speed));
 }
 public Command stopSpin(){
@@ -71,4 +71,5 @@ public Command kickT(double speed){
 public Command KickOffT(){
     return new InstantCommand(()-> kickWheelT.stopMotor());
 }
+
 }

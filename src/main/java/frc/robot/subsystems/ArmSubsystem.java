@@ -48,6 +48,12 @@ ClosedLoopSlot.kSlot0);
 config.smartCurrentLimit(20);
 config.idleMode(IdleMode.kCoast);
 
+//Lucy edits ._.
+config.softLimit.forwardSoftLimit(Constants.ArmConstants.ARM_LOWER_LIMIT);
+config.softLimit.reverseSoftLimit(Constants.ArmConstants.ARM_UPPER_LIMIT);
+config.softLimit.forwardSoftLimitEnabled(true);
+config.softLimit.reverseSoftLimitEnabled(true);
+
 config.closedLoop.feedForward
     .kS(0)
     .kV(0)

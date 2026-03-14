@@ -63,13 +63,21 @@ public class RobotContainer {
     private boolean hasSetupAutoChoosers = false;
 */
     public RobotContainer() {
-        
+        NamedCommands.registerCommand("shoot",shooterSubsystem.Shoot(-.7,-.7));
+        NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
+        NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
+        NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
+       /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
+        NamedCommands.registerCommand("indexTStop",shooterSubsystem.KickOffT());
+        */
+      //NamedCommands.registerCommand("stopIndex",
         /* 
         NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("Hello"));
-        //NamedCommands.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
-       NamedCommands.registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(15).andThen(ClimberSubsystem.climbDown()));
+        //NamedCommand.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
+       NamedCommands
+       .registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(15).andThen(ClimberSubsystem.climbDown()));
         NamedCommands.registerCommand("center shoot",shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
         NamedCommands.registerCommand("shoot auto red", shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
         // Chooser for number of actions in auto
@@ -84,15 +92,16 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Mode", autoChooser);
         */
         configureBindings();
+        
     }
-     
+    
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(Driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                drive.withVelocityX(Driver.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(Driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-Driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
