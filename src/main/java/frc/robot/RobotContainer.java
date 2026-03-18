@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -95,12 +96,25 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
         // controler buttons 
+        // intake buttons 
         auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.8));
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
-        auxDriver.rightBumper().onTrue(armSubsystem.armToNeutralLevel());
-        auxDriver.leftBumper().onTrue(armSubsystem.ArmIntake());
+        //arm buttons 
+        auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
+        auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
+        auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        //system clear
+        auxDriver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
+        auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
+        auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
+        auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
+        // kicker wheel
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
+        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
         armSubsystem.setDefaultCommand(
                 armSubsystem.setArmMotorSpeed(auxDriver.getLeftY() * -0.5)
                 );
@@ -109,6 +123,7 @@ public class RobotContainer {
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
+        // shooter button 
         auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
@@ -139,6 +154,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+        //return autoChooser.getSelected();
+        
         // Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
@@ -146,17 +163,18 @@ public class RobotContainer {
             // facing away from our alliance station wall (0 deg).
             drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
             // Then slowly drive forward (away from us) for 5 seconds.
-            /* 
+            
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(0.5)
                     .withVelocityY(0)
                     .withRotationalRate(0)
-            )*/
+            )
             //ShooterSubsystem.runOnce(()-> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
             //.withTimeout(5.0),
             // Finally idle for the rest of auton
-            drivetrain.applyRequest(() -> idle)
-        );
+            //drivetrain.applyRequest(() -> idle) 
+        ); 
+        
     }
 }
-//I love you landon <3
+

@@ -9,6 +9,8 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +26,9 @@ private SparkClosedLoopController m_pidController = intakeMotor.getClosedLoopCon
 private SparkRelativeEncoder leftEncoder = (SparkRelativeEncoder) intakeMotor.getEncoder();
 
 public IntakeSubsystem(){
+SparkMaxConfig config = new SparkMaxConfig();
+config.smartCurrentLimit(20);
+config.idleMode(IdleMode.kCoast);
 BadEncoder = new CANcoder(Constants.Sparky_1);
 
 }
