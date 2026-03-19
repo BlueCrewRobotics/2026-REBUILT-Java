@@ -4,13 +4,19 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -24,6 +30,8 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionModule;
+import frc.lib.bluecrew.pathplanner.CustomAutoBuilder;
+
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -115,22 +123,23 @@ public class RobotContainer {
         auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
-        auxDriver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
+        Driver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
         auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
-        auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
+        Driver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
-        auxDriver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
-        auxDriver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
+        Driver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
+        Driver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
         // kicker wheel
-        auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
-        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
-        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
-        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
-        auxDriver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
+        Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
+        Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
+        Driver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
+        Driver.leftBumper().onFalse(shooterSubsystem.KickOffT());
+        Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
         armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
         /* 
         armSubsystem.setDefaultCommand(
-                armSubsystem.setArmMotorSpeed(auxDriver.getLeftY() * -0.5)
+            new RunCommand (
+                () -> armSubsystem.setArmMotorSpeed(-auxDriver.getLeftY()))
                 );
             */
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
@@ -139,8 +148,8 @@ public class RobotContainer {
         //60 is awsome at 10ft
         //70 to much at 10ft
         // shooter button 
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
-        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
+        Driver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
+        Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
         //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
@@ -151,7 +160,7 @@ public class RobotContainer {
        //Driver.povDown().onTrue(ClimberSubsystem.linearActuatorOut());
        //Driver.y().onTrue(ClimberSubsystem.ClimbUp());
        //Driver.a().onTrue(ClimberSubsystem.climbDown());
-        Driver.rightBumper().whileTrue(drivetrain.applyRequest(() ->
+        Driver.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(Driver.getLeftY(), Driver.getLeftX()))
         ));
 
@@ -163,7 +172,7 @@ public class RobotContainer {
         Driver.start().and(Driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        Driver.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        Driver.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
