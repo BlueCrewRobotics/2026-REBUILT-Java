@@ -85,8 +85,8 @@ config.closedLoop.feedForward
         armPidController.setSetpoint(setState * ARM_MAX_ROTATIONS,ControlType.kVoltage,ClosedLoopSlot.kSlot0));
     }
 
-        public void setArmMotorSpeed(double speed){
-        ArmMotor.set(speed);
+        public Command setArmMotorSpeed(double speed){
+        return new InstantCommand(() -> ArmMotor.set(speed));
     }
     
     public Command ArmIntake(){
