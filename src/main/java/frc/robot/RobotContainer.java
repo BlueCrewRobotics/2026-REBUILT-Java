@@ -8,6 +8,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -24,6 +27,8 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionModule;
+import frc.robot.subsystems.VisionPipelineRunnable;
+import frc.robot.subsystems.VisionPoseEstimator;
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -54,7 +59,6 @@ public class RobotContainer {
     private boolean hasSetupAutoChoosers = false;
 */
     public RobotContainer() {
-        
         /* 
         NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
@@ -151,6 +155,15 @@ public class RobotContainer {
         Driver.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+        
+        // Logic: While the target is in range, rumble. When it leaves range, stop.
+    new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
+    .whileTrue(
+        Commands.runEnd(
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 1.0),
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
+        ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
+    );
     }
 
     public Command getAutonomousCommand() {
