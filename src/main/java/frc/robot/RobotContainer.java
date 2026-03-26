@@ -155,13 +155,13 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         
       //Logic: While the target is in range, rumble. When it leaves range, stop.
-    // new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
-    // .whileTrue(
-    //     Commands.runEnd(
-    //         () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2),
-    //         () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
-    //     ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
-    // );
+    new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
+    .whileTrue(
+        Commands.runEnd(
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 1.0),
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
+        ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
+    );
     
     }
 
