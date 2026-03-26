@@ -41,7 +41,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
-//controlers 
+//controllers 
     private final CommandXboxController Driver = new CommandXboxController(0);
     private final CommandXboxController auxDriver = new CommandXboxController(1);
 //subsystems 
