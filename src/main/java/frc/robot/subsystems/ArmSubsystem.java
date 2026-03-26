@@ -97,7 +97,9 @@ config.closedLoop.feedForward
         this
     ).withTimeout(2.0);
     }
-   
+   /*public Command ArmWiggle(){
+         return new InstantCommand(() ->ArmMotor.set(-0.1));
+   }*/
     public Command armToNeutralLevel(){
     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
         if (setPositon == 0){

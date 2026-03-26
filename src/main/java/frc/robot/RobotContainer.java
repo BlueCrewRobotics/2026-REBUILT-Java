@@ -118,9 +118,10 @@ public class RobotContainer {
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         //arm buttons 
-        auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
+        //auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
         auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
         auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
+        //auxDriver.povDown().onTrue(armSubsystem.ArmWiggle());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
         Driver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
