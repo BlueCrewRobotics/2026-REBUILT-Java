@@ -160,7 +160,7 @@ public class RobotContainer {
     new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
     .whileTrue(
         Commands.runEnd(
-            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 1.0),
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2),
             () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
         ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
     );
