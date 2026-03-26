@@ -45,7 +45,7 @@ config.closedLoop.pid(
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
-config.smartCurrentLimit(20);
+config.smartCurrentLimit(25);
 config.idleMode(IdleMode.kCoast);
 
 
@@ -79,14 +79,15 @@ config.idleMode(IdleMode.kCoast);
         return new InstantCommand(() -> ArmMotor.set(speed));
     }
     
-    public Command ArmIntake(){
-        // return new InstantCommand(()-> Intakedown());
-        return new StartEndCommand(
-        () -> ArmMotor.set(-0.2),  // start
-        () -> ArmMotor.set(0),    // stop
-        this
-    ).withTimeout(2.0);
-    }
+    //public Command ArmIntake(){
+
+    //     // return new InstantCommand(()-> Intakedown());
+    //     return new StartEndCommand(
+    //     () -> ArmMotor.set(-0.2),  // start
+    //     () -> ArmMotor.set(0),    // stop
+    //     this
+    // ).withTimeout(2.0);
+    //}
    
     public Command armToNeutralLevel(){
     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
@@ -96,5 +97,6 @@ config.idleMode(IdleMode.kCoast);
     return new InstantCommand(
         () -> ArmMotor.set(.3));
     }
+
 
 } 

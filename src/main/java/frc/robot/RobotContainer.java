@@ -107,7 +107,7 @@ public class RobotContainer {
         //arm buttons 
         auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
         auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
-        auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
+        //auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
         auxDriver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
@@ -119,9 +119,7 @@ public class RobotContainer {
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
         auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
-        armSubsystem.setDefaultCommand(
-                armSubsystem.setArmMotorSpeed(auxDriver.getLeftY() * -0.5)
-                );
+        
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
@@ -156,14 +154,15 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
         
-        // Logic: While the target is in range, rumble. When it leaves range, stop.
-    new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
-    .whileTrue(
-        Commands.runEnd(
-            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2),
-            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
-        ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
-    );
+      //Logic: While the target is in range, rumble. When it leaves range, stop.
+    // new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
+    // .whileTrue(
+    //     Commands.runEnd(
+    //         () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2),
+    //         () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
+    //     ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
+    // );
+    
     }
 
     public Command getAutonomousCommand() {
