@@ -36,7 +36,8 @@
   import static frc.robot.Constants.PhotonVision.TAGS_TO_SHOOT;
  import edu.wpi.first.math.geometry.Rotation2d;
  import edu.wpi.first.math.geometry.Transform3d;
- import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  import edu.wpi.first.math.kinematics.SwerveModulePosition;
  import edu.wpi.first.math.numbers.N1;
  import edu.wpi.first.math.numbers.N3;
@@ -78,7 +79,13 @@
                    var visionStdDevs = VecBuilder.fill(1, 1, 1);
            
                    swervePoseEstimator = new SwerveDrivePoseEstimator(
-                                   new SwerveDriveKinematics(),
+                                   //new SwerveDriveKinematics(),
+                                   new SwerveDriveKinematics(
+    new Translation2d(TunerConstants.FrontLeft.LocationX,  TunerConstants.FrontLeft.LocationY),
+    new Translation2d(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY),
+    new Translation2d(TunerConstants.BackLeft.LocationX,   TunerConstants.BackLeft.LocationY),
+    new Translation2d(TunerConstants.BackRight.LocationX,  TunerConstants.BackRight.LocationY)
+),
                                    new Rotation2d(),
                                    new SwerveModulePosition[] {
                                            new SwerveModulePosition(),
@@ -167,8 +174,9 @@
                public Optional<EstimatedRobotPose> getEstimatedVisionGlobalPose() {
                    useBestCamera();
                    var visionEst = currentPhotonEstimator.update(getLatestResult());
-                   double latestTimestamp = ((PhotonPipelineResult) currentCamera.getAllUnreadResults()).getTimestampSeconds();
-                //    double latestTimestamp = currentCamera.getAllUnreadResults().get(currentCamera.getAllUnreadResults().size()-1).getTimestampSeconds();
+                //  double latestTimestamp = ((PhotonPipelineResult) currentCamera.getAllUnreadResults()).getTimestampSeconds();
+                // double latestTimestamp = currentCamera.getAllUnreadResults().get(currentCamera.getAllUnreadResults().size()-1).getTimestampSeconds();
+                    double latestTimestamp = currentCamera.getAllUnreadResults().get(currentCamera.getAllUnreadResults().size()-1).getTimestampSeconds();
                    boolean newResult = Math.abs(latestTimestamp - lastEstTimestamp) > 1e-5;
                    if (newResult) lastEstTimestamp = latestTimestamp;
                    return (Optional<EstimatedRobotPose>) visionEst;
@@ -276,6 +284,7 @@
     // Helper method so you don't repeat the same code twice
     private boolean checkCamera(PhotonCamera camera) {
         var result = camera.getLatestResult();
+        
         if (result.hasTargets()) {
             for (var target : result.getTargets()) {
                 // Check if ID is in your TAGS_TO_SHOOT array
@@ -283,12 +292,14 @@
                     if (target.getFiducialId() == id) {
                         double distance = target.getBestCameraToTarget().getTranslation().toTranslation2d().getNorm();
                         if (distance >= MIN_DISTANCE_TO_TAG_IN_METERS && distance <= MAX_DISTANCE_TO_TAG_IN_METERS) {
+                           // System.out.println("helloooooooooooooooo");
                             return true; 
                         }
                     }
                 }
             }
         }
+        //System.out.println("to your old lover");
         return false;
     }
 }
