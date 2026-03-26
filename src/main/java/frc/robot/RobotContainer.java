@@ -41,7 +41,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
-//controlers 
+//controllers 
     private final CommandXboxController Driver = new CommandXboxController(0);
     private final CommandXboxController auxDriver = new CommandXboxController(1);
 //subsystems 
@@ -119,9 +119,7 @@ public class RobotContainer {
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
         auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
-        armSubsystem.setDefaultCommand(
-                armSubsystem.setArmMotorSpeed(auxDriver.getLeftY() * -0.5)
-                );
+       
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
