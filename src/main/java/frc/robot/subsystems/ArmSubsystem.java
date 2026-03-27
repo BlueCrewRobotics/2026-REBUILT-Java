@@ -45,7 +45,7 @@ config.closedLoop.pid(
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
-config.smartCurrentLimit(25);
+config.smartCurrentLimit(30);
 config.idleMode(IdleMode.kCoast);
 
 //Lucy edits ._.
@@ -108,10 +108,6 @@ config.closedLoop.feedForward
     return new InstantCommand(
         () -> ArmMotor.set(.3));
     }
-<<<<<<< HEAD
-
-
-=======
     double ARM_MAX_ROTATIONS = Constants.ArmConstants.ARM_MAX_ROTATIONS;
     public void spinByJostick( double amount){
         double spinAmount = MathUtil.applyDeadband(amount * ARM_MAX_ROTATIONS,.1);
@@ -125,5 +121,4 @@ config.closedLoop.feedForward
         System.out.println(setPositon + armEncoder.getPosition());
     }
     
->>>>>>> efd8494b5d1fa90315521020897f2c8182e03f63
 } 
