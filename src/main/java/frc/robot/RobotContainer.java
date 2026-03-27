@@ -54,7 +54,7 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
-/* 
+/*
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<Integer> numOfAutoActions;
     private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
@@ -86,10 +86,10 @@ public class RobotContainer {
             numOfAutoActions.addOption("" + i, i);
         }
         SmartDashboard.putData("Number Of Auto Actions", numOfAutoActions);
-        // Auto Chooser
+        //Auto Chooser
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
-        */
+       */
         configureBindings();
         
     }
@@ -179,9 +179,21 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        //return autoChooser.getSelected();
-        
-        // Simple drive forward auton
+        return Commands.sequence(
+        drivetrain.runOnce(()->drivetrain.seedFieldCentric(Rotation2d.kZero)),
+        drivetrain.applyRequest(() ->
+        drive.withVelocityX(0.5)
+            .withVelocityY(0)
+            .withRotationalRate(0)
+        ),
+        shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
+        .withTimeout(5.0));
+    
+
+
+       // return autoChooser.getSelected();
+       // */
+       /* Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
             // Reset our field centric heading to match the robot
@@ -198,7 +210,7 @@ public class RobotContainer {
             //.withTimeout(5.0),
             // Finally idle for the rest of auton
             //drivetrain.applyRequest(() -> idle) 
-        ); 
+        ); */
         
     }
 }

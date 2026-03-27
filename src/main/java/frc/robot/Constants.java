@@ -32,6 +32,7 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
 
     public static final class ArmConstants {
+        //spark max positions
         public static final double ARM_MAX_ROTATIONS = 100;
         public static final double ARM_AT_NEUTRAL_POSITION = 0;
         public static final double ARM_AT_INTAKE_POSITION = -2.8;
@@ -40,7 +41,7 @@ public final class Constants {
             public static final double kI = 0;
             public static final double kD = 0;
         }
-        //Lucy edits
+       //Lucy edits
         public static final double ARM_LOWER_LIMIT = 22;
         public static final double ARM_UPPER_LIMIT = 0;
     }

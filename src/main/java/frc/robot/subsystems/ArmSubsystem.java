@@ -93,7 +93,7 @@ config.closedLoop.feedForward
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
         () -> ArmMotor.set(-0.2),  // start
-        () -> ArmMotor.set(0),    // stop
+        () -> ArmMotor.set(0),// stop
         this
     ).withTimeout(2.0);
     }
