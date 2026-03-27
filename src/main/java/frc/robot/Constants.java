@@ -64,6 +64,9 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> singleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+        public static final int[] TAGS_TO_SHOOT = {9, 10, 25, 26};
+        public static final double MIN_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(6.0); //Feet to Meters
+        public static final double MAX_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(13.0); //Feet to Meters
     }
 
     /**

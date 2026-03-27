@@ -17,11 +17,17 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -32,6 +38,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionModule;
 import frc.lib.bluecrew.pathplanner.CustomAutoBuilder;
 
+import frc.robot.subsystems.VisionPipelineRunnable;
+import frc.robot.subsystems.VisionPoseEstimator;
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -44,7 +52,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
-//controlers 
+//controllers 
     private final CommandXboxController Driver = new CommandXboxController(0);
     private final CommandXboxController auxDriver = new CommandXboxController(1);
 //subsystems 
@@ -143,6 +151,11 @@ public class RobotContainer {
                 () -> armSubsystem.setArmMotorSpeed(-auxDriver.getLeftY()))
                 );
             */
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
+        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
+       
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
@@ -176,6 +189,15 @@ public class RobotContainer {
         Driver.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+        
+        // Logic: While the target is in range, rumble. When it leaves range, stop.
+    new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
+    .whileTrue(
+        Commands.runEnd(
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2),
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
+        ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
+    );
     }
 
     public Command getAutonomousCommand() {
