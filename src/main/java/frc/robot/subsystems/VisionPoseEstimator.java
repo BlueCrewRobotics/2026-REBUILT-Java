@@ -25,7 +25,9 @@
  package frc.robot.subsystems;
 
 
- import edu.wpi.first.math.Matrix;
+ import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagDetection;
+import edu.wpi.first.math.Matrix;
  import edu.wpi.first.math.VecBuilder;
  import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
  import edu.wpi.first.math.geometry.Pose2d;
@@ -42,7 +44,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
  import edu.wpi.first.math.numbers.N1;
  import edu.wpi.first.math.numbers.N3;
  import edu.wpi.first.wpilibj.DriverStation;
- import frc.robot.Constants;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
  import org.photonvision.EstimatedRobotPose;
  import org.photonvision.PhotonCamera;
  import org.photonvision.PhotonPoseEstimator;
@@ -157,12 +161,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
                        currentPhotonEstimator = photonEstimator1;
                    }
                }
-           
+
                 public PhotonPipelineResult getLatestResult() {
                     //return currentCamera.getLatestResult();
                    var results = currentCamera.getAllUnreadResults();
                     return results.get(results.size()-1);
                }
+
            
                /**
                 * The latest estimated robot pose on the field from vision data. This may be empty. This should

@@ -4,10 +4,19 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -27,6 +36,8 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionModule;
+import frc.lib.bluecrew.pathplanner.CustomAutoBuilder;
+
 import frc.robot.subsystems.VisionPipelineRunnable;
 import frc.robot.subsystems.VisionPoseEstimator;
 public class RobotContainer {
@@ -51,7 +62,7 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
-/* 
+/*
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<Integer> numOfAutoActions;
     private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
@@ -59,12 +70,21 @@ public class RobotContainer {
     private boolean hasSetupAutoChoosers = false;
 */
     public RobotContainer() {
+        NamedCommands.registerCommand("shoot",shooterSubsystem.Shoot(-.7,-.7));
+        NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
+        NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
+        NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
+       /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
+        NamedCommands.registerCommand("indexTStop",shooterSubsystem.KickOffT());
+        */
+      //NamedCommands.registerCommand("stopIndex",
         /* 
         NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
         NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
         NamedCommands.registerCommand("print hello", Commands.print("Hello"));
-        //NamedCommands.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
-       NamedCommands.registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(15).andThen(ClimberSubsystem.climbDown()));
+        //NamedCommand.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
+       NamedCommands
+       .registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(15).andThen(ClimberSubsystem.climbDown()));
         NamedCommands.registerCommand("center shoot",shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
         NamedCommands.registerCommand("shoot auto red", shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
         // Chooser for number of actions in auto
@@ -74,20 +94,21 @@ public class RobotContainer {
             numOfAutoActions.addOption("" + i, i);
         }
         SmartDashboard.putData("Number Of Auto Actions", numOfAutoActions);
-        // Auto Chooser
+        //Auto Chooser
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
-        */
+       */
         configureBindings();
+        
     }
-     
+    
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(Driver.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                drive.withVelocityX(Driver.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(Driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-Driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
@@ -105,16 +126,31 @@ public class RobotContainer {
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         //arm buttons 
-        auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
+        //auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
         auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
-        //auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
+        auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
+        //auxDriver.povDown().onTrue(armSubsystem.ArmWiggle());
         auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
-        auxDriver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
+        Driver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
         auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
-        auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
+        Driver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
+        Driver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
+        Driver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
         // kicker wheel
+        Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
+        Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
+        Driver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
+        Driver.leftBumper().onFalse(shooterSubsystem.KickOffT());
+        Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
+        armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
+        /* 
+        armSubsystem.setDefaultCommand(
+            new RunCommand (
+                () -> armSubsystem.setArmMotorSpeed(-auxDriver.getLeftY()))
+                );
+            */
         auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
         auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
@@ -126,8 +162,8 @@ public class RobotContainer {
         //60 is awsome at 10ft
         //70 to much at 10ft
         // shooter button 
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
-        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
+        Driver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
+        Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
         //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
@@ -138,7 +174,7 @@ public class RobotContainer {
        //Driver.povDown().onTrue(ClimberSubsystem.linearActuatorOut());
        //Driver.y().onTrue(ClimberSubsystem.ClimbUp());
        //Driver.a().onTrue(ClimberSubsystem.climbDown());
-        Driver.rightBumper().whileTrue(drivetrain.applyRequest(() ->
+        Driver.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(Driver.getLeftY(), Driver.getLeftX()))
         ));
 
@@ -150,7 +186,7 @@ public class RobotContainer {
         Driver.start().and(Driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        Driver.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        Driver.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
         
@@ -166,9 +202,21 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        //return autoChooser.getSelected();
-        
-        // Simple drive forward auton
+        return Commands.sequence(
+        drivetrain.runOnce(()->drivetrain.seedFieldCentric(Rotation2d.kZero)),
+        drivetrain.applyRequest(() ->
+        drive.withVelocityX(0.5)
+            .withVelocityY(0)
+            .withRotationalRate(0)
+        ),
+        shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
+        .withTimeout(5.0));
+    
+
+
+       // return autoChooser.getSelected();
+       // */
+       /* Simple drive forward auton
         final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
             // Reset our field centric heading to match the robot
@@ -185,7 +233,7 @@ public class RobotContainer {
             //.withTimeout(5.0),
             // Finally idle for the rest of auton
             //drivetrain.applyRequest(() -> idle) 
-        ); 
+        ); */
         
     }
 }

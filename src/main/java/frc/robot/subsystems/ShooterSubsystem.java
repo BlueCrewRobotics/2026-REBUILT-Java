@@ -32,7 +32,7 @@ private final SparkMax  kickWheel;
 public ShooterSubsystem(){
     motor1.clearStickyFaults();
     motor2.clearStickyFaults();
-shooterConfig.CurrentLimits.SupplyCurrentLimit=30;
+shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 
  kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
@@ -41,13 +41,13 @@ shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 public Command Shoot(double Speed,double speed){
     return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-speed);});
 }
-public Command spinMotor(double speed ){
+public Command spinMotor(double speed){
 return new InstantCommand(() -> motor1.set(speed));
 }
 public Command stopSpin(){
 return Commands.runOnce(()->{ motor1.stopMotor();motor2.stopMotor();});
 }
-//shooter2 code
+//motor2 code
 public void SpinTheMotor(){
 shooterConfig.CurrentLimits.SupplyCurrentLimit=40;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
@@ -71,4 +71,5 @@ public Command kickT(double speed){
 public Command KickOffT(){
     return new InstantCommand(()-> kickWheelT.stopMotor());
 }
+
 }

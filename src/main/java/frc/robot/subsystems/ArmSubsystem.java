@@ -12,7 +12,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -23,14 +23,14 @@ import frc.robot.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
 
+    private double setPositon;
+
     private final SparkMax ArmMotor;
 
     private final SparkClosedLoopController armPidController;
     private final SparkRelativeEncoder armEncoder;
 
     private final double gravityFF = 0.07;
- 
-    private Double setPosition;
 
     private double percentOut = 0;
 
@@ -48,6 +48,16 @@ ClosedLoopSlot.kSlot0);
 config.smartCurrentLimit(25);
 config.idleMode(IdleMode.kCoast);
 
+//Lucy edits ._.
+config.softLimit.forwardSoftLimit(Constants.ArmConstants.ARM_LOWER_LIMIT);
+config.softLimit.reverseSoftLimit(Constants.ArmConstants.ARM_UPPER_LIMIT);
+config.softLimit.forwardSoftLimitEnabled(true);
+config.softLimit.reverseSoftLimitEnabled(true);
+
+config.closedLoop.feedForward
+    .kS(0)
+    .kV(0)
+    .kA(0);
 
 //motor
     ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
@@ -60,7 +70,7 @@ config.idleMode(IdleMode.kCoast);
 //geting position of the encoder 
     armEncoder.setPosition(0.0);
 
-    setPosition = armEncoder.getPosition();
+    setPositon = armEncoder.getPosition();
     // figuer out how to make this go to the corect posithion me 
 
         
@@ -72,31 +82,48 @@ config.idleMode(IdleMode.kCoast);
     // }
     public Command armSetPoints(double setState){
         return new InstantCommand(()-> 
-        armPidController.setSetpoint(setState,ControlType.kVoltage,ClosedLoopSlot.kSlot0));
+        armPidController.setSetpoint(setState * ARM_MAX_ROTATIONS,ControlType.kVoltage,ClosedLoopSlot.kSlot0));
     }
 
         public Command setArmMotorSpeed(double speed){
         return new InstantCommand(() -> ArmMotor.set(speed));
     }
     
-    //public Command ArmIntake(){
-
-    //     // return new InstantCommand(()-> Intakedown());
-    //     return new StartEndCommand(
-    //     () -> ArmMotor.set(-0.2),  // start
-    //     () -> ArmMotor.set(0),    // stop
-    //     this
-    // ).withTimeout(2.0);
-    //}
-   
+    public Command ArmIntake(){
+        // return new InstantCommand(()-> Intakedown());
+        return new StartEndCommand(
+        () -> ArmMotor.set(-0.2),  // start
+        () -> ArmMotor.set(0),// stop
+        this
+    ).withTimeout(2.0);
+    }
+   /*public Command ArmWiggle(){
+         return new InstantCommand(() ->ArmMotor.set(-0.1));
+   }*/
     public Command armToNeutralLevel(){
     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
-        if (setPosition == 0){
+        if (setPositon == 0){
             return new InstantCommand(()-> ArmMotor.stopMotor());
         }
     return new InstantCommand(
         () -> ArmMotor.set(.3));
     }
+<<<<<<< HEAD
 
 
+=======
+    double ARM_MAX_ROTATIONS = Constants.ArmConstants.ARM_MAX_ROTATIONS;
+    public void spinByJostick( double amount){
+        double spinAmount = MathUtil.applyDeadband(amount * ARM_MAX_ROTATIONS,.1);
+        double sinscaler =  Math.sin(Math.toRadians(amount));
+        double feedForward = gravityFF * sinscaler;
+        if (spinAmount > .1 && spinAmount <- .01){
+            armPidController.setSetpoint(spinAmount, ControlType.kPosition,ClosedLoopSlot.kSlot0,feedForward);
+        }
+    }
+    public void periodic(){
+        System.out.println(setPositon + armEncoder.getPosition());
+    }
+    
+>>>>>>> efd8494b5d1fa90315521020897f2c8182e03f63
 } 
