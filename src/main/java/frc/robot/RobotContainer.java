@@ -62,7 +62,7 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
-/*
+/*  
     private final SendableChooser<Command> autoChooser;
     private final SendableChooser<Integer> numOfAutoActions;
     private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
@@ -130,7 +130,7 @@ public class RobotContainer {
         auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
         auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
         //auxDriver.povDown().onTrue(armSubsystem.ArmWiggle());
-        auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+       // auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
         Driver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
         auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
@@ -162,8 +162,11 @@ public class RobotContainer {
         //60 is awsome at 10ft
         //70 to much at 10ft
         // shooter button 
-        Driver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
-        Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
+        // this is how it should be do not change this to be on the driver controller thats stupid dont listin to them 
+        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
+        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
+        auxDriver.a().whileTrue(shooterSubsystem.pulseKick());
+        auxDriver.a().onFalse(shooterSubsystem.KickOffT());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
         //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
