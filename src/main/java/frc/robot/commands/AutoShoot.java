@@ -72,6 +72,6 @@ public class AutoShoot {
     }
     public Command simulatedShoot(){
         double speed = newVilocity(VisionPoseEstimator.distance);
-        return new InstantCommand(()-> shooterSubsystem.Shoot(speed, speed).alongWith(shooterSubsystem.pulseKick()));
+        return new InstantCommand(()-> shooterSubsystem.Shoot(speed).alongWith(shooterSubsystem.pulseKick()));
     }
 }

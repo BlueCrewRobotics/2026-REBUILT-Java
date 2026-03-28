@@ -70,7 +70,7 @@ public class RobotContainer {
     private boolean hasSetupAutoChoosers = false;
 */
     public RobotContainer() {
-        NamedCommands.registerCommand("shoot",shooterSubsystem.Shoot(-.7,-.7));
+        NamedCommands.registerCommand("shoot",shooterSubsystem.Shoot(.7));
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
@@ -132,7 +132,7 @@ public class RobotContainer {
         //auxDriver.povDown().onTrue(armSubsystem.ArmWiggle());
        // auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
-        Driver.leftTrigger().whileTrue(shooterSubsystem.Shoot(-.7,-.7));
+        Driver.leftTrigger().whileTrue(shooterSubsystem.shootBack(.7));
         auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
         Driver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
@@ -163,7 +163,7 @@ public class RobotContainer {
         //70 to much at 10ft
         // shooter button 
         // this is how it should be do not change this to be on the driver controller thats stupid dont listin to them 
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
+        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE));
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.a().whileTrue(shooterSubsystem.pulseKick());
         auxDriver.a().onFalse(shooterSubsystem.KickOffT());
@@ -211,7 +211,7 @@ public class RobotContainer {
             .withVelocityY(0)
             .withRotationalRate(0)
         ),
-        shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
+        shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE))
         .withTimeout(5.0));
     
 
