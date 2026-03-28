@@ -24,6 +24,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -62,9 +63,9 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
-/*
-    private final SendableChooser<Command> autoChooser;
-    private final SendableChooser<Integer> numOfAutoActions;
+     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    
+    /* private final SendableChooser<Integer> numOfAutoActions;
     private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
     private List<SendableChooser<Command>> selectedNoteActions = new ArrayList<>();
     private boolean hasSetupAutoChoosers = false;
@@ -74,7 +75,18 @@ public class RobotContainer {
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
-       /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
+        // Initialize the chooser
+    autoChooser.setDefaultOption("Default Auto", new InstantCommand());
+    autoChooser.addOption("Test1", AutoBuilder.buildAuto("TestAuto"));
+    SmartDashboard.putData("Auto Mode", autoChooser);
+        configureBindings();
+    }
+         public Command getAutonomousCommand() {
+            System.out.println("Run");
+            System.out.println(autoChooser.getSelected().getName());
+        return autoChooser.getSelected();
+    }
+        /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
         NamedCommands.registerCommand("indexTStop",shooterSubsystem.KickOffT());
         */
       //NamedCommands.registerCommand("stopIndex",
@@ -98,9 +110,7 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
        */
-        configureBindings();
-        
-    }
+    
     
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -200,18 +210,18 @@ public class RobotContainer {
     );
     }
 
-    public Command getAutonomousCommand() {
-        return Commands.sequence(
-        drivetrain.runOnce(()->drivetrain.seedFieldCentric(Rotation2d.kZero)),
-        drivetrain.applyRequest(() ->
-        drive.withVelocityX(0.5)
-            .withVelocityY(0)
-            .withRotationalRate(0)
-        ),
-        shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
-        .withTimeout(5.0));
+    // public Command getAutonomousCommand() {
+    //     return Commands.sequence(
+    //     drivetrain.runOnce(()->drivetrain.seedFieldCentric(Rotation2d.kZero)),
+    //     drivetrain.applyRequest(() ->
+    //     drive.withVelocityX(0.5)
+    //         .withVelocityY(0)
+    //         .withRotationalRate(0)
+    //     ),
+    //     shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
+    //     .withTimeout(5.0));
     
-
+      
 
        // return autoChooser.getSelected();
        // */
@@ -235,5 +245,5 @@ public class RobotContainer {
         ); */
         
     }
-}
+
 
