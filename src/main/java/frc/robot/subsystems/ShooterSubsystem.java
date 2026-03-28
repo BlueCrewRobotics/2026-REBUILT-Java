@@ -48,9 +48,9 @@ public Command shootBack(double Speed){
      return Commands.runOnce(() -> {motor1.set(-Speed); motor2.set(Speed);});
 }
 
-public Command shootInAuto(double Speed,double speed){
+public Command shootInAuto(double Speed){
     return Commands.startEnd(
-    () -> {motor1.set(Speed); motor2.set(-speed);}, 
+    () -> {motor1.set(Speed); motor2.set(-Speed);}, 
     () -> {motor1.stopMotor(); motor2.stopMotor();}
     );
 }

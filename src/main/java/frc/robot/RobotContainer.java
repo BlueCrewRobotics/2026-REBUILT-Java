@@ -104,7 +104,7 @@ public class RobotContainer {
     
         configureBindings();
 
-        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE).withTimeout(5));
+        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
 
     }
          public Command getAutonomousCommand() {
@@ -201,7 +201,7 @@ public class RobotContainer {
         //70 to much at 10ft
         // shooter button 
         // this is how it should be do not change this to be on the driver controller thats stupid dont listin to them 
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE));
+        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE));
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.a().whileTrue(shooterSubsystem.pulseKick());
         auxDriver.a().onFalse(shooterSubsystem.KickOffT());
