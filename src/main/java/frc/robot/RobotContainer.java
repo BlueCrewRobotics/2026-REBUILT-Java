@@ -86,6 +86,8 @@ public class RobotContainer {
             System.out.println(autoChooser.getSelected().getName());
         return autoChooser.getSelected();
     }
+
+    
         /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
         NamedCommands.registerCommand("indexTStop",shooterSubsystem.KickOffT());
         */
@@ -172,7 +174,7 @@ public class RobotContainer {
         //60 is awsome at 10ft
         //70 to much at 10ft
         // shooter button 
-        Driver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE));
+        Driver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE));
         Driver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
         //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
