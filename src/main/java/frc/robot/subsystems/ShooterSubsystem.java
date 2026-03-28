@@ -45,7 +45,7 @@ public Command spinMotor(double speed){
 return new InstantCommand(() -> motor1.set(speed));
 }
 public Command stopSpin(){
-return Commands.runOnce(()->{ motor1.stopMotor();motor2.stopMotor();});
+return Commands.runOnce(()->{ motor1.stopMotor(); motor2.stopMotor();});
 }
 //motor2 code
 public void SpinTheMotor(){
