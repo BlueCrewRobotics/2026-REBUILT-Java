@@ -47,14 +47,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
- import org.photonvision.EstimatedRobotPose;
+import frc.robot.commands.AutoShoot;
+
+import org.photonvision.EstimatedRobotPose;
  import org.photonvision.PhotonCamera;
  import org.photonvision.PhotonPoseEstimator;
  import org.photonvision.PhotonPoseEstimator.PoseStrategy;
  import org.photonvision.targeting.PhotonPipelineResult;
  import frc.robot.generated.TunerConstants;
  public final class VisionPoseEstimator {
- 
+ public double speed;
+ public static double distance;
      private static final Matrix<N3, N1> multiTagStdDevs = Constants.PhotonVision.multiTagStdDevs;
          private static final Object singleTagStdDevs = Constants.PhotonVision.singleTagStdDevs;
               private final PhotonCamera camera1;
@@ -295,10 +298,10 @@ import frc.robot.Constants;
                 // Check if ID is in your TAGS_TO_SHOOT array
                 for (int id : TAGS_TO_SHOOT) {
                     if (target.getFiducialId() == id) {
-                        double distance = target.getBestCameraToTarget().getTranslation().toTranslation2d().getNorm();
+                        distance = target.getBestCameraToTarget().getTranslation().toTranslation2d().getNorm();
                         if (distance >= MIN_DISTANCE_TO_TAG_IN_METERS && distance <= MAX_DISTANCE_TO_TAG_IN_METERS) {
                            // System.out.println("helloooooooooooooooo");
-                            return true; 
+                           return true; 
                         }
                     }
                 }

@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
@@ -13,6 +14,7 @@ import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -36,6 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private double pseudoBottomLimit = -10;
     private double pseudoTopLimit = 5;
+    private CANcoder armCanEncoder;
     
    public ArmSubsystem(){
     
@@ -67,6 +70,8 @@ config.closedLoop.feedForward
     armPidController = ArmMotor.getClosedLoopController();
 // encodoer 
     armEncoder = (SparkRelativeEncoder) ArmMotor.getEncoder();
+
+ armCanEncoder = new CANcoder(Constants.ARM_CAN_ENCODER);
 //geting position of the encoder 
     armEncoder.setPosition(0.0);
 
