@@ -41,6 +41,14 @@ shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 public Command Shoot(double Speed,double speed){
     return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-speed);});
 }
+
+public Command shootInAuto(double Speed,double speed){
+    return Commands.startEnd(
+    () -> {motor1.set(Speed); motor2.set(-speed);}, 
+    () -> {motor1.stopMotor(); motor2.stopMotor();}
+    );
+}
+
 public Command spinMotor(double speed){
 return new InstantCommand(() -> motor1.set(speed));
 }

@@ -104,7 +104,7 @@ public class RobotContainer {
     
         configureBindings();
 
-        NamedCommands.registerCommand("Shoot123", shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE));
+        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE).withTimeout(5));
 
     }
          public Command getAutonomousCommand() {
