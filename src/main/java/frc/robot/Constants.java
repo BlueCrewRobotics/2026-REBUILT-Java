@@ -118,13 +118,14 @@ public final class Constants {
     public static final double ARM_AT_INTAKE_POSITION = 1;
     public static final double ARM_MIN_LIMIT = -2;
     public static final double ARM_MAX_LIMIT = 0;
+    public static final int ARM_CAN_ENCODER = 99;
     //shooter constants 
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;
     public static final int motor2= 12;
     public static final int motor1= 10;
-    public static final double SPEED_OF_SHOOTER_LEFT_FACE = .52;
-     public static final double SPEED_OF_SHOOTER_RIGHT_FACE = .52;
+    public static final double SPEED_OF_SHOTER_LEFT_FACE = .62;
+     public static final double SPEED_OF_SHOTER_RIGHT_FACE = SPEED_OF_SHOTER_LEFT_FACE;//.62;
      public static final int KICK_WHEEL = 17;
     // Climber stuf
     public static final int CLIMBER_MOTOR_ID= 60;
