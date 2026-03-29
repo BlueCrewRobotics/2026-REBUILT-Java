@@ -122,8 +122,8 @@ config.closedLoop.feedForward
             armPidController.setSetpoint(spinAmount, ControlType.kPosition,ClosedLoopSlot.kSlot0,feedForward);
         }
     }
-    public void periodic(){
-        System.out.println(setPositon + armEncoder.getPosition());
-    }
+    // public void periodic(){
+    //     System.out.println(setPositon + armEncoder.getPosition());
+    // }
     
 } 

@@ -17,6 +17,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -24,6 +25,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -37,8 +39,11 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionModule;
 import frc.lib.bluecrew.pathplanner.CustomAutoBuilder;
-
+import java.io.File;
+import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.VisionPipelineRunnable;
+
 import frc.robot.subsystems.VisionPoseEstimator;
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -62,9 +67,10 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
-/*  
-    private final SendableChooser<Command> autoChooser;
-    private final SendableChooser<Integer> numOfAutoActions;
+
+     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    
+    /* private final SendableChooser<Integer> numOfAutoActions;
     private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
     private List<SendableChooser<Command>> selectedNoteActions = new ArrayList<>();
     private boolean hasSetupAutoChoosers = false;
@@ -74,7 +80,41 @@ public class RobotContainer {
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
-       /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
+
+        File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
+        String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
+        autoChooser.setDefaultOption("Default Auto", new InstantCommand());
+        if (autoFiles != null) {
+            for (String fileName : autoFiles) {
+        // Remove extension for display
+        String autoName = fileName.replace(".auto", "");
+        System.out.println("autoname");
+        autoChooser.addOption(autoName, AutoBuilder.buildAuto(autoName));
+       
+            }
+             SmartDashboard.putData("Auto Mode", autoChooser);
+        }       
+        
+    
+
+        // Initialize the chooser
+    // autoChooser.setDefaultOption("Default Auto", new InstantCommand());
+    // autoChooser.addOption("Test1", AutoBuilder.buildAuto("TestAuto"));
+    // SmartDashboard.putData("Auto Mode", autoChooser);
+    
+        configureBindings();
+
+        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
+
+    }
+         public Command getAutonomousCommand() {
+            System.out.println("Run");
+           System.out.println(autoChooser.getSelected().getName());
+        return autoChooser.getSelected();
+    }
+
+
+        /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
         NamedCommands.registerCommand("indexTStop",shooterSubsystem.KickOffT());
         */
       //NamedCommands.registerCommand("stopIndex",
@@ -85,7 +125,7 @@ public class RobotContainer {
         //NamedCommand.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
        NamedCommands
        .registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(15).andThen(ClimberSubsystem.climbDown()));
-        NamedCommands.registerCommand("center shoot",shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
+        NamedCommands.registerCommand("center shoot",shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE).withTimeout(2));
         NamedCommands.registerCommand("shoot auto red", shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
         // Chooser for number of actions in auto
         numOfAutoActions = new SendableChooser<>();
@@ -98,9 +138,7 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Mode", autoChooser);
        */
-        configureBindings();
-        
-    }
+    
     
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -163,7 +201,7 @@ public class RobotContainer {
         //70 to much at 10ft
         // shooter button 
         // this is how it should be do not change this to be on the driver controller thats stupid dont listin to them 
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE));
+        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE));
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.a().whileTrue(shooterSubsystem.pulseKick());
         auxDriver.a().onFalse(shooterSubsystem.KickOffT());
@@ -203,18 +241,16 @@ public class RobotContainer {
     );
     }
 
-    public Command getAutonomousCommand() {
-        return Commands.sequence(
-        drivetrain.runOnce(()->drivetrain.seedFieldCentric(Rotation2d.kZero)),
-        drivetrain.applyRequest(() ->
-        drive.withVelocityX(0.5)
-            .withVelocityY(0)
-            .withRotationalRate(0)
-        ),
-        shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE))
-        .withTimeout(5.0));
-    
-
+    // public Command getAutonomousCommand() {
+    //     return Commands.sequence(
+    //     drivetrain.runOnce(()->drivetrain.seedFieldCentric(Rotation2d.kZero)),
+    //     drivetrain.applyRequest(() ->
+    //     drive.withVelocityX(0.5)
+    //         .withVelocityY(0)
+    //         .withRotationalRate(0)
+    //     ),
+    //     shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
+    //     .withTimeout(5.0));shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE))
 
        // return autoChooser.getSelected();
        // */
@@ -238,5 +274,5 @@ public class RobotContainer {
         ); */
         
     }
-}
+
 

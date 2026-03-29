@@ -124,8 +124,8 @@ public final class Constants {
     private static final int shooter_motor_max_rotation = 10;
     public static final int motor2= 12;
     public static final int motor1= 10;
-    public static final double SPEED_OF_SHOTER_LEFT_FACE = .62;
-     public static final double SPEED_OF_SHOTER_RIGHT_FACE = SPEED_OF_SHOTER_LEFT_FACE;//.62;
+    public static final double SPEED_OF_SHOOTER_LEFT_FACE = .62;
+     public static final double SPEED_OF_SHOOTER_RIGHT_FACE = SPEED_OF_SHOOTER_LEFT_FACE;
      public static final int KICK_WHEEL = 17;
     // Climber stuf
     public static final int CLIMBER_MOTOR_ID= 60;
