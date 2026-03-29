@@ -47,11 +47,19 @@ public Command Shoot(double Speed){
 public Command shootBack(double Speed){
      return Commands.runOnce(() -> {motor1.set(-Speed); motor2.set(Speed);});
 }
+
+public Command shootInAuto(double Speed){
+    return Commands.startEnd(
+    () -> {motor1.set(Speed); motor2.set(-Speed);}, 
+    () -> {motor1.stopMotor(); motor2.stopMotor();}
+    );
+}
+
 public Command spinMotor(double speed){
 return new InstantCommand(() -> motor1.set(speed));
 }
 public Command stopSpin(){
-return Commands.runOnce(()->{ motor1.stopMotor();motor2.stopMotor();});
+return Commands.runOnce(()->{ motor1.stopMotor(); motor2.stopMotor();});
 }
 //motor2 code
 public void SpinTheMotor(){
