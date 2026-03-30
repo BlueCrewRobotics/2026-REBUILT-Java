@@ -80,7 +80,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
-
+        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
+        NamedCommands.registerCommand("shootMiddile",shooterSubsystem.autoShoot());
+        NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
+        NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
         File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
         String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
         autoChooser.setDefaultOption("Default Auto", new InstantCommand());
@@ -170,6 +173,8 @@ public class RobotContainer {
         //arm buttons 
         auxDriver.povUp().onTrue(armSubsystem.armMoveToZeroDegree());
         auxDriver.povLeft().onTrue(armSubsystem.armToNine());
+        auxDriver.povDown().onTrue(armSubsystem.armDown());
+        auxDriver.povRight().onTrue(armSubsystem.armUp());
         //auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
         // auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
         // auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
