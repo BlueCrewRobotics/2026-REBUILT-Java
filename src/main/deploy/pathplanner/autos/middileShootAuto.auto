@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TestPath"
+            "pathName": "middile_Shoot_Escape.Path"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootTheFuel"
+            "name": "Shoot"
           }
         }
       ]

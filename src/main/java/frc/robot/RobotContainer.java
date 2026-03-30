@@ -105,8 +105,11 @@ public class RobotContainer {
         configureBindings();
 
         NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
+        NamedCommands.registerCommand("shootMiddile",shooterSubsystem.autoShoot());
+        NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
+        NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
+    }   
 
-    }
          public Command getAutonomousCommand() {
             System.out.println("Run");
            System.out.println(autoChooser.getSelected().getName());
@@ -165,25 +168,27 @@ public class RobotContainer {
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         //arm buttons 
+        auxDriver.povUp().onTrue(armSubsystem.armMoveToZeroDegree());
+        auxDriver.povLeft().onTrue(armSubsystem.armToNine());
         //auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
-        auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
-        auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
+        // auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
+        // auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
         //auxDriver.povDown().onTrue(armSubsystem.ArmWiggle());
        // auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
-        Driver.leftTrigger().whileTrue(shooterSubsystem.shootBack(.7));
+        auxDriver.leftTrigger().whileTrue(shooterSubsystem.shootBack(.7));
         auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
-        Driver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
+        auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
-        Driver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
-        Driver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
+        auxDriver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
         // kicker wheel
         Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
         Driver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
         Driver.leftBumper().onFalse(shooterSubsystem.KickOffT());
         Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
-        armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
+        //armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
         /* 
         armSubsystem.setDefaultCommand(
             new RunCommand (
@@ -192,7 +197,7 @@ public class RobotContainer {
             */
         auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
-        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
        
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
@@ -206,6 +211,7 @@ public class RobotContainer {
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
         auxDriver.a().whileTrue(shooterSubsystem.pulseKick());
         auxDriver.a().onFalse(shooterSubsystem.KickOffT());
+        auxDriver.povDown().onTrue(shooterSubsystem.autoShoot());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
         //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2

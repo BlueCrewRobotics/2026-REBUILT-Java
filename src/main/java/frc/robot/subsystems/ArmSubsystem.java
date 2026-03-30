@@ -39,6 +39,8 @@ public class ArmSubsystem extends SubsystemBase {
     private double pseudoBottomLimit = -10;
     private double pseudoTopLimit = 5;
     private final CANcoder armCanEncoder;
+    private boolean armDown = true;
+    private boolean armUp;
     
    public ArmSubsystem(){
     
@@ -48,14 +50,19 @@ config.closedLoop.pid(
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
-config.smartCurrentLimit(20);
+config.closedLoop.pid(
+    Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP1,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI1,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD1,
+ClosedLoopSlot.kSlot1);
+config.smartCurrentLimit(25);
 config.idleMode(IdleMode.kCoast);
 
 //Lucy edits ._.
 config.softLimit.forwardSoftLimit(Constants.ArmConstants.ARM_LOWER_LIMIT);
 config.softLimit.reverseSoftLimit(Constants.ArmConstants.ARM_UPPER_LIMIT);
-config.softLimit.forwardSoftLimitEnabled(true);
-config.softLimit.reverseSoftLimitEnabled(true);
+//config.softLimit.forwardSoftLimitEnabled(true);
+//config.softLimit.reverseSoftLimitEnabled(true);
 
 config.closedLoop.feedForward
     .kS(0)
@@ -73,6 +80,7 @@ config.closedLoop.feedForward
 
     armCanEncoder = new CANcoder(Constants.ARM_CAN_ENCODER);
     var positionEncoder = armCanEncoder.getAbsolutePosition();
+    armCanEncoder.setPosition(0);
 //geting position of the encoder 
     armEncoder.setPosition(0.0);
 
@@ -140,6 +148,16 @@ public double armDegreesToMotorRotations(double degrees) {
     return new InstantCommand(
         () -> ArmMotor.set(.3));
     }
+    public Command armMoveToZeroDegree(){
+        armDown = false;
+        armUp = true; 
+        return new InstantCommand(() -> rotateToDegrees(0));
+    }
+    public Command armToNine(){
+        armUp = false;
+        armDown = true;
+        return new InstantCommand(()-> rotateToDegrees(1));
+    }
     double ARM_MAX_ROTATIONS = Constants.ArmConstants.ARM_MAX_ROTATIONS;
     public void spinByJostick( double amount){
         double spinAmount = MathUtil.applyDeadband(amount * ARM_MAX_ROTATIONS,.1);
@@ -156,8 +174,10 @@ public double armDegreesToMotorRotations(double degrees) {
             double feedForward = gravityFF * sineScalar;
 
         System.out.println(setPosition + armEncoder.getPosition());
-          armPidController.setSetpoint(setPosition,
+        armPidController.setSetpoint(setPosition,
                     ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }
     
-} 
+}
+
+

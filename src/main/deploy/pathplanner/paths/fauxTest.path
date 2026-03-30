@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9503283052351374,
-        "y": 3.9897146932952925
+        "x": 3.5780656610470274,
+        "y": 3.6124844720496894
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.2003283052351374,
-        "y": 3.9897146932952925
+        "x": 3.911164140199211,
+        "y": 3.3354601905391643
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.331,
-        "y": 3.9897146932952925
+        "x": 2.990567879325643,
+        "y": 4.0551197870452524
       },
       "prevControl": {
-        "x": 2.581,
-        "y": 3.9897146932952925
+        "x": 2.7670312680420346,
+        "y": 4.240828533717846
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,15 +33,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ShootTheFuel",
+      "name": "Shoot",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Shoot123"
-        }
-      }
+      "command": null
     }
   ],
   "globalConstraints": {
