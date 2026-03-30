@@ -39,20 +39,14 @@ shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 
  kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
-motor2.setControl(new Follower(Constants.motor1, null));
+//motor2.setControl(new Follower(Constants.motor1, null));
 }
 public Command Shoot(double Speed){
+    System.out.println("I Shoooooooooooooooooooooot");
     return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-Speed);});
 }
 public Command shootBack(double Speed){
      return Commands.runOnce(() -> {motor1.set(-Speed); motor2.set(Speed);});
-}
-
-public Command shootInAuto(double Speed){
-    return Commands.startEnd(
-    () -> {motor1.set(Speed); motor2.set(-Speed);}, 
-    () -> {motor1.stopMotor(); motor2.stopMotor();}
-    );
 }
 
 public Command spinMotor(double speed){

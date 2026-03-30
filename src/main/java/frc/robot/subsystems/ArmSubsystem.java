@@ -155,7 +155,7 @@ public double armDegreesToMotorRotations(double degrees) {
             double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
             double feedForward = gravityFF * sineScalar;
 
-        System.out.println(setPosition + armEncoder.getPosition());
+        //System.out.println(setPosition + armEncoder.getPosition());
           armPidController.setSetpoint(setPosition,
                     ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }

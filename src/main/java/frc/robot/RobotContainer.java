@@ -80,7 +80,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
-
+        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.Shoot(.52));
+        
         File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
         String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
         autoChooser.setDefaultOption("Default Auto", new InstantCommand());
@@ -104,7 +105,7 @@ public class RobotContainer {
     
         configureBindings();
 
-        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
+        
 
     }
          public Command getAutonomousCommand() {

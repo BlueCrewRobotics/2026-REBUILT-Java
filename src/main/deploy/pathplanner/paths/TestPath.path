@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.331,
+        "x": 3.430941512125534,
         "y": 3.9897146932952925
       },
       "prevControl": {
-        "x": 2.581,
+        "x": 3.680941512125534,
         "y": 3.9897146932952925
       },
       "nextControl": null,
@@ -33,15 +33,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot123",
+      "name": "ShootTheFuel",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Shoot123"
-        }
-      }
+      "command": null
     }
   ],
   "globalConstraints": {
