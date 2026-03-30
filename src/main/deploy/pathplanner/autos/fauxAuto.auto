@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TestPath"
+            "pathName": "fauxTest"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootTheFuel"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootOff"
           }
         }
       ]
