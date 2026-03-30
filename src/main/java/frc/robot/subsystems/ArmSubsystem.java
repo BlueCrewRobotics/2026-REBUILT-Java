@@ -106,10 +106,12 @@ public double armDegreesToMotorRotations(double degrees) {
     }
 
     public void rotateToDegrees(double degrees) {
+        System.out.println("hellooooooooooo");
         setPosition = armDegreesToMotorRotations(degrees);
     }
 
     public void rotateToMotorRotations(double rotations) {
+        System.out.println("my old lovers")
         setPosition = rotations;
     }
 
@@ -156,16 +158,14 @@ public double armDegreesToMotorRotations(double degrees) {
     public Command armToNine(){
         armUp = false;
         armDown = true;
-        return new InstantCommand(()-> rotateToDegrees(1));
+        return new InstantCommand(()-> rotateToDegrees(5));
     }
     double ARM_MAX_ROTATIONS = Constants.ArmConstants.ARM_MAX_ROTATIONS;
-    public void spinByJostick( double amount){
-        double spinAmount = MathUtil.applyDeadband(amount * ARM_MAX_ROTATIONS,.1);
-        double sinscaler =  Math.sin(Math.toRadians(amount));
-        double feedForward = gravityFF * sinscaler;
-        if (spinAmount > .1 && spinAmount <- .01){
-            armPidController.setSetpoint(spinAmount, ControlType.kPosition,ClosedLoopSlot.kSlot0,feedForward);
-        }
+    public Command armUp(){
+        return new InstantCommand(()-> ArmMotor.set(.4));
+    }
+    public Command armDown(){
+        return new InstantCommand(()-> ArmMotor.set(-.3));
     }
     public void periodic(){
         // TODO: add && !isAtSetPosition()
@@ -173,7 +173,7 @@ public double armDegreesToMotorRotations(double degrees) {
             double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
             double feedForward = gravityFF * sineScalar;
 
-        System.out.println(setPosition + armEncoder.getPosition());
+        System.out.println(setPosition);
         armPidController.setSetpoint(setPosition,
                     ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }
