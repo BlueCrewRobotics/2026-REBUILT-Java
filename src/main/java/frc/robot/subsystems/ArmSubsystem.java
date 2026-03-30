@@ -111,7 +111,7 @@ public double armDegreesToMotorRotations(double degrees) {
     }
 
     public void rotateToMotorRotations(double rotations) {
-        System.out.println("my old lovers")
+        System.out.println("my old lovers");
         setPosition = rotations;
     }
 
