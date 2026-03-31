@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -43,17 +45,11 @@ shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 //motor2.setControl(new Follower(Constants.motor1, null));
 }
 public Command Shoot(double Speed){
+ 
     return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-Speed);});
 }
 public Command shootBack(double Speed){
      return Commands.runOnce(() -> {motor1.set(-Speed); motor2.set(Speed);});
-}
-
-public Command shootInAuto(double Speed){
-    return Commands.startEnd(
-    () -> {motor1.set(Speed); motor2.set(-Speed);}, 
-    () -> {motor1.stopMotor(); motor2.stopMotor();}
-    );
 }
 
 public Command spinMotor(double speed){
@@ -90,6 +86,30 @@ public Command autoShoot(){
     return new InstantCommand(()-> AutoShoot.newVilocity(VisionPoseEstimator.distance));
 }
 public Command pulseKick(){
+    
+    return new SequentialCommandGroup(
+        kickT(.5),
+        KickOffT()
+
+    );
+
+    //return new InstantCommand(()-> kickT(.1).withTimeout(3).andThen(KickOffT()));
+}
+
+public Command shootInAutoPaths(double speed){
+    return new ParallelCommandGroup(
+        Shoot(speed),
+        Commands.sequence(
+            Commands.waitSeconds(1.5),
+            pulseKick().repeatedly().withTimeout(30)
+        )
+    );
+}
+public Command stopAllShooting(){
+    return new ParallelCommandGroup(
+        stopSpin(),
+         KickOffT()
+    );
 return new StartEndCommand(
     () -> kickT(-.1),
     () -> KickOffT(),
