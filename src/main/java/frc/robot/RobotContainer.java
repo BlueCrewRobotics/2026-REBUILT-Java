@@ -183,8 +183,7 @@ public class RobotContainer {
         // kicker wheel
         //Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         //Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
-        Driver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
-        Driver.leftBumper().onFalse(shooterSubsystem.KickOffT());
+        
         Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
         Driver.rightBumper().onFalse(shooterSubsystem.KickOffT());
         //armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));

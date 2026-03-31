@@ -85,12 +85,11 @@ public Command autoShoot(){
     return new InstantCommand(()-> AutoShoot.newVilocity(VisionPoseEstimator.distance));
 }
 public Command pulseKick(){
+    
     return new SequentialCommandGroup(
-        new InstantCommand(()-> kickT(.1)),
-        Commands.sequence(
-            Commands.waitSeconds(3),
-            new InstantCommand(()-> KickOffT())
-        )
+        kickT(.5),
+        KickOffT()
+
     );
 
     //return new InstantCommand(()-> kickT(.1).withTimeout(3).andThen(KickOffT()));

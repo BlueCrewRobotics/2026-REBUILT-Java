@@ -13,7 +13,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Encoder;
@@ -127,10 +126,10 @@ public double armDegreesToMotorRotations(double degrees) {
     public Command ArmIntake(){
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
-        () -> ArmMotor.set(-0.2),  // start
+        () -> ArmMotor.set(-0.5),  // start
         () -> ArmMotor.set(0),// stop
         this
-    ).withTimeout(2.0);
+    ).withTimeout(0.83);
     }
    /*public Command ArmWiggle(){
          return new InstantCommand(() ->ArmMotor.set(-0.1));
@@ -156,9 +155,9 @@ public double armDegreesToMotorRotations(double degrees) {
             double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
             double feedForward = gravityFF * sineScalar;
 
-        System.out.println(armCanEncoder.getAbsolutePosition().getValueAsDouble());
-          armPidController.setSetpoint(setPosition,
-                    ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
+        //System.out.println(armCanEncoder.getAbsolutePosition().getValueAsDouble());
+         // armPidController.setSetpoint(setPosition,
+                    //ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }
     
 } 
