@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
@@ -12,8 +13,8 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -59,10 +60,11 @@ config.smartCurrentLimit(25);
 config.idleMode(IdleMode.kCoast);
 
 //Lucy edits ._.
-config.softLimit.forwardSoftLimit(Constants.ArmConstants.ARM_LOWER_LIMIT);
-config.softLimit.reverseSoftLimit(Constants.ArmConstants.ARM_UPPER_LIMIT);
-//config.softLimit.forwardSoftLimitEnabled(true);
-//config.softLimit.reverseSoftLimitEnabled(true);
+//possible issue?
+// config.softLimit.forwardSoftLimit(Constants.ArmConstants.ARM_LOWER_LIMIT);
+// config.softLimit.reverseSoftLimit(Constants.ArmConstants.ARM_UPPER_LIMIT);
+// config.softLimit.forwardSoftLimitEnabled(true);
+// config.softLimit.reverseSoftLimitEnabled(true);
 
 config.closedLoop.feedForward
     .kS(0)
@@ -70,7 +72,7 @@ config.closedLoop.feedForward
     .kA(0);
 
 //motor
-    ArmMotor = new SparkMax(Constants.ARM_MOTOR,SparkLowLevel.MotorType.kBrushless);
+    ArmMotor = new SparkMax(Constants.ARM_MOTOR, SparkLowLevel.MotorType.kBrushless);
 
     ArmMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 //PID controloer 
@@ -79,6 +81,7 @@ config.closedLoop.feedForward
     armEncoder = (SparkRelativeEncoder) ArmMotor.getEncoder();
 
     armCanEncoder = new CANcoder(Constants.ARM_CAN_ENCODER);
+    double positionEncoder = armCanEncoder.getAbsolutePosition().getValueAsDouble();
     var positionEncoder = armCanEncoder.getAbsolutePosition();
     armCanEncoder.setPosition(0);
 //geting position of the encoder 
@@ -134,10 +137,10 @@ public double armDegreesToMotorRotations(double degrees) {
     public Command ArmIntake(){
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
-        () -> ArmMotor.set(-0.2),  // start
+        () -> ArmMotor.set(-0.5),  // start
         () -> ArmMotor.set(0),// stop
         this
-    ).withTimeout(2.0);
+    ).withTimeout(0.83);
     }
    /*public Command ArmWiggle(){
          return new InstantCommand(() ->ArmMotor.set(-0.1));
@@ -161,6 +164,12 @@ public double armDegreesToMotorRotations(double degrees) {
         return new InstantCommand(()-> rotateToDegrees(5));
     }
     double ARM_MAX_ROTATIONS = Constants.ArmConstants.ARM_MAX_ROTATIONS;
+    // public void spinByJostick( double amount){
+    //     double spinAmount = MathUtil.applyDeadband(amount * ARM_MAX_ROTATIONS,.1);
+    //     double sinscaler =  Math.sin(Math.toRadians(amount));
+    //     double feedForward = gravityFF * sinscaler;
+        
+    // }
     public Command armUp(){
         return new InstantCommand(()-> ArmMotor.set(.4));
     }
@@ -173,9 +182,9 @@ public double armDegreesToMotorRotations(double degrees) {
             double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
             double feedForward = gravityFF * sineScalar;
 
-        System.out.println(setPosition);
-        armPidController.setSetpoint(setPosition,
-                    ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
+        //System.out.println(armCanEncoder.getAbsolutePosition().getValueAsDouble());
+         // armPidController.setSetpoint(setPosition,
+                    //ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }
     
 }
