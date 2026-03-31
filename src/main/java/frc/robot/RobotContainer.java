@@ -84,7 +84,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAutoPaths(.52));
         NamedCommands.registerCommand("StopShooting", shooterSubsystem.stopAllShooting());
 
-        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
+        //NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
         NamedCommands.registerCommand("shootMiddile",shooterSubsystem.autoShoot());
         NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
         NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
@@ -112,7 +112,7 @@ public class RobotContainer {
         configureBindings();
 
         
-        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
+       // NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
         NamedCommands.registerCommand("shootMiddile",shooterSubsystem.autoShoot());
         NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
         NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
