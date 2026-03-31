@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
@@ -14,6 +15,7 @@ import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -73,7 +75,7 @@ config.closedLoop.feedForward
     armEncoder = (SparkRelativeEncoder) ArmMotor.getEncoder();
 
     armCanEncoder = new CANcoder(Constants.ARM_CAN_ENCODER);
-    var positionEncoder = armCanEncoder.getAbsolutePosition();
+    double positionEncoder = armCanEncoder.getAbsolutePosition().getValueAsDouble();
 //geting position of the encoder 
     armEncoder.setPosition(0.0);
 
@@ -154,7 +156,7 @@ public double armDegreesToMotorRotations(double degrees) {
             double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
             double feedForward = gravityFF * sineScalar;
 
-        System.out.println(setPosition + armEncoder.getPosition());
+        System.out.println(armCanEncoder.getAbsolutePosition().getValueAsDouble());
           armPidController.setSetpoint(setPosition,
                     ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }
