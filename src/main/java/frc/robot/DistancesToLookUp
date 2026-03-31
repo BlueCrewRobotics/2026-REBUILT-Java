@@ -1,0 +1,11 @@
+import java.util.HashMap;
+
+Map<Double, Double> distancesToPower = new HashMap<Double, Double>();
+
+
+
+
+
+public Double distanceToMotorSpeed(double distance){
+    return distancesToPower.get(distance);
+}

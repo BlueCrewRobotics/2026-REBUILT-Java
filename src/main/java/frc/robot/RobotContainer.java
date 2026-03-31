@@ -80,8 +80,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
-        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.Shoot(.52));
-        
+
+        NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAutoPaths(.52));
+        NamedCommands.registerCommand("StopShooting", shooterSubsystem.stopAllShooting());
+
         File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
         String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
         autoChooser.setDefaultOption("Default Auto", new InstantCommand());
@@ -179,20 +181,21 @@ public class RobotContainer {
         Driver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
         Driver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
         // kicker wheel
-        Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
-        Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
+        //Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
+        //Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
         Driver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
         Driver.leftBumper().onFalse(shooterSubsystem.KickOffT());
         Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
-        armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
+        Driver.rightBumper().onFalse(shooterSubsystem.KickOffT());
+        //armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
         /* 
         armSubsystem.setDefaultCommand(
             new RunCommand (
                 () -> armSubsystem.setArmMotorSpeed(-auxDriver.getLeftY()))
                 );
             */
-        auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
-        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
+        //auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
+        //auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
         auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
        

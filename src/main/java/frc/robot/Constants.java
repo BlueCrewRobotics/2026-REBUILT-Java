@@ -19,7 +19,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.generated.TunerConstants;
-
+import java.util.HashMap;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -128,6 +128,8 @@ public final class Constants {
     public static final double SPEED_OF_SHOOTER_LEFT_FACE = .62;
      public static final double SPEED_OF_SHOOTER_RIGHT_FACE = SPEED_OF_SHOOTER_LEFT_FACE;
      public static final int KICK_WHEEL = 17;
+
+
     // Climber stuf
     public static final int CLIMBER_MOTOR_ID= 60;
     public static final double CLIMBER_LOWER_LEVEL = 37.811;
