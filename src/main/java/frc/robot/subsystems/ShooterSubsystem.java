@@ -110,10 +110,6 @@ public Command stopAllShooting(){
         stopSpin(),
          KickOffT()
     );
-return new StartEndCommand(
-    () -> kickT(-.1),
-    () -> KickOffT(),
-this
-).withTimeout(5);
+
 }
 }

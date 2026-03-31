@@ -82,7 +82,7 @@ config.closedLoop.feedForward
 
     armCanEncoder = new CANcoder(Constants.ARM_CAN_ENCODER);
     double positionEncoder = armCanEncoder.getAbsolutePosition().getValueAsDouble();
-    var positionEncoder = armCanEncoder.getAbsolutePosition();
+
     armCanEncoder.setPosition(0);
 //geting position of the encoder 
     armEncoder.setPosition(0.0);
