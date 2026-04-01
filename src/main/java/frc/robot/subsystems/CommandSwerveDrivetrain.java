@@ -10,11 +10,15 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -27,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
-
+import com.pathplanner.lib.util.DriveFeedforwards;
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
@@ -55,29 +59,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
 // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
-   
+   public Pose2d getPose() {
+    return this.getState().Pose;
+}
 
-// Configure AutoBuilder last
-//     AutoBuilder.configure(
-//             this::getPose, // Robot pose supplier
-//             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-//             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-//             (11, 12) -> driveRobotRelative(11, 12), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-//             Constants.PathPlannerConstants.driveController,
-//             Constants.PathPlannerConstants.robotConfig, // The robot configuration
-//             () -> {
-//               // Boolean supplier that controls when the path will be mirrored for the red alliance
-//               // This will flip the path being followed to the red side of the field.
-//               // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+public ChassisSpeeds getRobotRelativeSpeeds() {
+    return this.getState().Speeds;
+}
 
-//               var alliance = DriverStation.getAlliance();
-//               if (alliance.isPresent()) {
-//                 return alliance.get() == DriverStation.Alliance.Red;
-//               }
-//               return false;
-//             },
-//             this // Reference to this subsystem to set requirements
-// );
   
 
 
@@ -163,8 +152,38 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
-    }
+    
+    
+ try {
+        RobotConfig config = RobotConfig.fromGUISettings();
 
+        AutoBuilder.configure(
+            this::getPose,
+            this::resetPose,
+            this::getRobotRelativeSpeeds,
+
+            (ChassisSpeeds speeds, DriveFeedforwards feedforwards) ->
+    this.setControl(
+        new SwerveRequest.ApplyRobotSpeeds().withSpeeds(speeds)
+    ),
+
+            new PPHolonomicDriveController(
+                new PIDConstants(5.0, 0.0, 0.0),
+                new PIDConstants(5.0, 0.0, 0.0)
+            ),
+
+            config,
+
+            () -> DriverStation.getAlliance()
+                    .orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red,
+
+            this
+        );
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    }
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
      * <p>

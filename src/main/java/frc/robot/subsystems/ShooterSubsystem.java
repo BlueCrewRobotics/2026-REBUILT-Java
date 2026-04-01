@@ -20,8 +20,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.AutoShoot;
 //shooter1 code
 public class ShooterSubsystem extends SubsystemBase {
 private final TalonFX motor1 = new TalonFX(Constants.motor1);
@@ -29,23 +33,30 @@ private final TalonFX motor2 = new TalonFX(Constants.motor2);
 private final TalonFX kickWheelT = new TalonFX(Constants.KICK_WHEEL);
 private final SparkMax  kickWheel;
     private TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
+
 public ShooterSubsystem(){
+
     motor1.clearStickyFaults();
     motor2.clearStickyFaults();
 shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 
  kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
-// motor2.setControl(new Follower(Constants.motor1, null));
+//motor2.setControl(new Follower(Constants.motor1, null));
 }
-public Command Shoot(double Speed,double speed){
-    return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-speed);});
+public Command Shoot(double Speed){
+ 
+    return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-Speed);});
 }
+public Command shootBack(double Speed){
+     return Commands.runOnce(() -> {motor1.set(-Speed); motor2.set(Speed);});
+}
+
 public Command spinMotor(double speed){
 return new InstantCommand(() -> motor1.set(speed));
 }
 public Command stopSpin(){
-return Commands.runOnce(()->{ motor1.stopMotor();motor2.stopMotor();});
+return Commands.runOnce(()->{ motor1.stopMotor(); motor2.stopMotor();});
 }
 //motor2 code
 public void SpinTheMotor(){
@@ -71,5 +82,34 @@ public Command kickT(double speed){
 public Command KickOffT(){
     return new InstantCommand(()-> kickWheelT.stopMotor());
 }
+public Command autoShoot(){
+    return new InstantCommand(()-> AutoShoot.newVilocity(VisionPoseEstimator.distance));
+}
+public Command pulseKick(){
+    
+    return new SequentialCommandGroup(
+        kickT(.5),
+        KickOffT()
 
+    );
+
+    //return new InstantCommand(()-> kickT(.1).withTimeout(3).andThen(KickOffT()));
+}
+
+public Command shootInAutoPaths(double speed){
+    return new ParallelCommandGroup(
+        Shoot(speed),
+        Commands.sequence(
+            Commands.waitSeconds(1.5),
+            pulseKick().repeatedly().withTimeout(30)
+        )
+    );
+}
+public Command stopAllShooting(){
+    return new ParallelCommandGroup(
+        stopSpin(),
+         KickOffT()
+    );
+
+}
 }
