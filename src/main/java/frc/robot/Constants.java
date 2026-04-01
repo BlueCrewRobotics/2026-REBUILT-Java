@@ -37,10 +37,10 @@ public final class Constants {
         public static final double ARM_AT_NEUTRAL_POSITION = 0;
         public static final double ARM_AT_INTAKE_POSITION = -2.8;
         public final static class ARM_UPWARDS_HIGH_GRAVITY_PID {
-            public static final double kP = .00001;
+            public static final double kP = 70;
             public static final double kI = 0;
             public static final double kD = 0;
-            public static final double kP1 = 20;
+            public static final double kP1 = 25;
             public static final double kI1 = 0;
             public static final double kD1 = 0;
 
@@ -68,8 +68,8 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> singleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-        public static final int[] TAGS_TO_SHOOT = {9, 10, 25, 26};
-        public static final double MIN_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(6.0); //Feet to Meters
+        public static final int[] TAGS_TO_SHOOT = {12, 3, 9, 10, 25, 26};
+        public static final double MIN_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(0.0); //Feet to Meters
         public static final double MAX_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(13.0); //Feet to Meters
     }
 
@@ -123,7 +123,7 @@ public final class Constants {
     public static final double ARM_MIN_LIMIT = -2;
     public static final double ARM_MAX_LIMIT = 0;
     public static final int ARM_CAN_ENCODER = 37;
-      public static final double ARM_BALANCE_DEGREES = -39.6;
+      public static final double ARM_BALANCE_DEGREES = 39.6;
     //shooter constants 
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;

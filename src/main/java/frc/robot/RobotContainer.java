@@ -176,10 +176,13 @@ public class RobotContainer {
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         //arm buttons 
-        auxDriver.povUp().onTrue(armSubsystem.armMoveToZeroDegree());
-        auxDriver.povLeft().onTrue(armSubsystem.armToNine());
+        auxDriver.povUp().onTrue(armSubsystem.ArmIntake());
+        auxDriver.povLeft().onTrue(armSubsystem.armToNeutralLevel());
+        //auxDriver.povUp().onTrue(armSubsystem.armMoveToZeroDegree());
+        //auxDriver.povLeft().onTrue(armSubsystem.armToNine());
         auxDriver.povDown().onTrue(armSubsystem.armDown());
         auxDriver.povRight().onTrue(armSubsystem.armUp());
+        auxDriver.povCenter().onTrue(armSubsystem.stopArm());
         //auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
         // auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
         // auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
@@ -209,7 +212,7 @@ public class RobotContainer {
         //auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
         auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
-       
+        
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
        //auxDriver.a().onFalse(armSubsystem.armStop());
         //50 percent wimpy 10ft
@@ -248,14 +251,15 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
         
-        // Logic: While the target is in range, rumble. When it leaves range, stop.
+      //Logic: While the target is in range, rumble. When it leaves range, stop.
     new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
     .whileTrue(
         Commands.runEnd(
-            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2),
+            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 1.0),
             () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
         ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
     );
+    
     }
 
     // public Command getAutonomousCommand() {
@@ -288,8 +292,7 @@ public class RobotContainer {
             //.withTimeout(5.0),
             // Finally idle for the rest of auton
             //drivetrain.applyRequest(() -> idle) 
-        ); */
-        
+        ); */        
     }
 
 
