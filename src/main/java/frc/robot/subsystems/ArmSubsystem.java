@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.PersistMode;
@@ -210,7 +211,7 @@ public double armDegreesToMotorRotations(double degrees) {
             double feedForward = gravityFF * sineScalar;
 
         //System.out.println(armCanEncoder.getAbsolutePosition().getValueAsDouble());
-        System.out.println(setPosition1);
+        //System.out.println(setPosition1);
          // armPidController.setSetpoint(setPosition,
                     //ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }

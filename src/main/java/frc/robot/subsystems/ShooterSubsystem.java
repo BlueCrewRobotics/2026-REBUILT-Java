@@ -146,11 +146,13 @@ private static final Map<Long, Double> distancesToPower;
 
 
 public Double distanceToMotorSpeed(double distance){
+    //System.out.println("I have done distance to motor speed");
     long numToGet = Math.round(Units.metersToFeet(distance));
     return distancesToPower.get(numToGet);
 }
 
 public Command setMotorSpeedFromDistance(double distance){
+    //System.out.println("I have set motor speed");
     return new InstantCommand(() -> Shoot(distanceToMotorSpeed(distance)));
 }
 }
