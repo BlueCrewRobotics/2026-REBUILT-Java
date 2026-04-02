@@ -90,14 +90,11 @@ public Command autoShoot(){
     return new InstantCommand(()-> AutoShoot.newVilocity(VisionPoseEstimator.distance));
 }
 public Command pulseKick(){
-    
-    return new SequentialCommandGroup(
-        kickT(.5),
-        KickOffT()
-
+    return Commands.runEnd(
+        () -> kickWheelT.set(Constants.KICK_WHEEL_SPEED),
+        () -> kickWheelT.stopMotor(),
+        this
     );
-
-    //return new InstantCommand(()-> kickT(.1).withTimeout(3).andThen(KickOffT()));
 }
 
 public Command shootInAutoPaths(double speed){
@@ -105,7 +102,7 @@ public Command shootInAutoPaths(double speed){
         Shoot(speed),
         Commands.sequence(
             Commands.waitSeconds(1.5),
-            pulseKick().repeatedly().withTimeout(30)
+            pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT).repeatedly()
         )
     );
 }
@@ -153,6 +150,6 @@ public Double distanceToMotorSpeed(double distance){
 
 public Command setMotorSpeedFromDistance(double distance){
     //System.out.println("I have set motor speed");
-    return new InstantCommand(() -> Shoot(distanceToMotorSpeed(distance)));
+    return Shoot(distanceToMotorSpeed(distance));
 }
 }

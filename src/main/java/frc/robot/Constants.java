@@ -132,6 +132,8 @@ public final class Constants {
     public static final double SPEED_OF_SHOOTER_LEFT_FACE = .62;
      public static final double SPEED_OF_SHOOTER_RIGHT_FACE = SPEED_OF_SHOOTER_LEFT_FACE;
      public static final int KICK_WHEEL = 17;
+     public static final double KICK_WHEEL_SPEED = 0.1;
+     public static final double KICK_WHEEL_TIMEOUT = 3;
 
 
     // Climber stuf

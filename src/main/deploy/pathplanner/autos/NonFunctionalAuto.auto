@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ShootTheFuelWithDistanceToPower"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "blue shoot"
+            "pathName": "fauxTest"
           }
         }
       ]

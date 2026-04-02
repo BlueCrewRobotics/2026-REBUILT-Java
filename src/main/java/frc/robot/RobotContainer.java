@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.util.Named;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -81,10 +82,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
-
+        NamedCommands.registerCommand("shootMiddile",shooterSubsystem.autoShoot());
+        NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
+        NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAutoPaths(.52));
+        NamedCommands.registerCommand("ShootTheFuelWithDistanceToPower", shooterSubsystem.shootInAutoPaths(shooterSubsystem.distanceToMotorSpeed(VisionPoseEstimator.getInstance().getDistanceToTarget())));
         NamedCommands.registerCommand("StopShooting", shooterSubsystem.stopAllShooting());
-
+        NamedCommands.registerCommand("KickerWheelOn", shooterSubsystem.kickT(Constants.KICK_WHEEL_SPEED));
+        NamedCommands.registerCommand("KickerWheelOff", shooterSubsystem.KickOffT());
         File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
         String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
         autoChooser.setDefaultOption("Default Auto", new InstantCommand());
@@ -110,9 +115,7 @@ public class RobotContainer {
 
         
        // NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
-        NamedCommands.registerCommand("shootMiddile",shooterSubsystem.autoShoot());
-        NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
-        NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
+
     }   
 
          public Command getAutonomousCommand() {
@@ -219,9 +222,11 @@ public class RobotContainer {
         // this is how it should be do not change this to be on the driver controller thats stupid dont listin to them 
         auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE));
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
-        auxDriver.a().whileTrue(shooterSubsystem.pulseKick());
+        auxDriver.a().whileTrue(shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT));
         auxDriver.a().onFalse(shooterSubsystem.KickOffT());
         auxDriver.povDown().onTrue(shooterSubsystem.autoShoot());
+        Command autoCommand = AutoBuilder.buildAuto("PulseKickAuto");
+        auxDriver.y().whileTrue(autoCommand);
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
         //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
