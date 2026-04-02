@@ -45,6 +45,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.VisionPipelineRunnable;
 
 import frc.robot.subsystems.VisionPoseEstimator;
+
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -239,9 +240,16 @@ public class RobotContainer {
     new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
     .whileTrue(
         Commands.runEnd(
-            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2),
-            () -> Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0)
-        ).ignoringDisable(true) // Allows you to test this while the robot is disabled!
+            () -> {
+                Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2);
+                shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
+            },
+            () -> {
+                Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
+                shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
+            }
+        )
+        //.ignoringDisable(true) // Allows you to test this while the robot is disabled!
     );
     }
 

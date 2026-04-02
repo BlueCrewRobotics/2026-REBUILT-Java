@@ -284,28 +284,50 @@ import org.photonvision.EstimatedRobotPose;
                  });
      }
 
-     public boolean isAnyCameraInRange() {
-        // Run both checks and return true if either camera sees a target in range
-        return checkCamera(camera1) || checkCamera(camera2);
-    }
-
-    // Helper method so you don't repeat the same code twice
-    private boolean checkCamera(PhotonCamera camera) {
-        var result = camera.getLatestResult();
-        
-        if (result.hasTargets()) {
-            for (var target : result.getTargets()) {
+     public double getDistanceToTarget() {
+        var result1 = camera1.getLatestResult();
+        if (result1.hasTargets()) {
+            for (var target : result1.getTargets()) {
                 // Check if ID is in your TAGS_TO_SHOOT array
                 for (int id : TAGS_TO_SHOOT) {
                     if (target.getFiducialId() == id) {
                         distance = target.getBestCameraToTarget().getTranslation().toTranslation2d().getNorm();
-                        if (distance >= MIN_DISTANCE_TO_TAG_IN_METERS && distance <= MAX_DISTANCE_TO_TAG_IN_METERS) {
-                           // System.out.println("helloooooooooooooooo");
-                           return true; 
+                        if (distance < 1) {
+                            return -1; // Return -1 if the target is too close, as it's likely a false positive
                         }
+                           return distance; 
                     }
                 }
             }
+        }
+        var result2 = camera2.getLatestResult();
+        if (result2.hasTargets()) {
+            for (var target : result2.getTargets()) {
+                // Check if ID is in your TAGS_TO_SHOOT array
+                for (int id : TAGS_TO_SHOOT) {
+                    if (target.getFiducialId() == id) {
+                        distance = target.getBestCameraToTarget().getTranslation().toTranslation2d().getNorm();
+                        if (distance < 1) {
+                            return -1; // Return -1 if the target is too close, as it's likely a false positive
+                        }
+                           return distance; 
+                    }
+                }
+            }
+        }
+        //System.out.println("to your old lover");
+        return -1;
+    }
+
+     public boolean isAnyCameraInRange() {
+        // Run both checks and return true if either camera sees a target in range
+        return isItInRange(getDistanceToTarget());
+    }
+
+    // Helper method so you don't repeat the same code twice
+    private boolean isItInRange(double distance) {
+        if (distance >= MIN_DISTANCE_TO_TAG_IN_METERS && distance <= MAX_DISTANCE_TO_TAG_IN_METERS) {
+            return true; 
         }
         //System.out.println("to your old lover");
         return false;
