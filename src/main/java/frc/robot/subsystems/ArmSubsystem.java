@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode.*;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -40,16 +42,26 @@ public class ArmSubsystem extends SubsystemBase {
     private double pseudoBottomLimit = -10;
     private double pseudoTopLimit = 5;
     private final CANcoder armCanEncoder;
+    private boolean armDown = true;
+    private boolean armUp;
     
    public ArmSubsystem(){
     
 SparkMaxConfig config = new SparkMaxConfig();
+
 config.closedLoop.pid(
     Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI,
 Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD,
 ClosedLoopSlot.kSlot0);
-config.smartCurrentLimit(20);
+
+config.closedLoop.pid(
+    Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP1,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI1,
+Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD1,
+ClosedLoopSlot.kSlot1);
+config.smartCurrentLimit(25);
+
 config.idleMode(IdleMode.kCoast);
 
 //Lucy edits ._.
@@ -74,11 +86,14 @@ config.closedLoop.feedForward
     armEncoder = (SparkRelativeEncoder) ArmMotor.getEncoder();
 
     armCanEncoder = new CANcoder(Constants.ARM_CAN_ENCODER);
+    
     double positionEncoder = armCanEncoder.getAbsolutePosition().getValueAsDouble();
+
+    armCanEncoder.setPosition(0.01);
 //geting position of the encoder 
     armEncoder.setPosition(0.0);
 
-    setPosition = armEncoder.getPosition();
+    setPosition = positionEncoder; //armEncoder.getPosition();
     // figuer out how to make this go to the corect posithion me 
 
         
@@ -100,10 +115,12 @@ public double armDegreesToMotorRotations(double degrees) {
     }
 
     public void rotateToDegrees(double degrees) {
+        System.out.println("hellooooooooooo");
         setPosition = armDegreesToMotorRotations(degrees);
     }
 
     public void rotateToMotorRotations(double rotations) {
+        System.out.println("my old lovers");
         setPosition = rotations;
     }
 
@@ -124,6 +141,9 @@ public double armDegreesToMotorRotations(double degrees) {
     }
     
     public Command ArmIntake(){
+            SparkMaxConfig config2 = new SparkMaxConfig();
+            config2.idleMode(SparkBaseConfig.IdleMode.kCoast);
+            ArmMotor.configure(config2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         // return new InstantCommand(()-> Intakedown());
         return new StartEndCommand(
         () -> ArmMotor.set(-0.5),  // start
@@ -135,12 +155,26 @@ public double armDegreesToMotorRotations(double degrees) {
          return new InstantCommand(() ->ArmMotor.set(-0.1));
    }*/
     public Command armToNeutralLevel(){
+        
     // return new InstantCommand(() -> armPidController.setSetpoint(Constants.ArmConstants.ARM_AT_NEUTRAL_POSITION, ControlType.kPosition, ClosedLoopSlot.kSlot0));
-        if (setPosition == 0){
-            return new InstantCommand(()-> ArmMotor.stopMotor());
+        if (setPosition == 0.08){
+            SparkMaxConfig config2 = new SparkMaxConfig();
+            config2.idleMode(SparkBaseConfig.IdleMode.kBrake);
+            ArmMotor.configure(config2, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         }
+        
     return new InstantCommand(
         () -> ArmMotor.set(.3));
+    }
+    public Command armMoveToZeroDegree(){
+        armDown = false;
+        armUp = true; 
+        return new InstantCommand(() -> rotateToDegrees(0));
+    }
+    public Command armToNine(){
+        armUp = false;
+        armDown = true;
+        return new InstantCommand(()-> rotateToDegrees(5));
     }
     double ARM_MAX_ROTATIONS = Constants.ArmConstants.ARM_MAX_ROTATIONS;
     // public void spinByJostick( double amount){
@@ -149,15 +183,38 @@ public double armDegreesToMotorRotations(double degrees) {
     //     double feedForward = gravityFF * sinscaler;
         
     // }
+    public Command stopArm(){
+        return new InstantCommand(()-> ArmMotor.stopMotor());
+    }
+    public Command armUp(){
+        double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
+        double feedForward = gravityFF * sineScalar;
+        CANcoderConfiguration config37 = new CANcoderConfiguration();
+        config37.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        armCanEncoder.getConfigurator().apply(config37);
+        return new InstantCommand(()-> armPidController.setSetpoint(0.01,ControlType.kPosition,ClosedLoopSlot.kSlot1, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut));
+    }
+    public Command armDown(){
+       double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
+        double feedForward = gravityFF * sineScalar;
+        CANcoderConfiguration config37 = new CANcoderConfiguration();
+        config37.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        armCanEncoder.getConfigurator().apply(config37);
+        return new InstantCommand(()-> armPidController.setSetpoint(0.269,ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward,SparkClosedLoopController.ArbFFUnits.kPercentOut));
+    }
     public void periodic(){
         // TODO: add && !isAtSetPosition()
+        double setPosition1 = armCanEncoder.getAbsolutePosition().getValueAsDouble();
             // Calculate feed forward based on angle to counteract gravity
             double sineScalar = Math.sin(Math.toRadians(getArmDegrees() - Constants.ARM_BALANCE_DEGREES));
             double feedForward = gravityFF * sineScalar;
 
         //System.out.println(armCanEncoder.getAbsolutePosition().getValueAsDouble());
+        System.out.println(setPosition1);
          // armPidController.setSetpoint(setPosition,
                     //ControlType.kPosition,ClosedLoopSlot.kSlot0, feedForward, SparkClosedLoopController.ArbFFUnits.kPercentOut);
     }
     
-} 
+}
+
+

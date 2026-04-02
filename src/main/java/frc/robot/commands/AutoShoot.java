@@ -14,7 +14,7 @@ public class AutoShoot {
     static final double NO_LOAD_RPM = 6000;    // max RPM at 12V (Kraken X60 example)
     static final double MAX_TORQUE_NM = 0.18;  // max torque in Nm
     static final double GEAR_RATIO = 1;        // direct drive example
-    static final double WHEEL_RADIUS_M = 0.05; // shooter wheel radius in meters (5 cm)
+    static final double WHEEL_RADIUS_M = 50.8; // shooter wheel radius in meters (5 cm)
 
     // Physical constants
     static final double GRAVITY = 9.81;        // m/s^2
@@ -61,13 +61,14 @@ public class AutoShoot {
     }
     public static double newVilocity(double Distance){
          double selectedMotorRPM = NO_LOAD_RPM; // Kraken X60/X44
-        double launchAngleDeg = 45;
+        double launchAngleDeg = 35.5;
         // Calculate ball speed
         double wheelRpm = motorToWheelSpeed(selectedMotorRPM, GEAR_RATIO);
         double ballSpeed = wheelToBallSpeed(wheelRpm, WHEEL_RADIUS_M);
          double[] trajectory = calculateTrajectory(Distance, ballSpeed, launchAngleDeg);
          double timeOfFlight = trajectory[0];
         double finalHeight = trajectory[1];
+        System.out.println(timeOfFlight);
         return timeOfFlight;
     }
     public Command simulatedShoot(){

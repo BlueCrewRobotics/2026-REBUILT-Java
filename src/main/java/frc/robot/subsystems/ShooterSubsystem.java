@@ -66,7 +66,7 @@ return Commands.runOnce(()->{ motor1.stopMotor(); motor2.stopMotor();});
 public void SpinTheMotor(){
 shooterConfig.CurrentLimits.SupplyCurrentLimit=40;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
- motor2.setControl(new Follower(Constants.motor1, null));
+ //motor2.setControl(new Follower(Constants.motor1, null));
 }
 public Command spinMotor2(double speed ){
 return new InstantCommand(() -> motor2.set(-speed));
