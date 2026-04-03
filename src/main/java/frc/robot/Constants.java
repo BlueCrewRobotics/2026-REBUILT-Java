@@ -19,7 +19,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.generated.TunerConstants;
-
+import java.util.HashMap;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -68,8 +68,8 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> singleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-        public static final int[] TAGS_TO_SHOOT = {12, 3, 9, 10, 25, 26};
-        public static final double MIN_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(0.0); //Feet to Meters
+        public static final int[] TAGS_TO_SHOOT = {9, 10, 25, 26};
+        public static final double MIN_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(4.0); //Feet to Meters
         public static final double MAX_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(13.0); //Feet to Meters
     }
 
@@ -132,6 +132,10 @@ public final class Constants {
     public static final double SPEED_OF_SHOOTER_LEFT_FACE = .62;
      public static final double SPEED_OF_SHOOTER_RIGHT_FACE = SPEED_OF_SHOOTER_LEFT_FACE;
      public static final int KICK_WHEEL = 17;
+     public static final double KICK_WHEEL_SPEED = 0.1;
+     public static final double KICK_WHEEL_TIMEOUT = 3;
+
+
     // Climber stuf
     public static final int CLIMBER_MOTOR_ID= 60;
     public static final double CLIMBER_LOWER_LEVEL = 37.811;
