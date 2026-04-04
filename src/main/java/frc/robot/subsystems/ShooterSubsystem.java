@@ -92,7 +92,7 @@ public Command autoShoot(){
 public Command pulseKick(){
     return Commands.runEnd(
         () -> kickWheelT.set(Constants.KICK_WHEEL_SPEED),
-        () -> kickWheelT.stopMotor(),
+        () -> kickWheelT.set(-0.1),
         this
     );
 }
@@ -113,43 +113,4 @@ public Command stopAllShooting(){
     );
 }
 
-private static final Map<Long, Double> distancesToPower;
-
-    static {
-        distancesToPower = new HashMap<Long, Double>();;
-        distancesToPower.put(-1L, 0.0); // default value for out of range distances
-        distancesToPower.put(1L,0.46);
-        distancesToPower.put(2L,0.48);
-        distancesToPower.put(3L,0.50);
-        distancesToPower.put(4L,0.52);
-        distancesToPower.put(5L,0.54);
-        distancesToPower.put(6L,0.56);
-        distancesToPower.put(7L,0.58);
-        distancesToPower.put(8L,0.60);
-        distancesToPower.put(9L,0.62);
-        distancesToPower.put(10L,0.64);
-        distancesToPower.put(11L,0.66);
-        distancesToPower.put(12L,0.68);
-        distancesToPower.put(13L,0.70);
-        distancesToPower.put(14L,0.72);
-        distancesToPower.put(15L,0.74);
-        distancesToPower.put(16L,0.76);
-        distancesToPower.put(17L,0.78);
-        distancesToPower.put(18L,0.80);
-        distancesToPower.put(19L,0.82);
-        distancesToPower.put(20L,0.84);
-    }
-
-
-
-public Double distanceToMotorSpeed(double distance){
-    //System.out.println("I have done distance to motor speed");
-    long numToGet = Math.round(Units.metersToFeet(distance));
-    return distancesToPower.get(numToGet);
-}
-
-public Command setMotorSpeedFromDistance(double distance){
-    //System.out.println("I have set motor speed");
-    return Shoot(distanceToMotorSpeed(distance));
-}
 }

@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -69,6 +70,7 @@ public class RobotContainer {
     public final ArmSubsystem armSubsystem = new ArmSubsystem();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
+    public final VisionPoseEstimator visionPoseEstimator =  VisionPoseEstimator.getInstance();
 
      private final SendableChooser<Command> autoChooser = new SendableChooser<>();
     
@@ -78,7 +80,7 @@ public class RobotContainer {
     private boolean hasSetupAutoChoosers = false;
 */
     public RobotContainer() {
-        NamedCommands.registerCommand("shoot",shooterSubsystem.Shoot(.7));
+        NamedCommands.registerCommand("shoot",shooterSubsystem.Shoot(.57));
         NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
         NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
@@ -86,10 +88,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
         NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
         NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAutoPaths(.52));
-        NamedCommands.registerCommand("ShootTheFuelWithDistanceToPower", shooterSubsystem.shootInAutoPaths(shooterSubsystem.distanceToMotorSpeed(VisionPoseEstimator.getInstance().getDistanceToTarget())));
+       // NamedCommands.registerCommand("ShootTheFuelWithDistanceToPower", shooterSubsystem.shootInAutoPaths(shooterSubsystem.distanceToMotorSpeed(VisionPoseEstimator.getInstance().getDistanceToTarget())));
         NamedCommands.registerCommand("StopShooting", shooterSubsystem.stopAllShooting());
         NamedCommands.registerCommand("KickerWheelOn", shooterSubsystem.kickT(Constants.KICK_WHEEL_SPEED));
-        NamedCommands.registerCommand("KickerWheelOff", shooterSubsystem.KickOffT());
+         NamedCommands.registerCommand("KickerWheelOff", shooterSubsystem.KickOffT());
+        NamedCommands.registerCommand("PulseKick", shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT).andThen(new WaitCommand(1.5)).repeatedly());
         File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
         String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
         autoChooser.setDefaultOption("Default Auto", new InstantCommand());
@@ -180,7 +183,7 @@ public class RobotContainer {
         auxDriver.povLeft().onTrue(armSubsystem.armToNeutralLevel());
         //auxDriver.povUp().onTrue(armSubsystem.armMoveToZeroDegree());
         //auxDriver.povLeft().onTrue(armSubsystem.armToNine());
-        auxDriver.povDown().onTrue(armSubsystem.armDown());
+        //auxDriver.povDown().onTrue(armSubsystem.armDown());
         auxDriver.povRight().onTrue(armSubsystem.armUp());
         auxDriver.povCenter().onTrue(armSubsystem.stopArm());
         //auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
@@ -210,7 +213,7 @@ public class RobotContainer {
             */
         //auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         //auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
-        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(.1));
+        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(- .1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
         
       // auxDriver.a().onTrue(armSubsystem.ArmIntake());
@@ -222,11 +225,11 @@ public class RobotContainer {
         // this is how it should be do not change this to be on the driver controller thats stupid dont listin to them 
         auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE));
         auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
-        auxDriver.a().whileTrue(shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT));
+        auxDriver.a().whileTrue(shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT).andThen(new WaitCommand(1.5)).repeatedly());
         auxDriver.a().onFalse(shooterSubsystem.KickOffT());
         auxDriver.povDown().onTrue(shooterSubsystem.autoShoot());
-        Command autoCommand = AutoBuilder.buildAuto("PulseKickAuto");
-        auxDriver.y().whileTrue(autoCommand);
+        auxDriver.y().whileTrue(shooterSubsystem.Shoot(visionPoseEstimator.distanceToMotorSpeed()));
+        auxDriver.y().onFalse(shooterSubsystem.stopSpin());
         //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
         //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
         //buttton for motor2
@@ -254,16 +257,17 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
         
       //Logic: While the target is in range, rumble. When it leaves range, stop.
-    new Trigger(VisionPoseEstimator.getInstance()::isAnyCameraInRange)
+    new Trigger(visionPoseEstimator::isAnyCameraInRange)
     .whileTrue(
         Commands.runEnd(
             () -> {
                 Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2);
-                shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
+                //shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
+                //VisionPoseEstimator.getInstance().distanceToMotorSpeed();
             },
             () -> {
                 Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-                shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
+                //shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
             }
         )
         //.ignoringDisable(true) // Allows you to test this while the robot is disabled!
