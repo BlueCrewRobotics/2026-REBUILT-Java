@@ -63,6 +63,7 @@ Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD1,
 ClosedLoopSlot.kSlot1);
 config.smartCurrentLimit(25);
 
+
 config.idleMode(IdleMode.kCoast);
 
 //Lucy edits ._.
@@ -116,12 +117,12 @@ public double armDegreesToMotorRotations(double degrees) {
     }
 
     public void rotateToDegrees(double degrees) {
-        System.out.println("hellooooooooooo");
+       // System.out.println("hellooooooooooo");
         setPosition = armDegreesToMotorRotations(degrees);
     }
 
     public void rotateToMotorRotations(double rotations) {
-        System.out.println("my old lovers");
+        //System.out.println("my old lovers");
         setPosition = rotations;
     }
 

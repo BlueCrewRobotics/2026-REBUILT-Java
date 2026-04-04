@@ -13,31 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "name": "shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "KickerWheelOn"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "KickerWheelOff"
+            "name": "PulseKick"
           }
         }
       ]
