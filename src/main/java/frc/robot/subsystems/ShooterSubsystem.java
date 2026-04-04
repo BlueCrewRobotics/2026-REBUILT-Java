@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -43,10 +44,12 @@ public ShooterSubsystem(){
     motor1.clearStickyFaults();
     motor2.clearStickyFaults();
 shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
+shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
+shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
 
  kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
-//motor2.setControl(new Follower(Constants.motor1, null));
+//motor2.setControl(new Follower(motor1.getDeviceID(), MotorAlignmentValue.Opposed));
 }
 public Command Shoot(double Speed){
  
@@ -64,7 +67,7 @@ return Commands.runOnce(()->{ motor1.stopMotor(); motor2.stopMotor();});
 }
 //motor2 code
 public void SpinTheMotor(){
-shooterConfig.CurrentLimits.SupplyCurrentLimit=40;
+shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
 shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
  //motor2.setControl(new Follower(Constants.motor1, null));
 }
