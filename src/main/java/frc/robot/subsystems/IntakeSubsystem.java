@@ -27,7 +27,7 @@ private SparkRelativeEncoder leftEncoder = (SparkRelativeEncoder) intakeMotor.ge
 
 public IntakeSubsystem(){
 SparkMaxConfig config = new SparkMaxConfig();
-config.smartCurrentLimit(25);
+config.smartCurrentLimit(40);
 config.idleMode(IdleMode.kCoast);
 BadEncoder = new CANcoder(Constants.Sparky_1);
 intakeMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -39,4 +39,7 @@ public Command intakeOn(double speed){
 public Command intakeOff(){
     return new InstantCommand(()-> intakeMotor.set(0));
 }
+// public void periodic(){
+// intakeMotor.set(.01);
+// }
 }
