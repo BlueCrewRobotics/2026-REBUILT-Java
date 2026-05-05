@@ -68,7 +68,7 @@ public class AutoShoot {
          double[] trajectory = calculateTrajectory(Distance, ballSpeed, launchAngleDeg);
          double timeOfFlight = trajectory[0];
         double finalHeight = trajectory[1];
-        System.out.println(timeOfFlight);
+        //System.out.println(timeOfFlight);
         return timeOfFlight;
     }
     public Command simulatedShoot(){

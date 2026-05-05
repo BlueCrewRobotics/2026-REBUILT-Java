@@ -34,7 +34,8 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystemKraken;
+//import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -67,7 +68,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-    public final ArmSubsystem armSubsystem = new ArmSubsystem();
+    public final ArmSubsystemKraken armSubsystemKraken = new ArmSubsystemKraken();
     public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
     public final VisionModule visionModule = new VisionModule();
     //public final VisionPoseEstimator visionPoseEstimator =  VisionPoseEstimator.getInstance();
@@ -175,21 +176,26 @@ public class RobotContainer {
         );
         // controler buttons 
         // intake buttons 
-        auxDriver.x().whileTrue(intakeSubsystem.intakeOn(-0.8));
+        auxDriver.x().whileTrue(intakeSubsystem.intakeOn(0.8));
         auxDriver.x().onFalse(intakeSubsystem.intakeOff());
         auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
         //arm buttons 
-        auxDriver.povUp().onTrue(armSubsystem.ArmIntake());
-        auxDriver.povLeft().onTrue(armSubsystem.armToNeutralLevel());
-        //auxDriver.povUp().onTrue(armSubsystem.armMoveToZeroDegree());
-        //auxDriver.povLeft().onTrue(armSubsystem.armToNine());
-        //auxDriver.povDown().onTrue(armSubsystem.armDown());
-        auxDriver.povRight().onTrue(armSubsystem.armUp());
-        auxDriver.povCenter().onTrue(armSubsystem.stopArm());
-        //auxDriver.povRight().onTrue(armSubsystem.armSetPoints(-8));
-        // auxDriver.povUp().onTrue(armSubsystem.armToNeutralLevel());
-        // auxDriver.povLeft().onTrue(armSubsystem.ArmIntake());
-        //auxDriver.povDown().onTrue(armSubsystem.ArmWiggle());
+        
+        //auxDriver.povUp().onTrue(armSubsystemKraken.ArmIntake());
+        //auxDriver.povLeft().onTrue(armSubsystemKraken.armToNeutralLevel());
+        
+        //auxDriver.povUp().onTrue(armSubsystemKraken.armMoveToZeroDegree());
+        //auxDriver.povLeft().onTrue(armSubsystemKraken.armToNine());
+
+        //auxDriver.povDown().onTrue(armSubsystemKraken.armDown());
+        //auxDriver.povRight().onTrue(armSubsystemKraken.armUp());
+       // auxDriver.povCenter().onTrue(armSubsystemKraken.stopArm());
+
+
+        //auxDriver.povRight().onTrue(armSubsystemKraken.armSetPoints(-8));
+        // auxDriver.povUp().onTrue(armSubsystemKraken.armToNeutralLevel());
+        // auxDriver.povLeft().onTrue(armSubsystemKraken.ArmIntake());
+        //auxDriver.povDown().onTrue(armSubsystemKraken.ArmWiggle());
        // auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
         //system clear
         auxDriver.leftTrigger().whileTrue(shooterSubsystem.shootBack(.7));
@@ -201,14 +207,17 @@ public class RobotContainer {
         // kicker wheel
         //Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
         //Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
-        
+
+         auxDriver.povDown().onTrue(armSubsystemKraken.armDown().withTimeout(2.0));
+        auxDriver.povRight().onTrue(armSubsystemKraken.armUp().withTimeout(3.3));
+
         Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
         Driver.rightBumper().onFalse(shooterSubsystem.KickOffT());
-        //armSubsystem.setDefaultCommand(armSubsystem.run(() -> armSubsystem.spinByJostick(auxDriver.getLeftY())));
+        //armSubsystemKraken.setDefaultCommand(armSubsystemKraken.run(() -> armSubsystemKraken.spinByJostick(auxDriver.getLeftY())));
         /* 
-        armSubsystem.setDefaultCommand(
+        armSubsystemKraken.setDefaultCommand(
             new RunCommand (
-                () -> armSubsystem.setArmMotorSpeed(-auxDriver.getLeftY()))
+                () -> armSubsystemKraken.setArmMotorSpeed(-auxDriver.getLeftY()))
                 );
             */
         //auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
@@ -216,8 +225,8 @@ public class RobotContainer {
         auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(- .1));
         auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
         
-      // auxDriver.a().onTrue(armSubsystem.ArmIntake());
-       //auxDriver.a().onFalse(armSubsystem.armStop());
+      // auxDriver.a().onTrue(armSubsystemKraken.ArmIntake());
+       //auxDriver.a().onFalse(armSubsystemKraken.armStop());
         //50 percent wimpy 10ft
         //60 is awsome at 10ft
         //70 to much at 10ft
