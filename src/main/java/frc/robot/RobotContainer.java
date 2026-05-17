@@ -50,271 +50,220 @@ import frc.robot.subsystems.VisionPipelineRunnable;
 import frc.robot.subsystems.VisionPoseEstimator;
 
 public class RobotContainer {
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+        private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired
+                                                                                            // top
+                                                                                            // speed
+        private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per
+                                                                                          // second
+                                                                                          // max angular velocity
 
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+        /* Setting up bindings for necessary control of the swerve drive platform */
+        private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+                        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+                        .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
+        private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+        private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
-//controllers 
-    private final CommandXboxController Driver = new CommandXboxController(0);
-    private final CommandXboxController auxDriver = new CommandXboxController(1);
-//subsystems 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-    public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-    public final ArmSubsystemKraken armSubsystemKraken = new ArmSubsystemKraken();
-    public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
-    public final VisionModule visionModule = new VisionModule();
-    //public final VisionPoseEstimator visionPoseEstimator =  VisionPoseEstimator.getInstance();
+        private final Telemetry logger = new Telemetry(MaxSpeed);
+        // controllers
+        private final CommandXboxController Driver = new CommandXboxController(0);
+        private final CommandXboxController auxDriver = new CommandXboxController(1);
+        // subsystems
+        public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+        public final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+        public final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+        public final ArmSubsystemKraken armSubsystemKraken = new ArmSubsystemKraken();
+        public final ClimberSubsystem ClimberSubsystem = new ClimberSubsystem();
+        public final VisionModule visionModule = new VisionModule();
+        // public final VisionPoseEstimator visionPoseEstimator =
+        // VisionPoseEstimator.getInstance();
 
-     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
-    
-    /* private final SendableChooser<Integer> numOfAutoActions;
-    private List<SendableChooser<Command>> selectedPathActions = new ArrayList<>();
-    private List<SendableChooser<Command>> selectedNoteActions = new ArrayList<>();
-    private boolean hasSetupAutoChoosers = false;
-*/
-    public RobotContainer() {
-        NamedCommands.registerCommand("shoot",shooterSubsystem.Shoot(.54));
-        NamedCommands.registerCommand("index",shooterSubsystem.kick(.5));
-        NamedCommands.registerCommand("stopShoot",shooterSubsystem.stopSpin());
-        NamedCommands.registerCommand("stopIndex",shooterSubsystem.KickOff());
-        NamedCommands.registerCommand("shootMiddile",shooterSubsystem.autoShoot());
-        NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
-        NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
-        //NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAutoPaths(.52));
-       // NamedCommands.registerCommand("ShootTheFuelWithDistanceToPower", shooterSubsystem.shootInAutoPaths(shooterSubsystem.distanceToMotorSpeed(VisionPoseEstimator.getInstance().getDistanceToTarget())));
-        NamedCommands.registerCommand("StopShooting", shooterSubsystem.stopAllShooting());
-        NamedCommands.registerCommand("KickerWheelOn", shooterSubsystem.kickT(Constants.KICK_WHEEL_SPEED));
-         NamedCommands.registerCommand("KickerWheelOff", shooterSubsystem.KickOffT());
-        NamedCommands.registerCommand("PulseKick", shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT).andThen(new WaitCommand(1.5)).repeatedly());
-        File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
-        String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
-        autoChooser.setDefaultOption("Default Auto", new InstantCommand());
-        if (autoFiles != null) {
-            for (String fileName : autoFiles) {
-        // Remove extension for display
-        String autoName = fileName.replace(".auto", "");
-        System.out.println("autoname");
-        autoChooser.addOption(autoName, AutoBuilder.buildAuto(autoName));
-       
-            }
-             SmartDashboard.putData("Auto Mode", autoChooser);
-        }       
-        
-    
+        private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-        // Initialize the chooser
-    // autoChooser.setDefaultOption("Default Auto", new InstantCommand());
-    // autoChooser.addOption("Test1", AutoBuilder.buildAuto("TestAuto"));
-    // SmartDashboard.putData("Auto Mode", autoChooser);
-    
-        configureBindings();
+        /*
+         * private final SendableChooser<Integer> numOfAutoActions;
+         * private List<SendableChooser<Command>> selectedPathActions = new
+         * ArrayList<>();
+         * private List<SendableChooser<Command>> selectedNoteActions = new
+         * ArrayList<>();
+         * private boolean hasSetupAutoChoosers = false;
+         */
+        public RobotContainer() {
+                NamedCommands.registerCommand("shoot", shooterSubsystem.Shoot(.54));
+                NamedCommands.registerCommand("index", shooterSubsystem.kick(.5));
+                NamedCommands.registerCommand("stopShoot", shooterSubsystem.stopSpin());
+                NamedCommands.registerCommand("stopIndex", shooterSubsystem.KickOff());
+                NamedCommands.registerCommand("shootMiddile", shooterSubsystem.autoShoot());
+                NamedCommands.registerCommand("Shoot", shooterSubsystem.autoShoot());
+                NamedCommands.registerCommand("ShootOff", shooterSubsystem.stopSpin());
+                // NamedCommands.registerCommand("ShootTheFuel",
+                // shooterSubsystem.shootInAutoPaths(.52));
+                // NamedCommands.registerCommand("ShootTheFuelWithDistanceToPower",
+                // shooterSubsystem.shootInAutoPaths(shooterSubsystem.distanceToMotorSpeed(VisionPoseEstimator.getInstance().getDistanceToTarget())));
+                NamedCommands.registerCommand("StopShooting", shooterSubsystem.stopAllShooting());
+                NamedCommands.registerCommand("KickerWheelOn", shooterSubsystem.kickT(Constants.KICK_WHEEL_SPEED));
+                NamedCommands.registerCommand("KickerWheelOff", shooterSubsystem.KickOffT());
+                NamedCommands.registerCommand("PulseKick", shooterSubsystem.pulseKick()
+                                .withTimeout(Constants.KICK_WHEEL_TIMEOUT).andThen(new WaitCommand(1.5)).repeatedly());
+                File pathPlannerFolder = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
+                String[] autoFiles = pathPlannerFolder.list((dir, name) -> name.endsWith(".auto"));
+                autoChooser.setDefaultOption("Default Auto", new InstantCommand());
+                if (autoFiles != null) {
+                        for (String fileName : autoFiles) {
+                                // Remove extension for display
+                                String autoName = fileName.replace(".auto", "");
+                                System.out.println("autoname");
+                                autoChooser.addOption(autoName, AutoBuilder.buildAuto(autoName));
 
-        
-       // NamedCommands.registerCommand("ShootTheFuel", shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
+                        }
+                        SmartDashboard.putData("Auto Mode", autoChooser);
+                }
 
-    }   
+                // Initialize the chooser
+                // autoChooser.setDefaultOption("Default Auto", new InstantCommand());
+                // autoChooser.addOption("Test1", AutoBuilder.buildAuto("TestAuto"));
+                // SmartDashboard.putData("Auto Mode", autoChooser);
 
-         public Command getAutonomousCommand() {
-            System.out.println("Run");
-           System.out.println(autoChooser.getSelected().getName());
-        return autoChooser.getSelected();
-    }
+                configureBindings();
 
+                // NamedCommands.registerCommand("ShootTheFuel",
+                // shooterSubsystem.shootInAuto(Constants.SPEED_OF_SHOOTER_LEFT_FACE).withTimeout(5));
 
-        /*  NamedCommands.registerCommand("indexT",shooterSubsystem.kickT(.5));
-        NamedCommands.registerCommand("indexTStop",shooterSubsystem.KickOffT());
-        */
-      //NamedCommands.registerCommand("stopIndex",
-        /* 
-        NamedCommands.registerCommand("marker1", Commands.print("Passed marker 1"));
-        NamedCommands.registerCommand("marker2", Commands.print("Passed marker 2"));
-        NamedCommands.registerCommand("print hello", Commands.print("Hello"));
-        //NamedCommand.registerCommand("Score Coral LMID", wristSubsystem.wristToLMID().andThen(elevatorSubsystem.L3Reef()));
-       NamedCommands
-       .registerCommand("Center Climb blue", ClimberSubsystem.ClimbUp().withTimeout(15).andThen(ClimberSubsystem.climbDown()));
-        NamedCommands.registerCommand("center shoot",shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE).withTimeout(2));
-        NamedCommands.registerCommand("shoot auto red", shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE).withTimeout(2));
-        // Chooser for number of actions in auto
-        numOfAutoActions = new SendableChooser<>();
-        numOfAutoActions.setDefaultOption("0", 0);
-        for (int i = 1; i <= 5; i++) {
-            numOfAutoActions.addOption("" + i, i);
         }
-        SmartDashboard.putData("Number Of Auto Actions", numOfAutoActions);
-        //Auto Chooser
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Mode", autoChooser);
-       */
-      
-    
-    
-    private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(Driver.getLeftY()* MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(Driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-Driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
 
-        // Idle while the robot is disabled. This ensures the configured
-        // neutral mode is applied to the drive motors while disabled.
-        final var idle = new SwerveRequest.Idle();
-        RobotModeTriggers.disabled().whileTrue(
-            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
-        );
-        // controler buttons 
-        // intake buttons 
-        auxDriver.x().whileTrue(intakeSubsystem.intakeOn(0.8));
-        auxDriver.x().onFalse(intakeSubsystem.intakeOff());
-        auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
-        //arm buttons 
-        
-        //auxDriver.povUp().onTrue(armSubsystemKraken.ArmIntake());
-        //auxDriver.povLeft().onTrue(armSubsystemKraken.armToNeutralLevel());
-        
-        //auxDriver.povUp().onTrue(armSubsystemKraken.armMoveToZeroDegree());
-        //auxDriver.povLeft().onTrue(armSubsystemKraken.armToNine());
+        public Command getAutonomousCommand() {
+                System.out.println("Run");
+                System.out.println(autoChooser.getSelected().getName());
+                return autoChooser.getSelected();
+        }
 
-        //auxDriver.povDown().onTrue(armSubsystemKraken.armDown());
-        //auxDriver.povRight().onTrue(armSubsystemKraken.armUp());
-       // auxDriver.povCenter().onTrue(armSubsystemKraken.stopArm());
+        private void configureBindings() {
+                // Note that X is defined as forward according to WPILib convention,
+                // and Y is defined as to the left according to WPILib convention.
+                drivetrain.setDefaultCommand(
+                                // Drivetrain will execute this command periodically
+                                drivetrain.applyRequest(() -> drive.withVelocityX(Driver.getLeftY() * MaxSpeed) // Drive
+                                                                                                                // forward
+                                                                                                                // with
+                                                                                                                // negative
+                                                                                                                // Y
+                                                                                                                // (forward)
+                                                .withVelocityY(Driver.getLeftX() * MaxSpeed) // Drive left with negative
+                                                                                             // X (left)
+                                                .withRotationalRate(-Driver.getRightX() * MaxAngularRate) // Drive
+                                                                                                          // counterclockwise
+                                                                                                          // with
+                                                                                                          // negative X
+                                                                                                          // (left)
+                                ));
 
+                // Idle while the robot is disabled. This ensures the configured
+                // neutral mode is applied to the drive motors while disabled.
+                final var idle = new SwerveRequest.Idle();
+                RobotModeTriggers.disabled().whileTrue(
+                                drivetrain.applyRequest(() -> idle).ignoringDisable(true));
+                // controler buttons
+                // intake buttons
+                auxDriver.x().whileTrue(intakeSubsystem.intakeOn(0.8));
+                auxDriver.x().onFalse(intakeSubsystem.intakeOff());
+                auxDriver.b().onTrue(intakeSubsystem.intakeOn(0.7));
 
-        //auxDriver.povRight().onTrue(armSubsystemKraken.armSetPoints(-8));
-        // auxDriver.povUp().onTrue(armSubsystemKraken.armToNeutralLevel());
-        // auxDriver.povLeft().onTrue(armSubsystemKraken.ArmIntake());
-        //auxDriver.povDown().onTrue(armSubsystemKraken.ArmWiggle());
-       // auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        //system clear
-        auxDriver.leftTrigger().whileTrue(shooterSubsystem.shootBack(.7));
-        auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
-        auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
-        auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
-        auxDriver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
-        auxDriver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
-        // kicker wheel
-        //Driver.leftBumper().onTrue(shooterSubsystem.kick(.1));
-        //Driver.leftBumper().onFalse(shooterSubsystem.KickOff());
+                auxDriver.leftTrigger().whileTrue(shooterSubsystem.shootBack(.7));
+                auxDriver.leftTrigger().onTrue(intakeSubsystem.intakeOn(0.7));
+                auxDriver.leftTrigger().onFalse(shooterSubsystem.stopSpin());
+                auxDriver.leftTrigger().onFalse(intakeSubsystem.intakeOff());
+                auxDriver.leftTrigger().onTrue(shooterSubsystem.kickT(.1));
+                auxDriver.leftTrigger().onFalse(shooterSubsystem.KickOffT());
 
-         auxDriver.povDown().onTrue(armSubsystemKraken.armDown().withTimeout(2.0));
-        auxDriver.povRight().onTrue(armSubsystemKraken.armUp().withTimeout(3.3));
+                auxDriver.povDown().onTrue(armSubsystemKraken.armDown().withTimeout(2.0));
+                auxDriver.povUp().onTrue(armSubsystemKraken.armUp().withTimeout(3.3));
+                // arm buttons
 
-        Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
-        Driver.rightBumper().onFalse(shooterSubsystem.KickOffT());
-        //armSubsystemKraken.setDefaultCommand(armSubsystemKraken.run(() -> armSubsystemKraken.spinByJostick(auxDriver.getLeftY())));
-        /* 
-        armSubsystemKraken.setDefaultCommand(
-            new RunCommand (
-                () -> armSubsystemKraken.setArmMotorSpeed(-auxDriver.getLeftY()))
-                );
-            */
-        //auxDriver.leftBumper().onTrue(shooterSubsystem.kick(.1));
-        //auxDriver.leftBumper().onFalse(shooterSubsystem.KickOff());
-        auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(- .1));
-        auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
-        
-      // auxDriver.a().onTrue(armSubsystemKraken.ArmIntake());
-       //auxDriver.a().onFalse(armSubsystemKraken.armStop());
-        //50 percent wimpy 10ft
-        //60 is awsome at 10ft
-        //70 to much at 10ft
-        // shooter button 
-        // this is how it should be do not change this to be on the driver controller thats stupid dont listin to them 
-        auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE));
-        auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
-        auxDriver.a().whileTrue(shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT).andThen(new WaitCommand(1.5)).repeatedly());
-        auxDriver.a().onFalse(shooterSubsystem.KickOffT());
-        auxDriver.povDown().onTrue(shooterSubsystem.autoShoot());
-        // auxDriver.y().whileTrue(shooterSubsystem.Shoot(visionPoseEstimator.distanceToMotorSpeed()));
-        // auxDriver.y().onFalse(shooterSubsystem.stopSpin());
-        //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
-        //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin()); 
-        //buttton for motor2
-        //auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
-        //auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
-       // all climber stuff
-       //Driver.povUp().onTrue(ClimberSubsystem.linearActuatorIn());
-       //Driver.povDown().onTrue(ClimberSubsystem.linearActuatorOut());
-       //Driver.y().onTrue(ClimberSubsystem.ClimbUp());
-       //Driver.a().onTrue(ClimberSubsystem.climbDown());
-        Driver.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(Driver.getLeftY(), Driver.getLeftX()))
-        ));
+                // auxDriver.povUp().onTrue(armSubsystemKraken.ArmIntake());
+                // auxDriver.povLeft().onTrue(armSubsystemKraken.armToNeutralLevel());
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        Driver.back().and(Driver.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        Driver.back().and(Driver.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        Driver.start().and(Driver.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        Driver.start().and(Driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+                // auxDriver.povUp().onTrue(armSubsystemKraken.armMoveToZeroDegree());
+                // auxDriver.povLeft().onTrue(armSubsystemKraken.armToNine());
 
-        // Reset the field-centric heading on left bumper press.
-        Driver.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+                // auxDriver.povDown().onTrue(armSubsystemKraken.armDown());
+                // auxDriver.povRight().onTrue(armSubsystemKraken.armUp());
+                // auxDriver.povCenter().onTrue(armSubsystemKraken.stopArm());
 
-        drivetrain.registerTelemetry(logger::telemeterize);
-        
-      //Logic: While the target is in range, rumble. When it leaves range, stop.
-    // new Trigger(visionPoseEstimator::isAnyCameraInRange)
-    // .whileTrue(
-    //     Commands.runEnd(
-    //         () -> {
-    //             Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2);
-    //             //shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
-    //             //VisionPoseEstimator.getInstance().distanceToMotorSpeed();
-    //         },
-    //         () -> {
-    //             Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
-    //             //shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget())); 
-    //         }
-    //     )
-        //.ignoringDisable(true) // Allows you to test this while the robot is disabled!
-    //);
-    
-    }
+                // auxDriver.povRight().onTrue(armSubsystemKraken.armSetPoints(-8));
+                // auxDriver.povUp().onTrue(armSubsystemKraken.armToNeutralLevel());
+                // auxDriver.povLeft().onTrue(armSubsystemKraken.ArmIntake());
+                // auxDriver.povDown().onTrue(armSubsystemKraken.ArmWiggle());
+                // auxDriver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+                // system clear
 
-    // public Command getAutonomousCommand() {
-    //     return Commands.sequence(
-    //     drivetrain.runOnce(()->drivetrain.seedFieldCentric(Rotation2d.kZero)),
-    //     drivetrain.applyRequest(() ->
-    //     drive.withVelocityX(0.5)
-    //         .withVelocityY(0)
-    //         .withRotationalRate(0)
-    //     ),
-    //     shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
-    //     .withTimeout(5.0));shooterSubsystem.runOnce(() -> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE, Constants.SPEED_OF_SHOOTER_RIGHT_FACE))
+                Driver.rightBumper().onTrue(shooterSubsystem.kickT(.1));
+                Driver.rightBumper().onFalse(shooterSubsystem.KickOffT());
 
-       // return autoChooser.getSelected();
-       // */
-       /* Simple drive forward auton
-        final var idle = new SwerveRequest.Idle();
-        return Commands.sequence(
-            // Reset our field centric heading to match the robot
-            // facing away from our alliance station wall (0 deg).
-            drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-            // Then slowly drive forward (away from us) for 5 seconds.
-            
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(0.5)
-                    .withVelocityY(0)
-                    .withRotationalRate(0)
-            )
-            //ShooterSubsystem.runOnce(()-> shooterSubsystem.Shoot(Constants.SPEED_OF_SHOTER_LEFT_FACE, Constants.SPEED_OF_SHOTER_RIGHT_FACE))
-            //.withTimeout(5.0),
-            // Finally idle for the rest of auton
-            //drivetrain.applyRequest(() -> idle) 
-        ); */        
-    }
+                auxDriver.leftBumper().onTrue(shooterSubsystem.kickT(-.1));
+                auxDriver.leftBumper().onFalse(shooterSubsystem.KickOffT());
 
+                // auxDriver.a().onTrue(armSubsystemKraken.ArmIntake());
+                // auxDriver.a().onFalse(armSubsystemKraken.armStop());
+                // 50 percent wimpy 10ft
+                // 60 is awsome at 10ft
+                // 70 to much at 10ft
+                // shooter button
+                // this is how it should be do not change this to be on the driver controller
+                // thats stupid dont listin to them
 
+                auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE));
+
+                auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
+                auxDriver.a().whileTrue(shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT)
+                                .andThen(new WaitCommand(1.5)).repeatedly());
+                auxDriver.a().onFalse(shooterSubsystem.KickOffT());
+                // auxDriver.povDown().onTrue(shooterSubsystem.autoShoot());
+
+                // auxDriver.y().whileTrue(shooterSubsystem.Shoot(visionPoseEstimator.distanceToMotorSpeed()));
+                // auxDriver.y().onFalse(shooterSubsystem.stopSpin());
+                // auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor(.75));
+                // auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
+                // buttton for motor2
+                // auxDriver.rightTrigger().whileTrue(shooterSubsystem.spinMotor2(.7));
+                // auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin2());
+                // all climber stuff
+                // Driver.povUp().onTrue(ClimberSubsystem.linearActuatorIn());
+                // Driver.povDown().onTrue(ClimberSubsystem.linearActuatorOut());
+                // Driver.y().onTrue(ClimberSubsystem.ClimbUp());
+                // Driver.a().onTrue(ClimberSubsystem.climbDown());
+                Driver.b().whileTrue(drivetrain
+                                .applyRequest(() -> point.withModuleDirection(
+                                                new Rotation2d(Driver.getLeftY(), Driver.getLeftX()))));
+
+                // Run SysId routines when holding back/start and X/Y.
+                // Note that each routine should be run exactly once in a single log.
+                Driver.back().and(Driver.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+                Driver.back().and(Driver.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+                Driver.start().and(Driver.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+                Driver.start().and(Driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+
+                // Reset the field-centric heading on left bumper press.
+                Driver.a().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+
+                drivetrain.registerTelemetry(logger::telemeterize);
+
+                // Logic: While the target is in range, rumble. When it leaves range, stop.
+                // new Trigger(visionPoseEstimator::isAnyCameraInRange)
+                // .whileTrue(
+                // Commands.runEnd(
+                // () -> {
+                // Driver.getHID().setRumble(RumbleType.kBothRumble, 0.2);
+                // //shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget()));
+                // //VisionPoseEstimator.getInstance().distanceToMotorSpeed();
+                // },
+                // () -> {
+                // Driver.getHID().setRumble(RumbleType.kBothRumble, 0.0);
+                // //shooterSubsystem.setMotorSpeedFromDistance((VisionPoseEstimator.getInstance().getDistanceToTarget()));
+                // }
+                // )
+                // .ignoringDisable(true) // Allows you to test this while the robot is
+                // disabled!
+                // );
+
+        }
+}

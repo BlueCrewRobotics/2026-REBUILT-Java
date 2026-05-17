@@ -5,19 +5,19 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionPoseEstimator;
 
-public class AutoShoot { 
+public class AutoShoot {
     private double distance;
     private double Speed;
     private ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     // ---------- MOTOR AND SHOOTER PARAMETERS ----------
     // Example values for Kraken X60/X44 motors
-    static final double NO_LOAD_RPM = 6000;    // max RPM at 12V (Kraken X60 example)
-    static final double MAX_TORQUE_NM = 0.18;  // max torque in Nm
-    static final double GEAR_RATIO = 1;        // direct drive example
+    static final double NO_LOAD_RPM = 6000; // max RPM at 12V (Kraken X60 example)
+    static final double MAX_TORQUE_NM = 0.18; // max torque in Nm
+    static final double GEAR_RATIO = 1; // direct drive example
     static final double WHEEL_RADIUS_M = 50.8; // shooter wheel radius in meters (5 cm)
 
     // Physical constants
-    static final double GRAVITY = 9.81;        // m/s^2
+    static final double GRAVITY = 9.81; // m/s^2
 
     // ---------- CONVERSIONS ----------
     public static double rpmToRadPerSec(double rpm) {
@@ -32,7 +32,8 @@ public class AutoShoot {
         double omega = rpmToRadPerSec(wheelRpm);
         return omega * wheelRadius;
     }
-   public static double[] calculateTrajectory(double distanceM, double initialSpeed, double launchAngleDeg) {
+
+    public static double[] calculateTrajectory(double distanceM, double initialSpeed, double launchAngleDeg) {
         double angleRad = Math.toRadians(launchAngleDeg);
 
         // Time of flight (horizontal motion)
@@ -41,38 +42,44 @@ public class AutoShoot {
         // Vertical position at target distance (optional)
         double yFinal = initialSpeed * Math.sin(angleRad) * tFlight - 0.5 * GRAVITY * Math.pow(tFlight, 2);
 
-        return new double[]{tFlight, yFinal};
+        return new double[] { tFlight, yFinal };
     }
-    public AutoShoot(){
+
+    public AutoShoot() {
 
     }
-    public double getNewSpeed(){
+
+    public double getNewSpeed() {
         return this.Speed;
     }
-    public void setNewspeed(double speed){
+
+    public void setNewspeed(double speed) {
         this.Speed = speed;
     }
 
     public double getDistance() {
         return distance;
     }
-    public void setDistance(double distamce){
+
+    public void setDistance(double distamce) {
         this.distance = distamce;
     }
-    public static double newVilocity(double Distance){
-         double selectedMotorRPM = NO_LOAD_RPM; // Kraken X60/X44
+
+    public static double newVilocity(double Distance) {
+        double selectedMotorRPM = NO_LOAD_RPM; // Kraken X60/X44
         double launchAngleDeg = 35.5;
         // Calculate ball speed
         double wheelRpm = motorToWheelSpeed(selectedMotorRPM, GEAR_RATIO);
         double ballSpeed = wheelToBallSpeed(wheelRpm, WHEEL_RADIUS_M);
-         double[] trajectory = calculateTrajectory(Distance, ballSpeed, launchAngleDeg);
-         double timeOfFlight = trajectory[0];
+        double[] trajectory = calculateTrajectory(Distance, ballSpeed, launchAngleDeg);
+        double timeOfFlight = trajectory[0];
         double finalHeight = trajectory[1];
-        //System.out.println(timeOfFlight);
+        // System.out.println(timeOfFlight);
         return timeOfFlight;
     }
-    public Command simulatedShoot(){
+
+    public Command simulatedShoot() {
         double speed = newVilocity(VisionPoseEstimator.distance);
-        return new InstantCommand(()-> shooterSubsystem.Shoot(speed).alongWith(shooterSubsystem.pulseKick()));
+        return new InstantCommand(() -> shooterSubsystem.Shoot(speed).alongWith(shooterSubsystem.pulseKick()));
     }
 }

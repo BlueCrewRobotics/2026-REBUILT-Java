@@ -13,7 +13,7 @@ public class VisionPipelineRunnable implements Runnable {
     @Override
     public void run() {
 
-        while(true) {
+        while (true) {
             visionModule.trackPipelineResults();
             try {
                 Thread.sleep(10); // we don't expect to ever get here, actually

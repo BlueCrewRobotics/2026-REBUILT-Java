@@ -25,37 +25,35 @@ public class ArmSubsystemKraken extends SubsystemBase {
     // CHANGE: Use MotionMagicDutyCycle for Phoenix Free
     private final MotionMagicDutyCycle m_mmReq = new MotionMagicDutyCycle(0);
 
-    private final double gravityFF = 0.07; 
+    private final double gravityFF = 0.07;
 
     public ArmSubsystemKraken() {
         armMotor = new TalonFX(Constants.ARM_MOTOR);
         armCanEncoder = new CANcoder(Constants.ARM_CAN_ENCODER);
 
         TalonFXConfiguration motorConfig = new TalonFXConfiguration();
-        
-    
 
         motorConfig.Slot0.kP = Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kP;
         motorConfig.Slot0.kI = Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kI;
         motorConfig.Slot0.kD = Constants.ArmConstants.ARM_UPWARDS_HIGH_GRAVITY_PID.kD;
-        
-        motorConfig.MotionMagic.MotionMagicAcceleration = 40; 
+
+        motorConfig.MotionMagic.MotionMagicAcceleration = 40;
         motorConfig.MotionMagic.MotionMagicCruiseVelocity = 80;
 
         motorConfig.CurrentLimits.StatorCurrentLimit = 25;
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         motorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // Apply Configuration
         armMotor.getConfigurator().apply(motorConfig);
 
         CANcoderConfiguration canConfig = new CANcoderConfiguration();
-     
-   canConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+
+        canConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         armCanEncoder.getConfigurator().apply(canConfig);
 
-        // CHANGE: Since we can't use FusedCANcoder without Pro, 
+        // CHANGE: Since we can't use FusedCANcoder without Pro,
         // we manually seed the motor position to match the CANcoder once at startup.
         armMotor.setPosition(armCanEncoder.getAbsolutePosition().getValueAsDouble());
     }
@@ -71,28 +69,25 @@ public class ArmSubsystemKraken extends SubsystemBase {
 
     public Command armUp() {
         return new StartEndCommand(
-            // DutyCycle setpoints are still in rotations (0 to 1)
-            //armMotor.setControl(ArmSubsystemVoltage.withPosition(-10));
-           () ->  armMotor.set(-0.1) ,
-           () ->  armMotor.set(0) ,
-           this
-        );
+                // DutyCycle setpoints are still in rotations (0 to 1)
+                // armMotor.setControl(ArmSubsystemVoltage.withPosition(-10));
+                () -> armMotor.set(0.1),
+                () -> armMotor.set(0),
+                this);
     }
 
     public Command armDown() {
         return new StartEndCommand(
-            () ->  armMotor.set(0.1) ,
-           () ->  armMotor.set(0) ,
-           this
-        );
+                () -> armMotor.set(-0.1),
+                () -> armMotor.set(0),
+                this);
     }
 
     public Command armWiggle() {
         return new StartEndCommand(
-            () ->  armMotor.set(0.1) ,
-           () ->  armMotor.set(0) ,
-           this
-        );
+                () -> armMotor.set(0.1),
+                () -> armMotor.set(0),
+                this);
     }
 
     public Command stopArm() {

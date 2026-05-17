@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map;
 import java.util.HashMap;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -20,8 +22,11 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkLowLevel;
+import com.ctre.phoenix6.StatusSignal;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,89 +36,124 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.AutoShoot;
+
 //shooter1 code
 public class ShooterSubsystem extends SubsystemBase {
-private final TalonFX motor1 = new TalonFX(Constants.motor1);
-private final TalonFX motor2 = new TalonFX(Constants.motor2);
-private final TalonFX kickWheelT = new TalonFX(Constants.KICK_WHEEL);
-private final SparkMax  kickWheel;
+    private final TalonFX motor1 = new TalonFX(Constants.motor1);
+    private final TalonFX motor2 = new TalonFX(Constants.motor2);
+    private final TalonFX kickWheelT = new TalonFX(Constants.KICK_WHEEL);
+    private final StatusSignal<AngularVelocity> motor1Signal;
+    private final StatusSignal<AngularVelocity> motor2Signal;
+    private final SparkMax kickWheel;
     private TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
 
-public ShooterSubsystem(){
+    public ShooterSubsystem() {
+        motor1Signal = motor1.getVelocity();
+        motor2Signal = motor2.getVelocity();
+        motor1.clearStickyFaults();
+        motor2.clearStickyFaults();
+        shooterConfig.CurrentLimits.SupplyCurrentLimit = 25;
+        shooterConfig.CurrentLimits.SupplyCurrentLimit = 25;
+        shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-    motor1.clearStickyFaults();
-    motor2.clearStickyFaults();
-shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
-shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
-shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
-shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
+        kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
+        // motor2.setControl(new Follower(motor1.getDeviceID(),
+        // MotorAlignmentValue.Opposed));
+    }
 
- kickWheel = new SparkMax(Constants.KICK_WHEEL, SparkLowLevel.MotorType.kBrushless);
-//motor2.setControl(new Follower(motor1.getDeviceID(), MotorAlignmentValue.Opposed));
-}
-public Command Shoot(double Speed){
- 
-    return Commands.runOnce(() -> {motor1.set(Speed); motor2.set(-Speed);});
-}
-public Command shootBack(double Speed){
-     return Commands.runOnce(() -> {motor1.set(-Speed); motor2.set(Speed);});
-}
+    public Command Shoot(double Speed) {
 
-public Command spinMotor(double speed){
-return new InstantCommand(() -> motor1.set(speed));
-}
-public Command stopSpin(){
-return Commands.runOnce(()->{ motor1.stopMotor(); motor2.stopMotor();});
-}
-//motor2 code
-public void SpinTheMotor(){
-shooterConfig.CurrentLimits.SupplyCurrentLimit=25;
-shooterConfig.CurrentLimits.SupplyCurrentLimitEnable=true;
- //motor2.setControl(new Follower(Constants.motor1, null));
-}
-public Command spinMotor2(double speed ){
-return new InstantCommand(() -> motor2.set(-speed));
-}
-public Command stopSpin2(){
-return new InstantCommand(()-> motor2.stopMotor());
-}
-public Command kick(double speed){
-    return new InstantCommand(()-> kickWheel.set(speed));
-}
-public Command KickOff(){
-    return new InstantCommand(()-> kickWheel.stopMotor());
-}
-public Command kickT(double speed){
-    return new InstantCommand(()-> kickWheelT.set(speed));
-}
-public Command KickOffT(){
-    return new InstantCommand(()-> kickWheelT.stopMotor());
-}
-public Command autoShoot(){
-    return new InstantCommand(()-> AutoShoot.newVilocity(VisionPoseEstimator.distance));
-}
-public Command pulseKick(){
-    return Commands.runEnd(
-        () -> kickWheelT.set(Constants.KICK_WHEEL_SPEED),
-        () -> kickWheelT.set(-0.1),
-        this
-    );
-}
+        return Commands.runOnce(() -> {
+            motor1.set(Speed);
+            motor2.set(-Speed);
+        });
+    }
 
-public Command shootInAutoPaths(double speed){
-    return new ParallelCommandGroup(
-        Shoot(speed),
-        Commands.sequence(
-            Commands.waitSeconds(1.5),
-            pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT).repeatedly()
-        )
-    );
-}
-public Command stopAllShooting(){
-    return new ParallelCommandGroup(
-        stopSpin(),
-         KickOffT()
-    );
-}
+    public Command shootBack(double Speed) {
+        return Commands.runOnce(() -> {
+            motor1.set(-Speed);
+            motor2.set(Speed);
+        });
+    }
+
+    public Command spinMotor(double speed) {
+        return new InstantCommand(() -> motor1.set(speed));
+    }
+
+    public Command stopSpin() {
+        return Commands.runOnce(() -> {
+            motor1.stopMotor();
+            motor2.stopMotor();
+        });
+    }
+
+    // motor2 code
+    public void SpinTheMotor() {
+        shooterConfig.CurrentLimits.SupplyCurrentLimit = 25;
+        shooterConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        // motor2.setControl(new Follower(Constants.motor1, null));
+    }
+
+    public Command spinMotor2(double speed) {
+        return new InstantCommand(() -> motor2.set(-speed));
+    }
+
+    public Command stopSpin2() {
+        return new InstantCommand(() -> motor2.stopMotor());
+    }
+
+    public Command kick(double speed) {
+        return new InstantCommand(() -> kickWheel.set(speed));
+    }
+
+    public Command KickOff() {
+        return new InstantCommand(() -> kickWheel.stopMotor());
+    }
+
+    public Command kickT(double speed) {
+        return new InstantCommand(() -> kickWheelT.set(speed));
+    }
+
+    public Command KickOffT() {
+        return new InstantCommand(() -> kickWheelT.stopMotor());
+    }
+
+    public Command autoShoot() {
+        return new InstantCommand(() -> AutoShoot.newVilocity(VisionPoseEstimator.distance));
+    }
+
+    public Command pulseKick() {
+        return Commands.runEnd(
+                () -> kickWheelT.set(Constants.KICK_WHEEL_SPEED),
+                () -> kickWheelT.set(-0.1),
+                this);
+    }
+
+    public Command shootInAutoPaths(double speed) {
+        return new ParallelCommandGroup(
+                Shoot(speed),
+                Commands.sequence(
+                        Commands.waitSeconds(1.5),
+                        pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT).repeatedly()));
+    }
+
+    public Command stopAllShooting() {
+        return new ParallelCommandGroup(
+                stopSpin(),
+                KickOffT());
+    }
+
+    @Override
+    public void periodic() {
+        motor1Signal.refresh();
+        motor2Signal.refresh();
+
+        double motor1RPS = motor1Signal.getValueAsDouble();
+        double motor2RPS = motor2Signal.getValueAsDouble();
+
+        SmartDashboard.putNumber("Motor 1 RPS", motor1RPS);
+        SmartDashboard.putNumber("Motor 2 RPS", motor2RPS);
+    }
 
 }

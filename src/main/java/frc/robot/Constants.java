@@ -32,10 +32,11 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
 
     public static final class ArmConstants {
-        //spark max positions
+        // spark max positions
         public static final double ARM_MAX_ROTATIONS = 100;
         public static final double ARM_AT_NEUTRAL_POSITION = 0;
         public static final double ARM_AT_INTAKE_POSITION = -2.8;
+
         public final static class ARM_UPWARDS_HIGH_GRAVITY_PID {
             public static final double kP = 0.3;
             public static final double kI = 0;
@@ -45,32 +46,36 @@ public final class Constants {
             public static final double kD1 = 0;
 
         }
-       //Lucy edits
+
+        // Lucy edits
         public static final double ARM_LOWER_LIMIT = 22;
         public static final double ARM_UPPER_LIMIT = 0;
     }
 
-
     public static final class PhotonVision {
         public static final String Thing2 = "Thing2";
         public static final String Thing1 = "Thing1";
-        // Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-        public static final Transform3d April_Tag_Front_pos =
-            new Transform3d(new Translation3d(Units.inchesToMeters(-11.5d), Units.inchesToMeters(-10.7d), Units.inchesToMeters(9.0d)), new Rotation3d(Math.toRadians(-33d), 0, 0/*Math.PI+3.125*/));
-        public static final Transform3d April_Tag_Back_pos =
-            new Transform3d(new Translation3d(Units.inchesToMeters(-12.5d), Units.inchesToMeters(5.5d), Units.inchesToMeters(35.3d)), new Rotation3d(Math.toRadians(65d), 0, Math.toRadians(180)/*3.125*/));
+        // Cam mounted facing forward, half a meter forward of center, half a meter up
+        // from center.
+        public static final Transform3d April_Tag_Front_pos = new Transform3d(
+                new Translation3d(Units.inchesToMeters(-11.5d), Units.inchesToMeters(-10.7d),
+                        Units.inchesToMeters(9.0d)),
+                new Rotation3d(Math.toRadians(-33d), 0, 0/* Math.PI+3.125 */));
+        public static final Transform3d April_Tag_Back_pos = new Transform3d(
+                new Translation3d(
+                        Units.inchesToMeters(-12.5d), Units.inchesToMeters(5.5d), Units.inchesToMeters(35.3d)),
+                new Rotation3d(Math.toRadians(65d), 0, Math.toRadians(180)/* 3.125 */));
         // The layout of the AprilTags on the field
-        public static final AprilTagFieldLayout tagLayout =
-                AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        public static final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
-
-        // The standard deviations of our vision estimated poses, which affect correction rate
+        // The standard deviations of our vision estimated poses, which affect
+        // correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> singleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-        public static final int[] TAGS_TO_SHOOT = {9, 10, 25, 26};
-        public static final double MIN_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(4.0); //Feet to Meters
-        public static final double MAX_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(13.0); //Feet to Meters
+        public static final int[] TAGS_TO_SHOOT = { 9, 10, 25, 26 };
+        public static final double MIN_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(4.0); // Feet to Meters
+        public static final double MAX_DISTANCE_TO_TAG_IN_METERS = Units.feetToMeters(13.0); // Feet to Meters
     }
 
     /**
@@ -95,51 +100,48 @@ public final class Constants {
         }
     }
 
-    public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
+    public static final class AutoConstants { // TODO: The below constants are used in the example auto, and must be
+                                              // tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-    
+
         public static final double kPXController = 1;
         public static final double kPYController = 1;
         public static final double kPThetaController = 1;
-    
+
         /* Constraint for the motion profilied robot angle controller */
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-            new TrapezoidProfile.Constraints(
+        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
 
-    //intake constans 
+    // intake constans
     public static final int Sparky_1 = 9;
     public static final int intake_motor_id = 50;
     public static final int intake_motor_max_rotations = 10;
     public static final double intake_motor_speed = 0.5;
-   // lift arm
-   public static final int ARM_MOTOR = 51;
-    public static final double ARM_AT_HUB_POSITION = .1; 
+    // lift arm
+    public static final int ARM_MOTOR = 51;
+    public static final double ARM_AT_HUB_POSITION = .1;
     public static final double ARM_AT_INTAKE_POSITION = 1;
     public static final double ARM_MIN_LIMIT = -2;
     public static final double ARM_MAX_LIMIT = 0;
     public static final int ARM_CAN_ENCODER = 37;
-      public static final double ARM_BALANCE_DEGREES = 39.6;
-    //shooter constants 
+    public static final double ARM_BALANCE_DEGREES = 39.6;
+    // shooter constants
     private static final int shooter_motor_id = 999999;
     private static final int shooter_motor_max_rotation = 10;
-    public static final int motor2= 12;
-    public static final int motor1= 10;
-    public static final double SPEED_OF_SHOOTER_LEFT_FACE = .52;
-     public static final double SPEED_OF_SHOOTER_RIGHT_FACE = SPEED_OF_SHOOTER_LEFT_FACE;
-     public static final int KICK_WHEEL = 17;
-     public static final double KICK_WHEEL_SPEED = -0.1;
-     public static final double KICK_WHEEL_TIMEOUT = 1;
-
+    public static final int motor2 = 12;
+    public static final int motor1 = 10;
+    public static final double SPEED_OF_SHOOTER_LEFT_FACE = .51;
+    public static final double SPEED_OF_SHOOTER_RIGHT_FACE = SPEED_OF_SHOOTER_LEFT_FACE;
+    public static final int KICK_WHEEL = 17;
+    public static final double KICK_WHEEL_SPEED = -0.1;
+    public static final double KICK_WHEEL_TIMEOUT = 1;
 
     // Climber stuf
-    public static final int CLIMBER_MOTOR_ID= 60;
+    public static final int CLIMBER_MOTOR_ID = 60;
     public static final double CLIMBER_LOWER_LEVEL = 37.811;
     public static final double CLIMBER_HIGHER_LEVEL = 4;
 }
-
-  
