@@ -42,7 +42,7 @@ public class ArmSubsystemKraken extends SubsystemBase {
 
         motorConfig.CurrentLimits.StatorCurrentLimit = 25;
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         motorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // Apply Configuration
@@ -71,14 +71,14 @@ public class ArmSubsystemKraken extends SubsystemBase {
         return new StartEndCommand(
                 // DutyCycle setpoints are still in rotations (0 to 1)
                 // armMotor.setControl(ArmSubsystemVoltage.withPosition(-10));
-                () -> armMotor.set(-0.1),
+                () -> armMotor.set(0.1),
                 () -> armMotor.set(0),
                 this);
     }
 
     public Command armDown() {
         return new StartEndCommand(
-                () -> armMotor.set(0.1),
+                () -> armMotor.set(-0.1),
                 () -> armMotor.set(0),
                 this);
     }

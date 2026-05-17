@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -21,8 +22,11 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkLowLevel;
+import com.ctre.phoenix6.StatusSignal;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -38,11 +42,14 @@ public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX motor1 = new TalonFX(Constants.motor1);
     private final TalonFX motor2 = new TalonFX(Constants.motor2);
     private final TalonFX kickWheelT = new TalonFX(Constants.KICK_WHEEL);
+    private final StatusSignal<AngularVelocity> motor1Signal;
+    private final StatusSignal<AngularVelocity> motor2Signal;
     private final SparkMax kickWheel;
     private TalonFXConfiguration shooterConfig = new TalonFXConfiguration();
 
     public ShooterSubsystem() {
-
+        motor1Signal = motor1.getVelocity();
+        motor2Signal = motor2.getVelocity();
         motor1.clearStickyFaults();
         motor2.clearStickyFaults();
         shooterConfig.CurrentLimits.SupplyCurrentLimit = 25;
@@ -135,6 +142,18 @@ public class ShooterSubsystem extends SubsystemBase {
         return new ParallelCommandGroup(
                 stopSpin(),
                 KickOffT());
+    }
+
+    @Override
+    public void periodic() {
+        motor1Signal.refresh();
+        motor2Signal.refresh();
+
+        double motor1RPS = motor1Signal.getValueAsDouble();
+        double motor2RPS = motor2Signal.getValueAsDouble();
+
+        SmartDashboard.putNumber("Motor 1 RPS", motor1RPS);
+        SmartDashboard.putNumber("Motor 2 RPS", motor2RPS);
     }
 
 }

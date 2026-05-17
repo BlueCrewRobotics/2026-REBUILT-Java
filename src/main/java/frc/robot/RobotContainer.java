@@ -210,7 +210,9 @@ public class RobotContainer {
                 // shooter button
                 // this is how it should be do not change this to be on the driver controller
                 // thats stupid dont listin to them
+
                 auxDriver.rightTrigger().whileTrue(shooterSubsystem.Shoot(Constants.SPEED_OF_SHOOTER_LEFT_FACE));
+
                 auxDriver.rightTrigger().onFalse(shooterSubsystem.stopSpin());
                 auxDriver.a().whileTrue(shooterSubsystem.pulseKick().withTimeout(Constants.KICK_WHEEL_TIMEOUT)
                                 .andThen(new WaitCommand(1.5)).repeatedly());
