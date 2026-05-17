@@ -18,17 +18,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a customized {@link AutoBuilder} that can build {@link SendableChooser} with options for all Path Planner autos in a given folder in the Path Planner UI
+ * This is a customized {@link AutoBuilder} that can build
+ * {@link SendableChooser} with options for all Path Planner autos in a given
+ * folder in the Path Planner UI
  */
 public class CustomAutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
 
     /**
-     * @param defaultAutoName The name of the auto the chooser should default to
-     * @param pathplannerFolderName The name of the auto folder in the Path Planner UI from which this should pull autos from
+     * @param defaultAutoName       The name of the auto the chooser should default
+     *                              to
+     * @param pathplannerFolderName The name of the auto folder in the Path Planner
+     *                              UI from which this should pull autos from
      * @return A {@link SendableChooser} of all Path Planner autos in the folder
-     * @throws RuntimeException if the Path Planner {@link AutoBuilder} is not configured
+     * @throws RuntimeException if the Path Planner {@link AutoBuilder} is not
+     *                          configured
      */
-    public static SendableChooser<Command> buildAutoChooserFromAutosInPPFolder(String defaultAutoName, String pathplannerFolderName) {
+    public static SendableChooser<Command> buildAutoChooserFromAutosInPPFolder(String defaultAutoName,
+            String pathplannerFolderName) {
         if (!AutoBuilder.isConfigured()) {
             throw new RuntimeException(
                     "AutoBuilder was not configured before attempting to build an auto chooser");
@@ -62,9 +68,11 @@ public class CustomAutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
     }
 
     /**
-     * @param pathplannerFolderName The name of the auto folder in the Path Planner UI from which this should pull autos from
+     * @param pathplannerFolderName The name of the auto folder in the Path Planner
+     *                              UI from which this should pull autos from
      * @return A {@link SendableChooser} of all Path Planner autos in the folder
-     * @throws RuntimeException if the Path Planner {@link AutoBuilder} is not configured
+     * @throws RuntimeException if the Path Planner {@link AutoBuilder} is not
+     *                          configured
      */
     public static SendableChooser<Command> buildAutoChooserFromAutosInPPFolder(String pathplannerFolderName) {
         return buildAutoChooserFromAutosInPPFolder("", pathplannerFolderName);
@@ -79,12 +87,11 @@ public class CustomAutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
         List<String> allAutoNames = AutoBuilder.getAllAutoNames();
         List<String> wantedAutoNames = new ArrayList<>();
 
-        for(String autoName : allAutoNames) {
-            try (BufferedReader br =
-                         new BufferedReader(
-                                 new FileReader(
-                                         new File(
-                                                 Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoName + ".auto")))) {
+        for (String autoName : allAutoNames) {
+            try (BufferedReader br = new BufferedReader(
+                    new FileReader(
+                            new File(
+                                    Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoName + ".auto")))) {
                 StringBuilder fileContentBuilder = new StringBuilder();
                 String line;
                 while ((line = br.readLine()) != null) {
@@ -94,7 +101,7 @@ public class CustomAutoBuilder extends com.pathplanner.lib.auto.AutoBuilder {
                 String fileContent = fileContentBuilder.toString();
                 JSONObject json = (JSONObject) new JSONParser().parse(fileContent);
 
-                if(json.get("folder") == pathplannerFolder) {
+                if (json.get("folder") == pathplannerFolder) {
                     wantedAutoNames.add(autoName);
                 }
             } catch (AutoBuilderException e) {

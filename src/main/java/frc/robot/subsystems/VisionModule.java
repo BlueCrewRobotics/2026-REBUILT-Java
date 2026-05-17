@@ -1,7 +1,6 @@
 
 package frc.robot.subsystems;
 
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -21,7 +20,6 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
-
 
 import static frc.robot.Constants.PhotonVision.April_Tag_Back_pos;
 
@@ -48,15 +46,12 @@ public final class VisionModule {
         aprilTagsFront = new PhotonCamera(Thing1);
         aprilTagsBack = new PhotonCamera(Thing2);
 
-
-        photonEstimatorBack =
-                new PhotonPoseEstimator(
-                        tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.PhotonVision.April_Tag_Back_pos);
+        photonEstimatorBack = new PhotonPoseEstimator(
+                tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.PhotonVision.April_Tag_Back_pos);
         photonEstimatorBack.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-        photonEstimatorFront = 
-                new PhotonPoseEstimator(
-                        tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,Constants.PhotonVision.April_Tag_Front_pos);
+        photonEstimatorFront = new PhotonPoseEstimator(
+                tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.PhotonVision.April_Tag_Front_pos);
         photonEstimatorFront.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 
@@ -79,7 +74,7 @@ public final class VisionModule {
 
     public void setPhotonEstimatorBack(Transform3d transform3d) {
         this.photonEstimatorBack = new PhotonPoseEstimator(
-                tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,transform3d);
+                tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, transform3d);
         photonEstimatorFront.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 

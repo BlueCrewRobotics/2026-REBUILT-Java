@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.ArmSubsystemKraken;
 
 public final class Main {
-  private Main() {}
+  private Main() {
+  }
 
   public static void main(String... args) {
     RobotBase.startRobot(Robot::new);
